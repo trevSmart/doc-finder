@@ -9,9 +9,12 @@ export interface Process {
   category: string
   diagram?: string
   documentation?: string
-  priority: 'critical' | 'high' | 'medium' | 'low' | string
-  complexity: 'high' | 'medium' | 'low' | string
+  priority: PriorityLevel
+  complexity: ComplexityLevel
 }
+
+export type PriorityLevel = 'critical' | 'high' | 'medium' | 'low'
+export type ComplexityLevel = 'high' | 'medium' | 'low'
 
 export interface ProcessesDatabase {
   categories: string[]
@@ -41,14 +44,14 @@ export interface TagUpdatePayload {
 }
 
 export interface UploadResponse {
-  saved: Array<{
+  saved: {
     originalName: string
     storedName: string
     size: number
     directory: string
-  }>
-  errors: Array<{
+  }[]
+  errors: {
     name: string
     reason: string
-  }>
+  }[]
 }

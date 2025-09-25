@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
-import './App.css'
+import type { PointerEvent as ReactPointerEvent } from 'react'
 import type {
   FiltersState,
   Process,
@@ -24,8 +23,9 @@ const SORT_LOCALE = 'ca'
 const DEFAULT_DATABASE_PATH = 'processes-database.json'
 const baseUrl = import.meta.env.BASE_URL ?? '/'
 const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`
-const envDatabaseUrlRaw = import.meta.env.VITE_DATABASE_URL
-const envDatabaseUrl = typeof envDatabaseUrlRaw === 'string' ? envDatabaseUrlRaw.trim() : ''
+const envDatabaseUrlCandidate: unknown = import.meta.env.VITE_DATABASE_URL
+const envDatabaseUrl =
+  typeof envDatabaseUrlCandidate === 'string' ? envDatabaseUrlCandidate.trim() : ''
 const DATABASE_URL = envDatabaseUrl.length > 0
   ? envDatabaseUrl
   : `${normalizedBaseUrl}${DEFAULT_DATABASE_PATH}`
@@ -130,18 +130,6 @@ const getStoredNumber = (key: string, fallback: number) => {
   }
 }
 
-type SurfaceAnimationStyle = CSSProperties & {
-  '--surface-delay'?: string
-}
-
-const SURFACE_STYLES = {
-  sidebar: { '--surface-delay': '40ms' } as SurfaceAnimationStyle,
-  header: { '--surface-delay': '80ms' } as SurfaceAnimationStyle,
-  search: { '--surface-delay': '140ms' } as SurfaceAnimationStyle,
-  results: { '--surface-delay': '200ms' } as SurfaceAnimationStyle,
-  rightPanel: { '--surface-delay': '260ms' } as SurfaceAnimationStyle,
-}
-
 type UploadStatus = 'success' | 'partial' | 'error'
 
 interface UploadFeedbackState {
@@ -169,7 +157,6 @@ function AppContent() {
   const [database, setDatabase] = useState<ProcessesDatabase | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [appReady, setAppReady] = useState(!isBrowser)
   const [dropActive, setDropActive] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadStatus, setUploadStatus] = useState<UploadStatus | null>(null)
@@ -301,15 +288,6 @@ function AppContent() {
   }, [])
 
   useEffect(() => {
-    if (!isBrowser) {
-      setAppReady(true)
-      return () => {}
-    }
-    const frame = window.requestAnimationFrame(() => setAppReady(true))
-    return () => window.cancelAnimationFrame(frame)
-  }, [])
-
-  useEffect(() => {
     let isMounted = true
 
     const loadDatabase = async () => {
@@ -345,7 +323,7 @@ function AppContent() {
       }
     }
 
-    loadDatabase()
+    void loadDatabase()
 
     return () => {
       isMounted = false
@@ -361,7 +339,7 @@ function AppContent() {
 
   useEffect(() => {
     if (!isBrowser) {
-      return () => {}
+      return undefined
     }
 
     const dragTargets = new Set<EventTarget>()
@@ -374,7 +352,7 @@ function AppContent() {
         return
       }
       event.preventDefault()
-      const target = event.target as EventTarget | null
+      const target = event.target
       if (target) {
         dragTargets.add(target)
       }
@@ -394,20 +372,21 @@ function AppContent() {
         return
       }
       event.preventDefault()
-      const target = event.target as EventTarget | null
+      const target = event.target
       if (target) {
         dragTargets.delete(target)
       }
-      const relatedTarget = event.relatedTarget as Node | null
-      const stillInsideApp = Boolean(
-        relatedTarget && typeof document !== 'undefined' && document.body.contains(relatedTarget),
-      )
+      const relatedTarget = event.relatedTarget
+      const stillInsideApp =
+        relatedTarget instanceof Node &&
+        typeof document !== 'undefined' &&
+        document.body.contains(relatedTarget)
       if (!stillInsideApp && dragTargets.size === 0) {
         setDropActive(false)
       }
     }
 
-    const handleDrop = async (event: DragEvent) => {
+    const handleDrop = (event: DragEvent) => {
       if (!hasFiles(event)) {
         return
       }
@@ -446,11 +425,11 @@ function AppContent() {
 
   useEffect(() => {
     if (!isBrowser) {
-      return () => {}
+      return undefined
     }
 
     if (!uploadStatus || uploadStatus === 'success') {
-      return () => {}
+      return undefined
     }
 
     const timeout = window.setTimeout(() => {
@@ -757,10 +736,10 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="loading-state flex items-center justify-center min-h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-lg">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-700 text-center">Carregant base de coneixement…</p>
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="glass-panel flex flex-col items-center gap-4 px-10 py-8 text-center">
+          <span className="h-12 w-12 animate-spin rounded-full border-2 border-violet-400/60 border-t-transparent" />
+          <p className="text-sm text-white/70">Carregant base de coneixement…</p>
         </div>
       </div>
     )
@@ -768,18 +747,17 @@ function AppContent() {
 
   if (error) {
     return (
-      <div className="loading-state error flex items-center justify-center min-h-screen">
-        <div className="bg-red-50 border border-red-200 p-8 rounded-lg shadow-lg max-w-md">
-          <div className="text-red-600 mb-4">
-            <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <p className="text-red-800 text-center mb-6">{error}</p>
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6">
+        <div className="glass-panel max-w-md space-y-6 border border-rose-400/40 bg-rose-500/10 px-10 py-8 text-center text-rose-100">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.3" className="mx-auto h-12 w-12">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M20 12v10M20 26h.01" />
+            <path d="M20 6L4 34h32L20 6z" />
+          </svg>
+          <p className="text-sm text-rose-100/80">{error}</p>
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+            className="ring-focus inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-rose-500/40 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-500/50"
           >
             Reintenta
           </button>
@@ -788,77 +766,124 @@ function AppContent() {
     )
   }
 
-  const containerClassName = [
-    'app-container',
-    sidebarMinimized ? 'sidebar-minimized' : '',
-    rightPanelMinimized ? 'right-panel-minimized' : '',
-    appReady ? 'app-ready' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
-  const uploadStatusClass =
-    isUploading && !uploadFeedback ? 'uploading' : uploadFeedback?.status ?? 'idle'
+  const totalProcesses = processes.length
+  const filteredCount = filteredProcesses.length
+  const uploadState: UploadStatus | 'uploading' | null =
+    isUploading && !uploadFeedback ? 'uploading' : uploadFeedback?.status ?? null
   const uploadMessage = isUploading ? t('uploading') : uploadFeedback?.message ?? ''
   const savedFiles = uploadFeedback?.summary.saved ?? []
   const failedFiles = uploadFeedback?.summary.errors ?? []
 
+  const uploadVariants = {
+    uploading: {
+      className: 'border-violet-400/40 bg-violet-500/10 text-violet-100',
+      icon: (
+        <span className="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      ),
+    },
+    success: {
+      className: 'border-emerald-400/40 bg-emerald-500/10 text-emerald-100',
+      icon: (
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 11l3 3 7-7" />
+        </svg>
+      ),
+    },
+    partial: {
+      className: 'border-amber-400/40 bg-amber-500/10 text-amber-100',
+      icon: (
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6v5m0 3h.01" />
+          <circle cx="10" cy="10" r="7" />
+        </svg>
+      ),
+    },
+    error: {
+      className: 'border-rose-400/40 bg-rose-500/10 text-rose-100',
+      icon: (
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7 7l6 6m0-6l-6 6" />
+          <circle cx="10" cy="10" r="7" />
+        </svg>
+      ),
+    },
+  } as const
+
+  const activeUploadVariant = uploadState ? uploadVariants[uploadState] : null
+
   return (
     <>
-      <div className="background-shapes">
-        <div className="shape"></div>
-        <div className="shape"></div>
-        <div className="shape"></div>
-      </div>
-      <div className={containerClassName}>
-        <Sidebar
-          categories={categories}
-          mechanisms={mechanisms}
-          objects={objects}
-          integrations={integrations}
-          tags={tags}
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          minimized={sidebarMinimized}
-          onToggle={toggleSidebar}
-          className="surface-card"
-          style={SURFACE_STYLES.sidebar}
-        />
+      <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -left-32 top-[-15%] h-[420px] w-[420px] rounded-full bg-fuchsia-500/20 blur-[180px]" />
+          <div className="absolute bottom-[-20%] right-[-10%] h-[520px] w-[520px] rounded-full bg-indigo-500/20 blur-[200px]" />
+          <div className="absolute left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/10 blur-[160px]" />
+        </div>
 
-        <main className="main-content">
-          <header className="header surface-card" style={SURFACE_STYLES.header}>
-            <div className="header-content">
-              <div className="header-title-group">
-                <img src={vodafoneLogoSrc} alt="Vodafone" className="vodafone-logo-img" />
-                <div>
-                  <h1 className="header-title">{t('knowledgeBase')}</h1>
-                  <p className="header-subtitle">
-                    {t('businessProcessesSubtitle')}
-                  </p>
+        <div className="relative flex min-h-screen flex-col lg:flex-row">
+          <Sidebar
+            categories={categories}
+            mechanisms={mechanisms}
+            objects={objects}
+            integrations={integrations}
+            tags={tags}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            minimized={sidebarMinimized}
+            onToggle={toggleSidebar}
+          />
+
+          <div className="flex flex-1 flex-col gap-6 px-6 pb-12 pt-8 lg:px-10">
+            <header className="glass-panel flex flex-col gap-6 p-6 lg:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/10">
+                    <img src={vodafoneLogoSrc} alt="Vodafone" className="h-8 w-auto" />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-white/40">{t('businessProcesses')}</p>
+                    <h1 className="mt-1 text-3xl font-semibold text-white">{t('knowledgeBase')}</h1>
+                    <p className="mt-2 text-sm text-white/60">{t('businessProcessesSubtitle')}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <OptionsMenu
+                    availableTags={tags}
+                    tagColors={database?.tagColors ?? {}}
+                    onUpdateTags={handleUpdateProcessTags}
+                    onUpdateGlobalTags={handleUpdateGlobalTags}
+                    selectedProcessId={selectedProcessId}
+                    databasePath={resolvedDatabasePath}
+                    onInitializeDatabaseSuccess={() => void refreshDatabase()}
+                  />
+                  <LanguageSelector />
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="ring-focus inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-white/20 hover:bg-white/20 hover:text-white"
+                  >
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-4 w-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6l-4 4 4 4" />
+                    </svg>
+                    {t('back')}
+                  </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <OptionsMenu
-                  availableTags={tags}
-                  tagColors={database?.tagColors ?? {}}
-                  onUpdateTags={handleUpdateProcessTags}
-                  onUpdateGlobalTags={handleUpdateGlobalTags}
-                  selectedProcessId={selectedProcessId}
-                  databasePath={resolvedDatabasePath}
-                  onInitializeDatabaseSuccess={() => void refreshDatabase()}
-                />
-                <LanguageSelector />
-                <button type="button" className="back-btn" onClick={resetFilters}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M15 6l-6 6 6 6" />
+              <div className="flex flex-wrap items-center gap-4 text-xs text-white/50">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1">
+                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" className="h-4 w-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 10h12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 4v12" />
                   </svg>
-                  {t('back')}
-                </button>
+                  <span className="text-sm font-semibold text-white">{filteredCount}</span>
+                  <span>
+                    {t('resultsCount')} {totalProcesses}
+                  </span>
+                </span>
+                <span className="truncate text-xs text-white/50">{resolvedDatabasePath}</span>
               </div>
-            </div>
-          </header>
+            </header>
 
-          <section className="controls-area surface-card" style={SURFACE_STYLES.search}>
             <SearchBar
               value={filters.search}
               onChange={(value: string) => handleFilterChange('search', value)}
@@ -873,147 +898,116 @@ function AppContent() {
               categories={categories}
               mechanisms={mechanisms}
               tags={tags}
-              total={processes.length}
-              filtered={filteredProcesses.length}
+              total={totalProcesses}
+              filtered={filteredCount}
               onViewChange={(view: typeof filters.view) => handleFilterChange('view', view)}
             />
-          </section>
 
-          <section className="results-section surface-card" style={SURFACE_STYLES.results}>
-          <ProcessResults
-            processes={filteredProcesses}
-            view={filters.view}
-            onSelect={handleSelectProcess}
-            onTagClick={handleTagClick}
-            onShowDiagram={handleShowDiagram}
+            <section className="glass-panel flex-1 overflow-hidden p-6 lg:p-8">
+              <ProcessResults
+                processes={filteredProcesses}
+                view={filters.view}
+                onSelect={handleSelectProcess}
+                onTagClick={handleTagClick}
+                onShowDiagram={handleShowDiagram}
+                tagColors={database?.tagColors ?? {}}
+              />
+            </section>
+          </div>
+
+          <RightPanel
+            process={selectedProcess}
+            onClose={() => setSelectedProcessId(null)}
+            minimized={rightPanelMinimized}
+            width={rightPanelWidth}
+            onToggle={toggleRightPanel}
+            onResizeStart={handleRightPanelResizeStart}
             tagColors={database?.tagColors ?? {}}
           />
-        </section>
-        </main>
-
-        <RightPanel
-          process={selectedProcess}
-          onClose={() => setSelectedProcessId(null)}
-          minimized={rightPanelMinimized}
-          width={rightPanelWidth}
-          onToggle={toggleRightPanel}
-          onResizeStart={handleRightPanelResizeStart}
-          className="surface-card"
-          surfaceStyle={SURFACE_STYLES.rightPanel}
-        />
-
-        <DiagramModal process={diagramProcess} isOpen={isModalOpen} onClose={closeModal} />
+        </div>
       </div>
 
-      {sidebarMinimized && (
-        <button
-          type="button"
-          className="panel-toggle-button sidebar-open-btn"
-          onClick={() => setSidebarMinimized(false)}
-          aria-label="Mostrar navegació"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6l6 6-6 6" />
-          </svg>
-        </button>
-      )}
-
-      {rightPanelMinimized && (
-        <button
-          type="button"
-          className="panel-toggle-button right-panel-open-btn"
-          onClick={() => setRightPanelMinimized(false)}
-          aria-label="Mostrar panell de previsualització"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M14 6l-6 6 6 6" />
-          </svg>
-        </button>
-      )}
+      <DiagramModal process={diagramProcess} isOpen={isModalOpen} onClose={closeModal} />
 
       {dropActive && (
-        <div className="global-dropzone" role="presentation">
-          <div className="global-dropzone__content">
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              viewBox="0 0 24 24"
-              className="global-dropzone__icon"
-            >
-              <path
-                d="M12 16V4m0 0L7 9m5-5 5 5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M20 16.5v1.75A1.75 1.75 0 0 1 18.25 20H5.75A1.75 1.75 0 0 1 4 18.25V16.5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-violet-500/10 p-6 text-center text-white/80 backdrop-blur">
+          <div className="glass-panel flex max-w-md flex-col items-center gap-4 px-10 py-8">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-10 w-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 0L7 9m5-5 5 5" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M20 16.5v1.75A1.75 1.75 0 0 1 18.25 20H5.75A1.75 1.75 0 0 1 4 18.25V16.5" />
             </svg>
-            <p className="global-dropzone__title">{t('dropzoneTitle')}</p>
-            <p className="global-dropzone__subtitle">{t('dropzoneSubtitle')}</p>
+            <p className="text-lg font-semibold text-white">{t('dropzoneTitle')}</p>
+            <p className="text-sm text-white/70">{t('dropzoneSubtitle')}</p>
           </div>
         </div>
       )}
 
-      {uploadFeedback && (
-        <aside className={`upload-feedback upload-feedback--${uploadStatusClass}`} aria-live="polite">
-          <div className="upload-feedback__header">
-            <p className="upload-feedback__title">{uploadMessage}</p>
-            {uploadFeedback && (
-              <button
-                type="button"
-                className="upload-feedback__close"
-                onClick={closeUploadFeedback}
-                aria-label={t('close')}
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            )}
+      {activeUploadVariant && (
+        <aside
+          className={`fixed bottom-6 right-6 z-40 max-w-md rounded-3xl border px-6 py-5 shadow-2xl backdrop-blur ${activeUploadVariant.className}`}
+          aria-live="polite"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10">
+                {activeUploadVariant.icon}
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-white">{uploadMessage}</p>
+                <p className="text-xs text-white/70">
+                  {savedFiles.length} OK · {failedFiles.length} KO
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={closeUploadFeedback}
+              className="ring-focus inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white/70 transition hover:border-white/20 hover:bg-white/20 hover:text-white"
+              aria-label={t('close')}
+            >
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 14l8-8M6 6l8 8" />
+              </svg>
+            </button>
           </div>
 
-          {uploadFeedback && (
-            <div className="upload-feedback__body">
-              {savedFiles.length > 0 && (
-                <div>
-                  <p className="upload-feedback__section-title">{t('savedFiles')}</p>
-                  <button
-                    type="button"
-                    className="upload-feedback__refresh-btn"
-                    onClick={() => void refreshDatabase()}
-                    aria-label={t('refreshDatabase')}
+          {savedFiles.length > 0 && (
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">{t('savedFiles')}</p>
+                <button
+                  type="button"
+                  onClick={() => void refreshDatabase()}
+                  className="ring-focus inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white/80 transition hover:border-white/20 hover:bg-white/20 hover:text-white"
+                >
+                  🔄 {t('refreshDatabase')}
+                </button>
+              </div>
+              <ul className="space-y-1 text-xs text-white/70">
+                {savedFiles.map((file) => (
+                  <li
+                    key={`${file.originalName}-${file.storedName}`}
+                    className="flex flex-col rounded-xl border border-white/10 bg-white/5 px-3 py-2"
                   >
-                    🔄 {t('refreshDatabase')}
-                  </button>
-                  <ul>
-                    {savedFiles.map((file) => (
-                      <li key={`${file.originalName}-${file.storedName}`}>
-                        <span className="upload-feedback__file-name">{file.originalName}</span>
-                        <span className="upload-feedback__file-path">{file.directory}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                    <span className="font-medium text-white">{file.originalName}</span>
+                    <span className="text-[11px] text-white/60">{file.directory}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-              {failedFiles.length > 0 && (
-                <div>
-                  <p className="upload-feedback__section-title">{t('failedFiles')}</p>
-                  <ul>
-                    {failedFiles.map((file) => (
-                      <li key={`${file.name}-${file.reason}`}>
-                        <span className="upload-feedback__file-name">{file.name}</span>
-                        <span className="upload-feedback__file-error">{file.reason}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+          {failedFiles.length > 0 && (
+            <div className="mt-4 space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">{t('failedFiles')}</p>
+              <ul className="space-y-1 text-xs text-white/70">
+                {failedFiles.map((file) => (
+                  <li key={`${file.name}-${file.reason}`} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                    <span className="font-medium text-white">{file.name}</span>
+                    <span className="text-[11px] text-white/60">{file.reason}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
         </aside>
