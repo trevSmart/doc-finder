@@ -658,18 +658,19 @@ def start_server():
         print("\n💡 Prem Ctrl+C per aturar el servidor")
         print("=" * 60)
 
-        # Obrir navegador de forma intel·ligent (amb delay més llarg)
-        print("🔍 Gestionant navegador...")
-        import threading
-        def delayed_browser_open():
-            time.sleep(2.0)  # Esperar 2 segons perquè el servidor estigui completament iniciat
-            print("🌐 Intentant obrir navegador...")
-            result = smart_browser_open()
-            if result:
-                print("✅ Navegador obert correctament")
-            else:
-                print("❌ Error obrint navegador")
-        threading.Thread(target=delayed_browser_open, daemon=True).start()
+        # Opcionalment obrir navegador (es pot suprimir amb SUPPRESS_BROWSER=true)
+        if os.environ.get('SUPPRESS_BROWSER', '').lower() not in ('1', 'true', 'yes'):
+            print("🔍 Gestionant navegador...")
+            import threading
+            def delayed_browser_open():
+                time.sleep(2.0)  # Esperar 2 segons perquè el servidor estigui completament iniciat
+                print("🌐 Intentant obrir navegador...")
+                result = smart_browser_open()
+                if result:
+                    print("✅ Navegador obert correctament")
+                else:
+                    print("❌ Error obrint navegador")
+            threading.Thread(target=delayed_browser_open, daemon=True).start()
 
         try:
             httpd.serve_forever()
