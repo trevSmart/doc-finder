@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
+import type { PointerEvent as ReactPointerEvent } from 'react'
 import './App.css'
 import type {
   FiltersState,
@@ -24,7 +24,7 @@ const SORT_LOCALE = 'ca'
 const DEFAULT_DATABASE_PATH = 'processes-database.json'
 const baseUrl = import.meta.env.BASE_URL ?? '/'
 const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`
-const envDatabaseUrlRaw = import.meta.env.VITE_DATABASE_URL
+const envDatabaseUrlRaw = import.meta.env.VITE_DATABASE_URL as string | undefined
 const envDatabaseUrl = typeof envDatabaseUrlRaw === 'string' ? envDatabaseUrlRaw.trim() : ''
 const DATABASE_URL = envDatabaseUrl.length > 0
   ? envDatabaseUrl
@@ -130,17 +130,17 @@ const getStoredNumber = (key: string, fallback: number) => {
   }
 }
 
-type SurfaceAnimationStyle = CSSProperties & {
-  '--surface-delay'?: string
-}
+// type SurfaceAnimationStyle = CSSProperties & {
+//   '--surface-delay'?: string
+// }
 
-const SURFACE_STYLES = {
-  sidebar: { '--surface-delay': '40ms' } as SurfaceAnimationStyle,
-  header: { '--surface-delay': '80ms' } as SurfaceAnimationStyle,
-  search: { '--surface-delay': '140ms' } as SurfaceAnimationStyle,
-  results: { '--surface-delay': '200ms' } as SurfaceAnimationStyle,
-  rightPanel: { '--surface-delay': '260ms' } as SurfaceAnimationStyle,
-}
+// const SURFACE_STYLES = {
+//   sidebar: { '--surface-delay': '40ms' } as SurfaceAnimationStyle,
+//   header: { '--surface-delay': '80ms' } as SurfaceAnimationStyle,
+//   search: { '--surface-delay': '140ms' } as SurfaceAnimationStyle,
+//   results: { '--surface-delay': '200ms' } as SurfaceAnimationStyle,
+//   rightPanel: { '--surface-delay': '260ms' } as SurfaceAnimationStyle,
+// }
 
 type UploadStatus = 'success' | 'partial' | 'error'
 
@@ -169,7 +169,7 @@ function AppContent() {
   const [database, setDatabase] = useState<ProcessesDatabase | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [appReady, setAppReady] = useState(!isBrowser)
+  const [, setAppReady] = useState(!isBrowser)
   const [dropActive, setDropActive] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadStatus, setUploadStatus] = useState<UploadStatus | null>(null)
@@ -303,7 +303,7 @@ function AppContent() {
   useEffect(() => {
     if (!isBrowser) {
       setAppReady(true)
-      return () => {}
+      return undefined
     }
     const frame = window.requestAnimationFrame(() => setAppReady(true))
     return () => window.cancelAnimationFrame(frame)
@@ -345,7 +345,7 @@ function AppContent() {
       }
     }
 
-    loadDatabase()
+    void loadDatabase()
 
     return () => {
       isMounted = false
@@ -361,7 +361,7 @@ function AppContent() {
 
   useEffect(() => {
     if (!isBrowser) {
-      return () => {}
+      return undefined
     }
 
     const dragTargets = new Set<EventTarget>()
@@ -374,7 +374,7 @@ function AppContent() {
         return
       }
       event.preventDefault()
-      const target = event.target as EventTarget | null
+      const target = event.target
       if (target) {
         dragTargets.add(target)
       }
@@ -394,7 +394,7 @@ function AppContent() {
         return
       }
       event.preventDefault()
-      const target = event.target as EventTarget | null
+      const target = event.target
       if (target) {
         dragTargets.delete(target)
       }
@@ -407,7 +407,7 @@ function AppContent() {
       }
     }
 
-    const handleDrop = async (event: DragEvent) => {
+    const handleDrop = (event: DragEvent) => {
       if (!hasFiles(event)) {
         return
       }
@@ -446,11 +446,11 @@ function AppContent() {
 
   useEffect(() => {
     if (!isBrowser) {
-      return () => {}
+      return undefined
     }
 
     if (!uploadStatus || uploadStatus === 'success') {
-      return () => {}
+      return undefined
     }
 
     const timeout = window.setTimeout(() => {
@@ -788,14 +788,14 @@ function AppContent() {
     )
   }
 
-  const containerClassName = [
-    'app-container',
-    sidebarMinimized ? 'sidebar-minimized' : '',
-    rightPanelMinimized ? 'right-panel-minimized' : '',
-    appReady ? 'app-ready' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
+  // const containerClassName = [
+  //   'app-container',
+  //   sidebarMinimized ? 'sidebar-minimized' : '',
+  //   rightPanelMinimized ? 'right-panel-minimized' : '',
+  //   appReady ? 'app-ready' : '',
+  // ]
+  //   .filter(Boolean)
+  //   .join(' ')
 
   const uploadStatusClass =
     isUploading && !uploadFeedback ? 'uploading' : uploadFeedback?.status ?? 'idle'
@@ -804,13 +804,16 @@ function AppContent() {
   const failedFiles = uploadFeedback?.summary.errors ?? []
 
   return (
-    <>
-      <div className="background-shapes">
-        <div className="shape"></div>
-        <div className="shape"></div>
-        <div className="shape"></div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+      {/* Background decorative elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
+        <div className="absolute top-40 left-1/2 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-2000"></div>
       </div>
-      <div className={containerClassName}>
+
+      <div className="relative z-10 flex h-screen p-4 gap-4">
+        {/* Sidebar */}
         <Sidebar
           categories={categories}
           mechanisms={mechanisms}
@@ -821,23 +824,21 @@ function AppContent() {
           onFilterChange={handleFilterChange}
           minimized={sidebarMinimized}
           onToggle={toggleSidebar}
-          className="surface-card"
-          style={SURFACE_STYLES.sidebar}
         />
 
-        <main className="main-content">
-          <header className="header surface-card" style={SURFACE_STYLES.header}>
-            <div className="header-content">
-              <div className="header-title-group">
-                <img src={vodafoneLogoSrc} alt="Vodafone" className="vodafone-logo-img" />
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col gap-4 min-w-0">
+          {/* Header */}
+          <header className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <img src={vodafoneLogoSrc} alt="Vodafone" className="w-12 h-12 rounded-full object-cover" />
                 <div>
-                  <h1 className="header-title">{t('knowledgeBase')}</h1>
-                  <p className="header-subtitle">
-                    {t('businessProcessesSubtitle')}
-                  </p>
+                  <h1 className="text-2xl font-semibold text-white">{t('knowledgeBase')}</h1>
+                  <p className="text-white/80 text-sm">{t('businessProcessesSubtitle')}</p>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div className="flex items-center gap-4">
                 <OptionsMenu
                   availableTags={tags}
                   tagColors={database?.tagColors ?? {}}
@@ -848,7 +849,11 @@ function AppContent() {
                   onInitializeDatabaseSuccess={() => void refreshDatabase()}
                 />
                 <LanguageSelector />
-                <button type="button" className="back-btn" onClick={resetFilters}>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 border border-white/20"
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M15 6l-6 6 6 6" />
                   </svg>
@@ -858,7 +863,8 @@ function AppContent() {
             </div>
           </header>
 
-          <section className="controls-area surface-card" style={SURFACE_STYLES.search}>
+          {/* Search and Filters */}
+          <section className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl">
             <SearchBar
               value={filters.search}
               onChange={(value: string) => handleFilterChange('search', value)}
@@ -879,18 +885,20 @@ function AppContent() {
             />
           </section>
 
-          <section className="results-section surface-card" style={SURFACE_STYLES.results}>
-          <ProcessResults
-            processes={filteredProcesses}
-            view={filters.view}
-            onSelect={handleSelectProcess}
-            onTagClick={handleTagClick}
-            onShowDiagram={handleShowDiagram}
-            tagColors={database?.tagColors ?? {}}
-          />
-        </section>
+          {/* Results */}
+          <section className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl overflow-hidden">
+            <ProcessResults
+              processes={filteredProcesses}
+              view={filters.view}
+              onSelect={handleSelectProcess}
+              onTagClick={handleTagClick}
+              onShowDiagram={handleShowDiagram}
+              tagColors={database?.tagColors ?? {}}
+            />
+          </section>
         </main>
 
+        {/* Right Panel */}
         <RightPanel
           process={selectedProcess}
           onClose={() => setSelectedProcessId(null)}
@@ -898,8 +906,6 @@ function AppContent() {
           width={rightPanelWidth}
           onToggle={toggleRightPanel}
           onResizeStart={handleRightPanelResizeStart}
-          className="surface-card"
-          surfaceStyle={SURFACE_STYLES.rightPanel}
         />
 
         <DiagramModal process={diagramProcess} isOpen={isModalOpen} onClose={closeModal} />
@@ -1018,7 +1024,7 @@ function AppContent() {
           )}
         </aside>
       )}
-    </>
+    </div>
   )
 }
 
