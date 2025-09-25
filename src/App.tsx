@@ -9,15 +9,15 @@ import type {
   UploadResponse,
 } from './types'
 import { DEFAULT_TAG_COLOR, ensureTagColors } from './tagColors'
-import { Sidebar } from './components/Sidebar'
-import { SearchBar } from './components/SearchBar'
-import { FiltersPanel } from './components/FiltersPanel'
-import { ProcessResults } from './components/ProcessResults'
-import { RightPanel } from './components/RightPanel'
-import { DiagramModal } from './components/DiagramModal'
-import { OptionsMenu } from './components/OptionsMenu'
+import { Sidebar } from './components/Sidebar.tsx'
+import { SearchBar } from './components/SearchBar.tsx'
+import { FiltersPanel } from './components/FiltersPanel.tsx'
+import { ProcessResults } from './components/ProcessResults.tsx'
+import { RightPanel } from './components/RightPanel.tsx'
+import { DiagramModal } from './components/DiagramModal.tsx'
+import { OptionsMenu } from './components/OptionsMenu.tsx'
 import { LanguageProvider } from './LanguageContext'
-import { LanguageSelector } from './components/LanguageSelector'
+import { LanguageSelector } from './components/LanguageSelector.tsx'
 import { useTranslation } from './useTranslation'
 
 const SORT_LOCALE = 'ca'
@@ -756,16 +756,34 @@ function AppContent() {
   }
 
   if (loading) {
-    return <div className="loading-state">Carregant base de coneixement…</div>
+    return (
+      <div className="loading-state flex items-center justify-center min-h-screen">
+        <div className="bg-white p-8 rounded-lg shadow-lg">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-700 text-center">Carregant base de coneixement…</p>
+        </div>
+      </div>
+    )
   }
 
   if (error) {
     return (
-      <div className="loading-state error">
-        <p>{error}</p>
-        <button type="button" onClick={() => window.location.reload()}>
-          Reintenta
-        </button>
+      <div className="loading-state error flex items-center justify-center min-h-screen">
+        <div className="bg-red-50 border border-red-200 p-8 rounded-lg shadow-lg max-w-md">
+          <div className="text-red-600 mb-4">
+            <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <p className="text-red-800 text-center mb-6">{error}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+          >
+            Reintenta
+          </button>
+        </div>
       </div>
     )
   }
@@ -800,7 +818,7 @@ function AppContent() {
           integrations={integrations}
           tags={tags}
           filters={filters}
-          onFilterChange={(key, value) => handleFilterChange(key, value)}
+          onFilterChange={handleFilterChange}
           minimized={sidebarMinimized}
           onToggle={toggleSidebar}
           className="surface-card"
@@ -843,7 +861,7 @@ function AppContent() {
           <section className="controls-area surface-card" style={SURFACE_STYLES.search}>
             <SearchBar
               value={filters.search}
-              onChange={(value) => handleFilterChange('search', value)}
+              onChange={(value: string) => handleFilterChange('search', value)}
               onClear={handleClearSearch}
             />
 
@@ -857,7 +875,7 @@ function AppContent() {
               tags={tags}
               total={processes.length}
               filtered={filteredProcesses.length}
-              onViewChange={(view) => handleFilterChange('view', view)}
+              onViewChange={(view: typeof filters.view) => handleFilterChange('view', view)}
             />
           </section>
 
