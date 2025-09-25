@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Datos de Integraciones - Vodafone Salesforce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .filters {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .filter-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .integration-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .integration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .integration-card.critical {
+            border-left-color: #e74c3c;
+        }
+
+        .integration-card.high {
+            border-left-color: #f39c3c;
+        }
+
+        .integration-card.medium {
+            border-left-color: #f1c40f;
+        }
+
+        .integration-card.low {
+            border-left-color: #27ae60;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .priority-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .priority-critical {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .priority-high {
+            background: #f39c3c;
+            color: white;
+        }
+
+        .priority-medium {
+            background: #f1c40f;
+            color: #333;
+        }
+
+        .priority-low {
+            background: #27ae60;
+            color: white;
+        }
+
+        .card-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 0.9em;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .monitoring-status {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .monitoring-good {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .monitoring-bad {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .category-title h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .category-count {
+            color: #667eea;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .integrations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-details {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Base de Datos de Integraciones</h1>
+            <p>Sistema Salesforce Vodafone - Catálogo Completo de Integraciones</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">33</div>
+                <div class="stat-label">Total Integraciones</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Categorías</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Tipos de Integración</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Con Monitorización Adecuada</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <h3 style="margin-bottom: 20px; color: #2c3e50;">Filtros de Búsqueda</h3>
+            <input type="text" id="searchInput" class="search-box" placeholder="Buscar por nombre, descripción o tags...">
+            <div class="filter-group">
+                <div>
+                    <label for="categoryFilter">Categoría:</label>
+                    <select id="categoryFilter">
+                        <option value="">Todas las categorías</option>
+                        <option value="Customer Management">Customer Management</option>
+                        <option value="Case Management">Case Management</option>
+                        <option value="Field Service">Field Service</option>
+                        <option value="Workforce Management">Workforce Management</option>
+                        <option value="Order Management">Order Management</option>
+                        <option value="Diagnostics">Diagnostics</option>
+                        <option value="Authorization">Authorization</option>
+                        <option value="Communication">Communication</option>
+                        <option value="Data Quality">Data Quality</option>
+                        <option value="Data Management">Data Management</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Compliance">Compliance</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="typeFilter">Tipo:</label>
+                    <select id="typeFilter">
+                        <option value="">Todos los tipos</option>
+                        <option value="REST API (Inbound)">REST API (Inbound)</option>
+                        <option value="HTTP Callout (Outbound)">HTTP Callout (Outbound)</option>
+                        <option value="Event Processing">Event Processing</option>
+                        <option value="Batch Processing">Batch Processing</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="priorityFilter">Prioridad:</label>
+                    <select id="priorityFilter">
+                        <option value="">Todas las prioridades</option>
+                        <option value="critical">Crítica</option>
+                        <option value="high">Alta</option>
+                        <option value="medium">Media</option>
+                        <option value="low">Baja</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="monitoringFilter">Monitorización:</label>
+                    <select id="monitoringFilter">
+                        <option value="">Todos los estados</option>
+                        <option value="good">Adecuada</option>
+                        <option value="bad">Inadecuada</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="integrationsContainer">
+            <!-- Las integraciones se cargarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <script>
+        const integrationsData = {
+            "integrations": [
+                {
+                    "id": "customer-interaction-creation",
+                    "name": "Customer Interaction Creation",
+                    "description": "Creación de interacciones de clientes desde sistemas CRM externos",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/ManageCustomerInteraction/CreateCustomerInteraction",
+                    "sourceSystem": "External CRM Systems",
+                    "targetSystem": "Salesforce Tasks",
+                    "timing": "Real-time",
+                    "businessPurpose": "Customer interaction tracking",
+                    "monitoringStatus": "❌ No trace object",
+                    "priority": "high",
+                    "tags": ["customer", "interaction", "crm", "rest", "inbound"],
+                    "category": "Customer Management"
+                },
+                {
+                    "id": "customer-interaction-retrieval",
+                    "name": "Customer Interaction Retrieval",
+                    "description": "Recuperación de interacciones de clientes por sistemas externos",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/ManageCustomerInteraction/GetCustomerInteraction/*",
+                    "sourceSystem": "External CRM Systems",
+                    "targetSystem": "Salesforce Query",
+                    "timing": "Real-time",
+                    "businessPurpose": "Data retrieval for external systems",
+                    "monitoringStatus": "❌ No response monitoring",
+                    "priority": "medium",
+                    "tags": ["customer", "interaction", "crm", "rest", "inbound", "query"],
+                    "category": "Customer Management"
+                },
+                {
+                    "id": "subcase-updates",
+                    "name": "Subcase Updates",
+                    "description": "Actualización de subcasos desde sistemas externos de gestión de casos",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/UpdateSubCase",
+                    "sourceSystem": "External Case Mgmt",
+                    "targetSystem": "Salesforce Cases",
+                    "timing": "Real-time",
+                    "businessPurpose": "Case lifecycle management",
+                    "monitoringStatus": "❌ Limited error tracking",
+                    "priority": "high",
+                    "tags": ["case", "subcase", "update", "rest", "inbound"],
+                    "category": "Case Management"
+                },
+                {
+                    "id": "nemo-subcase-updates",
+                    "name": "NEMO Subcase Updates",
+                    "description": "Actualización específica de subcasos NEMO",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/UpdateNEMOSubCase",
+                    "sourceSystem": "NEMO System",
+                    "targetSystem": "Salesforce Cases",
+                    "timing": "Real-time",
+                    "businessPurpose": "NEMO-specific case processing",
+                    "monitoringStatus": "❌ No dedicated monitoring",
+                    "priority": "medium",
+                    "tags": ["nemo", "case", "subcase", "rest", "inbound"],
+                    "category": "Case Management"
+                },
+                {
+                    "id": "massive-case-operations",
+                    "name": "Massive Case Operations",
+                    "description": "Operaciones masivas de casos para procesamiento en lote",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/UpsertMassiveCase",
+                    "sourceSystem": "Bulk Processing Systems",
+                    "targetSystem": "Salesforce Cases",
+                    "timing": "Batch",
+                    "businessPurpose": "Bulk case management",
+                    "monitoringStatus": "❌ No volume tracking",
+                    "priority": "high",
+                    "tags": ["case", "massive", "bulk", "rest", "inbound", "batch"],
+                    "category": "Case Management"
+                },
+                {
+                    "id": "work-order-updates",
+                    "name": "Work Order Updates",
+                    "description": "Actualización de órdenes de trabajo desde el sistema ITOOL",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/ITOOL/UpdateWorkOrder",
+                    "sourceSystem": "ITOOL Field Service",
+                    "targetSystem": "Salesforce Work Orders",
+                    "timing": "Real-time",
+                    "businessPurpose": "Field service coordination",
+                    "monitoringStatus": "❌ No SLA monitoring",
+                    "priority": "high",
+                    "tags": ["work-order", "itool", "field-service", "rest", "inbound"],
+                    "category": "Field Service"
+                },
+                {
+                    "id": "gmms-task-creation",
+                    "name": "GMMS Task Creation",
+                    "description": "Creación de tareas desde el sistema GMMS Workforce",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/GMMS/createTask",
+                    "sourceSystem": "GMMS Workforce",
+                    "targetSystem": "Salesforce Tasks",
+                    "timing": "Real-time",
+                    "businessPurpose": "Workforce task management",
+                    "monitoringStatus": "❌ No integration metrics",
+                    "priority": "medium",
+                    "tags": ["gmms", "task", "workforce", "rest", "inbound"],
+                    "category": "Workforce Management"
+                },
+                {
+                    "id": "agent-workgroup-updates",
+                    "name": "Agent Workgroup Updates",
+                    "description": "Actualización de grupos de trabajo de agentes",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/GMMS/UpdateAgentWorkgroup",
+                    "sourceSystem": "GMMS Workforce",
+                    "targetSystem": "Agent Records",
+                    "timing": "Real-time",
+                    "businessPurpose": "Agent assignment management",
+                    "monitoringStatus": "❌ No change tracking",
+                    "priority": "medium",
+                    "tags": ["gmms", "agent", "workgroup", "rest", "inbound"],
+                    "category": "Workforce Management"
+                },
+                {
+                    "id": "task-customer-data",
+                    "name": "Task Customer Data",
+                    "description": "Obtención de datos de clientes para contexto de tareas",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/GMMS/GetTaskCustomerData",
+                    "sourceSystem": "GMMS Workforce",
+                    "targetSystem": "Customer Data Query",
+                    "timing": "Real-time",
+                    "businessPurpose": "Customer data for task context",
+                    "monitoringStatus": "❌ No performance monitoring",
+                    "priority": "medium",
+                    "tags": ["gmms", "task", "customer", "data", "rest", "inbound"],
+                    "category": "Workforce Management"
+                },
+                {
+                    "id": "xom-procedure-invocation",
+                    "name": "XOM Procedure Invocation",
+                    "description": "Invocación de procedimientos de orden vía MuleSoft",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/CSP_XomMulesoftIntProcdureInvocation",
+                    "sourceSystem": "XOM via MuleSoft",
+                    "targetSystem": "Order Procedures",
+                    "timing": "Real-time",
+                    "businessPurpose": "Order management procedures",
+                    "monitoringStatus": "❌ Limited procedure tracking",
+                    "priority": "critical",
+                    "tags": ["xom", "mulesoft", "procedure", "order", "rest", "inbound"],
+                    "category": "Order Management"
+                },
+                {
+                    "id": "telediagnosis-results",
+                    "name": "Telediagnosis Results",
+                    "description": "Resultados de telediagnóstico desde sistemas de diagnóstico",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/ManageTelediagnosisResult",
+                    "sourceSystem": "Diagnostic Systems",
+                    "targetSystem": "Diagnostic Records",
+                    "timing": "Real-time",
+                    "businessPurpose": "Technical problem resolution",
+                    "monitoringStatus": "❌ No result correlation",
+                    "priority": "medium",
+                    "tags": ["telediagnosis", "diagnostic", "result", "rest", "inbound"],
+                    "category": "Diagnostics"
+                },
+                {
+                    "id": "contact-data-retrieval",
+                    "name": "Contact Data Retrieval",
+                    "description": "Recuperación de datos de contacto por sistemas externos",
+                    "type": "REST API (Inbound)",
+                    "endpoint": "/getContactData",
+                    "sourceSystem": "External Systems",
+                    "targetSystem": "Contact Query",
+                    "timing": "Real-time",
+                    "businessPurpose": "Contact data integration",
+                    "monitoringStatus": "❌ Test endpoint only",
+                    "priority": "low",
+                    "tags": ["contact", "data", "retrieval", "rest", "inbound", "test"],
+                    "category": "Customer Management"
+                },
+                {
+                    "id": "gestiona-account-sync",
+                    "name": "Gestiona Account Sync",
+                    "description": "Sincronización de cuentas con el CRM legacy Gestiona",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Account Trigger Events",
+                    "sourceSystem": "Salesforce Accounts",
+                    "targetSystem": "Gestiona CRM",
+                    "timing": "Real-time Async",
+                    "businessPurpose": "Legacy CRM synchronization",
+                    "monitoringStatus": "❌ No sync status dashboard",
+                    "priority": "critical",
+                    "tags": ["gestiona", "account", "sync", "legacy", "crm", "outbound"],
+                    "category": "Customer Management"
+                },
+                {
+                    "id": "pre-scoring-integration",
+                    "name": "Pre-Scoring Integration",
+                    "description": "Integración de pre-puntuación para evaluación de riesgo crediticio",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Account Evaluation",
+                    "sourceSystem": "Salesforce Accounts",
+                    "targetSystem": "Scoring System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Credit risk assessment",
+                    "monitoringStatus": "❌ No scoring result tracking",
+                    "priority": "high",
+                    "tags": ["scoring", "credit", "risk", "assessment", "outbound"],
+                    "category": "Customer Management"
+                },
+                {
+                    "id": "address-normalization",
+                    "name": "Address Normalization",
+                    "description": "Normalización de direcciones para asegurar calidad de datos",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Address Changes",
+                    "sourceSystem": "Address Fields",
+                    "targetSystem": "Validation Service",
+                    "timing": "Real-time",
+                    "businessPurpose": "Data quality assurance",
+                    "monitoringStatus": "❌ No validation success rates",
+                    "priority": "medium",
+                    "tags": ["address", "normalization", "validation", "data-quality", "outbound"],
+                    "category": "Data Quality"
+                },
+                {
+                    "id": "itool-appointment-creation",
+                    "name": "ITOOL Appointment Creation",
+                    "description": "Creación de citas desde el sistema ITOOL",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Appointment Events",
+                    "sourceSystem": "Work Orders",
+                    "targetSystem": "ITOOL System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Field service scheduling",
+                    "monitoringStatus": "❌ No appointment correlation",
+                    "priority": "high",
+                    "tags": ["itool", "appointment", "creation", "field-service", "outbound"],
+                    "category": "Field Service"
+                },
+                {
+                    "id": "itool-appointment-modification",
+                    "name": "ITOOL Appointment Modification",
+                    "description": "Modificación de citas desde el sistema ITOOL",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Appointment Changes",
+                    "sourceSystem": "Work Orders",
+                    "targetSystem": "ITOOL System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Field service rescheduling",
+                    "monitoringStatus": "❌ No change success tracking",
+                    "priority": "high",
+                    "tags": ["itool", "appointment", "modification", "field-service", "outbound"],
+                    "category": "Field Service"
+                },
+                {
+                    "id": "gae-authorization-creation",
+                    "name": "GAE Authorization Creation",
+                    "description": "Creación de autorizaciones GAE para control de acceso",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Contact Authorization",
+                    "sourceSystem": "Contact Events",
+                    "targetSystem": "GAE System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Access control setup",
+                    "monitoringStatus": "❌ No authorization audit trail",
+                    "priority": "high",
+                    "tags": ["gae", "authorization", "creation", "access-control", "outbound"],
+                    "category": "Authorization"
+                },
+                {
+                    "id": "gae-authorization-deactivation",
+                    "name": "GAE Authorization Deactivation",
+                    "description": "Desactivación de autorizaciones GAE",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Contact Deactivation",
+                    "sourceSystem": "Contact Events",
+                    "targetSystem": "GAE System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Access control removal",
+                    "monitoringStatus": "❌ No deactivation confirmation",
+                    "priority": "high",
+                    "tags": ["gae", "authorization", "deactivation", "access-control", "outbound"],
+                    "category": "Authorization"
+                },
+                {
+                    "id": "gae-authorization-reactivation",
+                    "name": "GAE Authorization Reactivation",
+                    "description": "Reactivación de autorizaciones GAE",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Contact Reactivation",
+                    "sourceSystem": "Contact Events",
+                    "targetSystem": "GAE System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Access control restoration",
+                    "monitoringStatus": "❌ No reactivation tracking",
+                    "priority": "high",
+                    "tags": ["gae", "authorization", "reactivation", "access-control", "outbound"],
+                    "category": "Authorization"
+                },
+                {
+                    "id": "gae-contact-creation",
+                    "name": "GAE Contact Creation",
+                    "description": "Creación de contactos en el sistema GAE",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Contact Creation",
+                    "sourceSystem": "Contact Events",
+                    "targetSystem": "GAE System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Contact provisioning",
+                    "monitoringStatus": "❌ No provisioning status",
+                    "priority": "high",
+                    "tags": ["gae", "contact", "creation", "provisioning", "outbound"],
+                    "category": "Authorization"
+                },
+                {
+                    "id": "gae-contact-modification",
+                    "name": "GAE Contact Modification",
+                    "description": "Modificación de contactos en el sistema GAE",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Contact Updates",
+                    "sourceSystem": "Contact Events",
+                    "targetSystem": "GAE System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Contact maintenance",
+                    "monitoringStatus": "❌ No update confirmation",
+                    "priority": "high",
+                    "tags": ["gae", "contact", "modification", "maintenance", "outbound"],
+                    "category": "Authorization"
+                },
+                {
+                    "id": "notification-service",
+                    "name": "Notification Service",
+                    "description": "Servicio de notificaciones para comunicación con clientes",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Process Events",
+                    "sourceSystem": "Various Processes",
+                    "targetSystem": "Notification Systems",
+                    "timing": "Async (Queueable)",
+                    "businessPurpose": "Customer communication",
+                    "monitoringStatus": "❌ No delivery confirmation",
+                    "priority": "critical",
+                    "tags": ["notification", "service", "communication", "async", "outbound"],
+                    "category": "Communication"
+                },
+                {
+                    "id": "nice-call-integration",
+                    "name": "Nice Call Integration",
+                    "description": "Integración con el sistema Nice Call para call center",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Call Events",
+                    "sourceSystem": "Call Activities",
+                    "targetSystem": "Nice Call System",
+                    "timing": "Real-time",
+                    "businessPurpose": "Call center integration",
+                    "monitoringStatus": "❌ No call correlation",
+                    "priority": "medium",
+                    "tags": ["nice", "call", "integration", "call-center", "outbound"],
+                    "category": "Communication"
+                },
+                {
+                    "id": "diagnosis-launch",
+                    "name": "Diagnosis Launch",
+                    "description": "Lanzamiento de diagnósticos para solución de problemas técnicos",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Service Requests",
+                    "sourceSystem": "Service Events",
+                    "targetSystem": "Diagnostic Systems",
+                    "timing": "Async",
+                    "businessPurpose": "Technical diagnostics",
+                    "monitoringStatus": "❌ No diagnostic correlation",
+                    "priority": "medium",
+                    "tags": ["diagnosis", "launch", "technical", "async", "outbound"],
+                    "category": "Diagnostics"
+                },
+                {
+                    "id": "diagnosis-result-retrieval",
+                    "name": "Diagnosis Result Retrieval",
+                    "description": "Recuperación de resultados de diagnóstico por polling",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Polling",
+                    "sourceSystem": "Diagnostic Process",
+                    "targetSystem": "Diagnostic Systems",
+                    "timing": "Async",
+                    "businessPurpose": "Diagnostic result processing",
+                    "monitoringStatus": "❌ No polling optimization",
+                    "priority": "medium",
+                    "tags": ["diagnosis", "result", "retrieval", "polling", "async", "outbound"],
+                    "category": "Diagnostics"
+                },
+                {
+                    "id": "telediagnosis-invocation",
+                    "name": "Telediagnosis Invocation",
+                    "description": "Invocación de telediagnóstico para diagnóstico remoto",
+                    "type": "HTTP Callout (Outbound)",
+                    "endpoint": "Service Requests",
+                    "sourceSystem": "Service Events",
+                    "targetSystem": "Telediagnosis Systems",
+                    "timing": "Async",
+                    "businessPurpose": "Remote diagnostics",
+                    "monitoringStatus": "❌ No session tracking",
+                    "priority": "medium",
+                    "tags": ["telediagnosis", "invocation", "remote", "async", "outbound"],
+                    "category": "Diagnostics"
+                },
+                {
+                    "id": "xom-orchestration-events",
+                    "name": "XOM Orchestration Events",
+                    "description": "Procesamiento de eventos de orquestación XOM para workflow de cumplimiento de órdenes",
+                    "type": "Event Processing",
+                    "endpoint": "Orchestration State Changes",
+                    "sourceSystem": "Vlocity Orchestration",
+                    "targetSystem": "Related Orchestration Items",
+                    "timing": "Real-time",
+                    "businessPurpose": "Order fulfillment workflow",
+                    "monitoringStatus": "✅ Event state tracking",
+                    "priority": "critical",
+                    "tags": ["xom", "orchestration", "events", "workflow", "order", "vlocity"],
+                    "category": "Order Management"
+                },
+                {
+                    "id": "partner-synchronization",
+                    "name": "Partner Synchronization",
+                    "description": "Sincronización de partners para mantenimiento de datos",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Salesforce Partners",
+                    "targetSystem": "External Partner Systems",
+                    "timing": "Batch",
+                    "businessPurpose": "Partner data maintenance",
+                    "monitoringStatus": "❌ No sync reporting",
+                    "priority": "medium",
+                    "tags": ["partner", "synchronization", "batch", "maintenance"],
+                    "category": "Data Management"
+                },
+                {
+                    "id": "user-synchronization",
+                    "name": "User Synchronization",
+                    "description": "Sincronización de usuarios para mantenimiento de cuentas",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Salesforce Users",
+                    "targetSystem": "External User Systems",
+                    "timing": "Batch",
+                    "businessPurpose": "User account maintenance",
+                    "monitoringStatus": "❌ No user sync status",
+                    "priority": "medium",
+                    "tags": ["user", "synchronization", "batch", "maintenance"],
+                    "category": "Data Management"
+                },
+                {
+                    "id": "campaign-updates",
+                    "name": "Campaign Updates",
+                    "description": "Actualización de campañas de marketing",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Salesforce Campaigns",
+                    "targetSystem": "External Marketing",
+                    "timing": "Batch",
+                    "businessPurpose": "Marketing campaign sync",
+                    "monitoringStatus": "❌ No campaign sync metrics",
+                    "priority": "low",
+                    "tags": ["campaign", "updates", "marketing", "batch", "sync"],
+                    "category": "Marketing"
+                },
+                {
+                    "id": "massive-case-processing",
+                    "name": "Massive Case Processing",
+                    "description": "Procesamiento masivo de casos para operaciones en lote",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Case Records",
+                    "targetSystem": "Case Processing System",
+                    "timing": "Batch",
+                    "businessPurpose": "Bulk case operations",
+                    "monitoringStatus": "❌ No processing statistics",
+                    "priority": "high",
+                    "tags": ["case", "massive", "processing", "batch", "bulk"],
+                    "category": "Case Management"
+                },
+                {
+                    "id": "contact-anonymization",
+                    "name": "Contact Anonymization",
+                    "description": "Anonimización de contactos para cumplimiento GDPR",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Contact Records",
+                    "targetSystem": "GDPR Compliance",
+                    "timing": "Batch",
+                    "businessPurpose": "Data privacy compliance",
+                    "monitoringStatus": "❌ No compliance reporting",
+                    "priority": "critical",
+                    "tags": ["contact", "anonymization", "gdpr", "compliance", "batch"],
+                    "category": "Compliance"
+                },
+                {
+                    "id": "gdpr-lead-deletion",
+                    "name": "GDPR Lead Deletion",
+                    "description": "Eliminación de leads para cumplimiento GDPR",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Lead Records",
+                    "targetSystem": "GDPR Compliance",
+                    "timing": "Batch",
+                    "businessPurpose": "Data retention compliance",
+                    "monitoringStatus": "❌ No deletion confirmation",
+                    "priority": "critical",
+                    "tags": ["gdpr", "lead", "deletion", "compliance", "batch"],
+                    "category": "Compliance"
+                },
+                {
+                    "id": "sla-case-notifications",
+                    "name": "SLA Case Notifications",
+                    "description": "Notificaciones SLA para casos de larga duración",
+                    "type": "Batch Processing",
+                    "endpoint": "Scheduled (Batch)",
+                    "sourceSystem": "Long-running Cases",
+                    "targetSystem": "Notification System",
+                    "timing": "Batch",
+                    "businessPurpose": "SLA monitoring alerts",
+                    "monitoringStatus": "❌ No SLA dashboard",
+                    "priority": "high",
+                    "tags": ["sla", "case", "notifications", "monitoring", "batch"],
+                    "category": "Case Management"
+                }
+            ]
+        };
+
+        function renderIntegrations(integrations) {
+            const container = document.getElementById('integrationsContainer');
+
+            if (integrations.length === 0) {
+                container.innerHTML = '<div class="no-results">No se encontraron integraciones que coincidan con los filtros seleccionados.</div>';
+                return;
+            }
+
+            // Agrupar por categorías
+            const groupedByCategory = {};
+            integrations.forEach(integration => {
+                if (!groupedByCategory[integration.category]) {
+                    groupedByCategory[integration.category] = [];
+                }
+                groupedByCategory[integration.category].push(integration);
+            });
+
+            let html = '';
+            Object.keys(groupedByCategory).sort().forEach(category => {
+                const categoryIntegrations = groupedByCategory[category];
+                html += `
+                    <div class="category-section">
+                        <div class="category-title">
+                            <h2>${category}</h2>
+                            <div class="category-count">${categoryIntegrations.length} integración${categoryIntegrations.length !== 1 ? 'es' : ''}</div>
+                        </div>
+                        <div class="integrations-grid">
+                            ${categoryIntegrations.map(integration => createIntegrationCard(integration)).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function createIntegrationCard(integration) {
+            const monitoringClass = integration.monitoringStatus.includes('✅') ? 'monitoring-good' : 'monitoring-bad';
+            const priorityClass = `priority-${integration.priority}`;
+
+            return `
+                <div class="integration-card ${integration.priority}">
+                    <div class="card-header">
+                        <div class="card-title">${integration.name}</div>
+                        <div class="priority-badge ${priorityClass}">${integration.priority}</div>
+                    </div>
+                    <div class="card-description">${integration.description}</div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Tipo</div>
+                            <div class="detail-value">${integration.type}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Endpoint</div>
+                            <div class="detail-value">${integration.endpoint}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Sistema Origen</div>
+                            <div class="detail-value">${integration.sourceSystem}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Sistema Destino</div>
+                            <div class="detail-value">${integration.targetSystem}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Timing</div>
+                            <div class="detail-value">${integration.timing}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Propósito</div>
+                            <div class="detail-value">${integration.businessPurpose}</div>
+                        </div>
+                    </div>
+                    <div class="monitoring-status ${monitoringClass}">
+                        ${integration.monitoringStatus}
+                    </div>
+                    <div class="tags">
+                        ${integration.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterIntegrations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const monitoringFilter = document.getElementById('monitoringFilter').value;
+
+            const filtered = integrationsData.integrations.filter(integration => {
+                const matchesSearch = !searchTerm ||
+                    integration.name.toLowerCase().includes(searchTerm) ||
+                    integration.description.toLowerCase().includes(searchTerm) ||
+                    integration.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+
+                const matchesCategory = !categoryFilter || integration.category === categoryFilter;
+                const matchesType = !typeFilter || integration.type === typeFilter;
+                const matchesPriority = !priorityFilter || integration.priority === priorityFilter;
+
+                let matchesMonitoring = true;
+                if (monitoringFilter === 'good') {
+                    matchesMonitoring = integration.monitoringStatus.includes('✅');
+                } else if (monitoringFilter === 'bad') {
+                    matchesMonitoring = integration.monitoringStatus.includes('❌');
+                }
+
+                return matchesSearch && matchesCategory && matchesType && matchesPriority && matchesMonitoring;
+            });
+
+            renderIntegrations(filtered);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterIntegrations);
+        document.getElementById('categoryFilter').addEventListener('change', filterIntegrations);
+        document.getElementById('typeFilter').addEventListener('change', filterIntegrations);
+        document.getElementById('priorityFilter').addEventListener('change', filterIntegrations);
+        document.getElementById('monitoringFilter').addEventListener('change', filterIntegrations);
+
+        // Renderizar todas las integraciones al cargar la página
+        renderIntegrations(integrationsData.integrations);
+    </script>
+</body>
+</html>

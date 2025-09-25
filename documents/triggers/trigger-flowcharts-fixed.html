@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramas de Flujo de Triggers - Representación Visual</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        .mermaid {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        .critical {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+        .style-note {
+            font-style: italic;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Diagramas de Flujo de Triggers - Representación Visual</h1>
+
+        <h2>Flujos Principales de Triggers</h2>
+
+        <h3>1. Patrón GSP_MetadataTriggerHandler (23 Triggers)</h3>
+        <div class="mermaid">
+graph TD
+    A[Object DML Event] --> B{Trigger Activated}
+    B --> C[GSP_MetadataTriggerHandler]
+    C --> D[Load Metadata Configuration]
+    D --> E{Handler Class Configured?}
+    E -->|Yes| F[Execute Handler Class]
+    E -->|No| G[Skip Processing]
+    F --> H[Handler Logic Execution]
+    H --> I[Field Validations]
+    H --> J[Business Logic]
+    H --> K[Related Record Processing]
+    I --> L[End]
+    J --> L
+    K --> L
+    G --> L
+
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style F fill:#e8f5e8
+    style L fill:#fff3e0
+        </div>
+
+        <h3>2. Asset Trigger - Recursión Infinita (PROBLEMA CRÍTICO)</h3>
+        <div class="critical">
+            <strong>⚠️ ADVERTENCIA CRÍTICA:</strong> Este trigger causa recursión infinita ya que modifica los mismos registros que activaron el trigger, sin mecanismo de control de recursión.
+        </div>
+        <div class="mermaid">
+graph TD
+    A[Asset Before Update] --> B[recursionexample Trigger]
+    B --> C[Loop: for each Asset in TriggerNew]
+    C --> D[Set assetvQuantity = 5]
+    D --> E[Add to assets List]
+    E --> F{More Assets?}
+    F -->|Yes| C
+    F -->|No| G[update assets]
+    G --> H[LOOP: Asset Before Update Event Fired Again]
+    H --> B
+
+    style A fill:#e1f5fe
+    style B fill:#ffebee
+    style G fill:#ffcdd2
+    style H fill:#f44336
+
+    B -.->|INFINITE LOOP| H
+        </div>
+
+        <h3>3. Account - Múltiples Triggers</h3>
+        <div class="mermaid">
+graph TD
+    A[Account DML Event] --> B{Which Trigger Executes?}
+    B -->|Primary| C[CSP_AccountTrigger]
+    B -->|Secondary| D[ParentCreatedUpdateCreateUpdateChildRecords]
+
+    C --> E[GSP_MetadataTriggerHandler]
+    E --> F[Metadata-driven Processing]
+    F --> G[Account Handler Logic]
+
+    D --> H{Is After Insert/Update?}
+    H -->|Yes| I[HelperForParentScenariocreateUpdateChildRecord]
+    H -->|No| J[Pass Through]
+    I --> K[Create/Update Child Records]
+
+    G --> L[End]
+    J --> L
+    K --> L
+
+    style A fill:#e1f5fe
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style I fill:#f3e5f5
+        </div>
+
+        <h3>4. Contact - Cuatro Triggers Simultáneos</h3>
+        <div class="mermaid">
+graph TD
+    A[Contact DML Event] --> B[Multiple Triggers Execute]
+
+    B --> C[CSP_ContactTrigger]
+    B --> D[CSP_trigger_cl]
+    B --> E[CSP_AccountContactRelTrigger]
+    B --> F[CSP_ChildCreatedUpdateUdateParent]
+
+    C --> G[GSP_MetadataTriggerHandler]
+    D --> H[GSP_MetadataTriggerHandler]
+    E --> I[Empty - No Logic]
+    F --> J{Is After Insert/Update?}
+
+    G --> K[Handler Logic 1]
+    H --> L[Handler Logic 2]
+    I --> M[Pass Through]
+    J -->|Yes| N[CSP_ChildCreatedUpdateUdateParentafterInsert]
+    J -->|No| O[Pass Through]
+
+    N --> P[Update Parent Records]
+
+    K --> Q[End]
+    L --> Q
+    M --> Q
+    O --> Q
+    P --> Q
+
+    style A fill:#e1f5fe
+    style B fill:#ffecb3
+    style I fill:#f5f5f5
+    style N fill:#e8f5e8
+        </div>
+
+        <h3>5. OrchestrationItem - Procesamiento Complejo</h3>
+        <div class="mermaid">
+graph TD
+    A[OrchestrationItem After Update] --> B[CSP_OrchItem_Trigger]
+    B --> C{Is After Update?}
+    C -->|No| D[End]
+    C -->|Yes| E[Loop: oldOrchItem in Triggerold]
+    E --> F[Loop: newOrchItem in Triggernew]
+    F --> G{Same ID?}
+    G -->|No| F
+    G -->|Yes| H{State Changed to 'Completed'?}
+    H -->|No| I{More Items?}
+    H -->|Yes| J{Name in CRM Client Set?}
+    J -->|No| I
+    J -->|Yes| K[Add to orchItemsToExecute]
+    K --> I
+    I -->|Yes| F
+    I -->|No| L{orchItemsToExecute not empty?}
+    L -->|No| D
+    L -->|Yes| M[CSP_XomPushEventHanddlerexecute]
+    M --> N[External System Processing]
+    N --> D
+
+    style A fill:#e1f5fe
+    style H fill:#fff3e0
+    style J fill:#e8f5e8
+    style M fill:#f3e5f5
+    style N fill:#ffecb3
+        </div>
+
+        <h3>6. UpgradeStep - Validación y Relaciones</h3>
+        <div class="mermaid">
+graph TD
+    A[UpgradeStep Before Insert/Update] --> B[UpgradeStep Trigger]
+    B --> C[Loop: each step in TriggerNew]
+    C --> D[Validate Name not blank]
+    D --> E[Validate ExternalId__c not blank]
+    E --> F[Validate UniqueId__c not blank]
+    F --> G[Validate UpgradePlanId__c not null]
+    G --> H{Any Validation Failed?}
+    H -->|Yes| I[Add Error to Field]
+    H -->|No| J{Is Update?}
+    I --> K{More Steps?}
+    J -->|No| K
+    J -->|Yes| L[Build stepMap by UniqueId__c]
+    L --> M[Loop: each step in stepMap]
+    M --> N{ParentStepUniqueId__c exists?}
+    N -->|Yes| O[Set ParentStepId__c]
+    N -->|No| P{PrecursorStepUniqueId__c exists?}
+    O --> P
+    P -->|Yes| Q[Set PrecursorStepId__c]
+    P -->|No| R{More Steps in Map?}
+    Q --> R
+    R -->|Yes| M
+    R -->|No| K
+    K -->|Yes| C
+    K -->|No| S[End]
+
+    style A fill:#e1f5fe
+    style H fill:#fff3e0
+    style I fill:#ffcdd2
+    style L fill:#e8f5e8
+    style O fill:#f3e5f5
+    style Q fill:#f3e5f5
+        </div>
+
+        <h3>7. Triggers con Bypass Mechanism</h3>
+        <div class="mermaid">
+graph TD
+    A[Object DML Event] --> B{Which Object?}
+    B -->|PortfolioManagement| C[CSP_PortfolioMngtTrigger]
+    B -->|VodafoneBusinessTeam| D[CSP_VodafoneBusinessTeamTrigger]
+    B -->|Other| E[Standard GSP Flow]
+
+    C --> F{!CSP_PortfolioMngtHandler.bypassAccTrigger?}
+    D --> G{!CSP_VodafoneBusinessTeamTriggerHandler.byPassVDFTrigger?}
+
+    F -->|True| H[GSP_MetadataTriggerHandler]
+    F -->|False| I[Skip Processing]
+    G -->|True| H
+    G -->|False| I
+    E --> H
+
+    H --> J[Execute Handler Logic]
+    I --> K[End]
+    J --> K
+
+    style A fill:#e1f5fe
+    style F fill:#fff3e0
+    style G fill:#fff3e0
+    style I fill:#ffecb3
+    style H fill:#e8f5e8
+        </div>
+
+        <hr>
+
+        <h2>Diagramas de Interacción entre Objetos</h2>
+
+        <h3>1. Account ↔ Contact Parent-Child Relationship</h3>
+        <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Account
+    participant Contact
+    participant AccountTrigger
+    participant ContactTrigger
+    participant HelperClass
+
+    User->>Account: Create/Update Account
+    Account->>AccountTrigger: Trigger Activation
+    AccountTrigger->>HelperClass: ParentCreatedUpdateCreateUpdateChildRecords
+    HelperClass->>Contact: Create/Update Child Contacts
+    Contact->>ContactTrigger: Child Trigger Activation
+    ContactTrigger->>HelperClass: CSP_ChildCreatedUpdateUdateParent
+    HelperClass->>Account: Update Parent Account
+    Account-->>User: Process Complete
+        </div>
+
+        <h3>2. ContentDocument Processing Flow</h3>
+        <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant ContentDocument
+    participant Case
+    participant POC_Trigger
+    participant ExternalSystem
+
+    User->>ContentDocument: Update Document
+    ContentDocument->>POC_Trigger: POC_ContentDocument (after update)
+    POC_Trigger->>POC_Trigger: Debug: Create post & update external system
+
+    User->>ContentDocument: Delete Document
+    ContentDocument->>POC_Trigger: POC_ContentDocument (before delete)
+    POC_Trigger->>POC_Trigger: Debug: Create post & update external system
+
+    Note over POC_Trigger,ExternalSystem: External system integration prepared but not executed
+        </div>
+
+        <h3>3. OrchestrationItem → External System Integration</h3>
+        <div class="mermaid">
+sequenceDiagram
+    participant OrchItem as OrchestrationItem
+    participant Trigger as CSP_OrchItem_Trigger
+    participant Handler as CSP_XomPushEventHanddler
+    participant ExtSys as External System
+
+    OrchItem->>Trigger: After Update Event
+    Trigger->>Trigger: Check State Change to 'Completed'
+    Trigger->>Trigger: Validate Name in CRM Client Set
+    alt State = Completed AND Name in Set
+        Trigger->>Handler: execute(orchItemsToExecute)
+        Handler->>ExtSys: Push Event
+        ExtSys-->>Handler: Response
+    else
+        Trigger->>Trigger: No Action
+    end
+        </div>
+
+        <hr>
+
+        <h2>Patrones de Ejecución por Contexto</h2>
+
+        <h3>Before Triggers - Validation & Preparation</h3>
+        <div class="mermaid">
+graph LR
+    A[Before Event] --> B[Validation Logic]
+    B --> C[Field Population]
+    C --> D[Business Rules]
+    D --> E[Error Handling]
+    E --> F[Allow/Prevent Save]
+
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#f3e5f5
+    style E fill:#ffecb3
+    style F fill:#e1f5fe
+        </div>
+
+        <h3>After Triggers - Processing & Integration</h3>
+        <div class="mermaid">
+graph LR
+    A[After Event] --> B[Related Record Updates]
+    B --> C[External System Calls]
+    C --> D[Workflow/Process Builder]
+    D --> E[Notifications]
+    E --> F[Cleanup Operations]
+
+    style A fill:#e8f5e8
+    style B fill:#f3e5f5
+    style C fill:#fff3e0
+    style D fill:#ffecb3
+    style E fill:#fce4ec
+    style F fill:#e1f5fe
+        </div>
+
+        <hr>
+
+        <h2>Recomendaciones de Flujo</h2>
+
+        <h3>1. Control de Recursión Recomendado</h3>
+        <div class="info">
+            <strong>Recomendación:</strong> Implementar un mecanismo de control de recursión para evitar bucles infinitos en triggers que modifican los mismos registros que los activaron.
+        </div>
+        <div class="mermaid">
+graph TD
+    A[Trigger Entry] --> B{RecursionHelper.shouldRun}
+    B -->|False| C[Exit - Already Running]
+    B -->|True| D[Set Running Flag]
+    D --> E[Execute Trigger Logic]
+    E --> F[RecursionHelper.reset]
+    F --> G[End]
+    C --> G
+
+    style B fill:#fff3e0
+    style C fill:#ffcdd2
+    style D fill:#e8f5e8
+    style F fill:#e8f5e8
+        </div>
+
+        <h3>2. Consolidación de Triggers Múltiples</h3>
+        <div class="info">
+            <strong>Recomendación:</strong> Consolidar múltiples triggers en un solo trigger por objeto para simplificar la gestión y evitar conflictos de ejecución.
+        </div>
+        <div class="mermaid">
+graph TD
+    A[Object Event] --> B[Single Consolidated Trigger]
+    B --> C[Context Detection]
+    C --> D{Which Handler?}
+    D -->|Validation| E[Validation Handler]
+    D -->|Business Logic| F[Business Handler]
+    D -->|Integration| G[Integration Handler]
+    D -->|Parent-Child| H[Relationship Handler]
+
+    E --> I[Unified Response]
+    F --> I
+    G --> I
+    H --> I
+    I --> J[End]
+
+    style B fill:#e8f5e8
+    style C fill:#fff3e0
+    style I fill:#f3e5f5
+        </div>
+
+        <hr>
+
+        <div class="info">
+            <p><strong>Nota:</strong> Este documento proporciona representaciones visuales de los flujos de triggers más complejos e importantes del sistema, facilitando la comprensión de las interacciones y dependencias entre los diferentes componentes.</p>
+        </div>
+    </div>
+</body>
+</html>

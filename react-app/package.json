@@ -1,0 +1,37 @@
+{
+  "name": "react-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "predev": "npm run sync:data",
+    "build": "tsc -b && vite build",
+    "prebuild": "npm run sync:data",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "sync:data": "node ./scripts/sync-data.mjs",
+    "start:server": "VITE_DATABASE_URL=processes-database.json && npm run build && cd ../../.. && python3 docs/doc-finder/server.py",
+    "startTest": "DOCUMENTS_DIRECTORY=/Users/marcpla/Downloads/library VITE_DATABASE_URL=processes-database.json npm run dev"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.4.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.44.0",
+    "vite": "^7.1.7"
+  }
+}
