@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "sync:data": "node ./scripts/sync-data.mjs",
-    "start:server": "VITE_DATABASE_URL=processes-database.json && npm run build && cd ../../.. && python3 docs/doc-finder/server.py",
+    "start:server": "VITE_DATABASE_URL=processes-database.json && npm run build && python3 server.py",
     "startTest": "DOCUMENTS_DIRECTORY=/Users/marcpla/Downloads/library VITE_DATABASE_URL=processes-database.json npm run dev"
   },
   "dependencies": {

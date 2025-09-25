@@ -24,17 +24,17 @@ from urllib.parse import unquote
 
 # Configuració
 PORT = 8082
-DIRECTORY = Path(__file__).parent.parent  # Serveix des de docs/
+DIRECTORY = Path(__file__).parent  # Serveix des de l'arrel del projecte
 
 # Llegir DOCUMENTS_DIRECTORY des de la variable d'entorn si està definida
 DOCUMENTS_DIRECTORY_ENV = os.environ.get('DOCUMENTS_DIRECTORY')
 if DOCUMENTS_DIRECTORY_ENV:
     DOCUMENTS_DIRECTORY = Path(DOCUMENTS_DIRECTORY_ENV)
 else:
-    DOCUMENTS_DIRECTORY = DIRECTORY / 'doc-finder' / 'documents'
+    DOCUMENTS_DIRECTORY = DIRECTORY / 'documents'
 
-REACT_DIST_INDEX = DIRECTORY / 'doc-finder' / 'react-app' / 'dist' / 'index.html'
-DOC_FINDER_PATH = '/doc-finder/react-app/dist/' if REACT_DIST_INDEX.exists() else '/doc-finder/index.html'
+REACT_DIST_INDEX = DIRECTORY / 'dist' / 'index.html'
+DOC_FINDER_PATH = '/dist/' if REACT_DIST_INDEX.exists() else '/index.html'
 
 def check_server_running():
     """Verifica si el servidor doc-finder ja està funcionant en qualsevol port"""
