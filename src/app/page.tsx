@@ -15,7 +15,7 @@ export default function Home() {
   // Llegir la ruta dels settings
   const { settings } = useSettings()
   const { files, loading, error } = useFileList(settings.documentSources.localFolder)
-  const { openFileDetails } = useFileDetails()
+  const { openFileDetails, selectedFile, isOpen, closeFileDetails } = useFileDetails()
   const { debouncedSearchQuery } = useSearch()
 
   useEffect(() => {
@@ -32,15 +32,23 @@ export default function Home() {
     }
   }
 
-  // Funció per filtrar documents segons la cerca
+  // Funció per filtrar documents segons la cerca i configuració
   const filterFiles = (files: FileItem[], query: string): FileItem[] => {
+    let filteredFiles = files
+
+    // Filtrar carpetes segons la configuració "Show folders"
+    if (!settings.searchSettings.showFolders) {
+      filteredFiles = filteredFiles.filter(file => !file.isDirectory)
+    }
+
+    // Si no hi ha cerca, retornar els fitxers filtrats
     if (!query.trim()) {
-      return files
+      return filteredFiles
     }
 
     const searchTerm = query.toLowerCase().trim()
 
-    return files.filter(file => {
+    return filteredFiles.filter(file => {
       // Cerca en el nom del fitxer
       if (file.name.toLowerCase().includes(searchTerm)) {
         return true
@@ -92,7 +100,14 @@ export default function Home() {
 
 
   return (
-    <div>
+    <div
+      onClick={(e) => {
+        // Si es clica directament al div principal (no a una targeta), deseleccionar
+        if (e.target === e.currentTarget && isOpen) {
+          closeFileDetails() // Tancar la sidebar
+        }
+      }}
+    >
       {/* File List Section */}
       <div className="mb-8">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -144,43 +159,136 @@ export default function Home() {
         )}
 
         {!loading && !error && files.length > 0 && filteredFiles.length > 0 && (
-          <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredFiles.map((file, index) => (
-              <li
-                key={index}
-                className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg focus:outline-hidden focus:shadow-lg transition dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 ${
-                  file.isDirectory ? 'cursor-default' : 'cursor-pointer'
-                }`}
-                onClick={() => handleFileClick(file)}
-              >
-                {/* Contingut de la card */}
-                <div className="p-4 md:p-5">
-                  <h3 className="text-lg font-bold text-gray-800 dark:text-white truncate">
-                    {file.name}
-                  </h3>
-                  <p className="mt-1 text-gray-500 dark:text-neutral-400">
-                    {file.isDirectory
-                      ? 'Directory containing files and folders'
-                      : file.category
-                        ? `${file.category.charAt(0).toUpperCase() + file.category.slice(1)} file`
-                        : 'Document file'
-                    }
-                  </p>
-                  <p className="mt-5 text-xs text-gray-500 dark:text-neutral-500">
-                    {file.isDirectory
-                      ? 'Directory'
-                      : `Last updated ${file.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Unknown date'} • ${file.size ? formatFileSize(file.size) : 'Unknown size'}`
-                    }
-                  </p>
+          <div
+            onClick={(e) => {
+              // Si es clica directament al div del grid (no a una targeta), deseleccionar
+              console.log('Grid clicked:', e.target, e.currentTarget, e.target === e.currentTarget, isOpen)
+              if (e.target === e.currentTarget && isOpen) {
+                console.log('Closing file details')
+                closeFileDetails()
+              }
+            }}
+          >
+            <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredFiles.map((file, index) => {
+              const isSelected = isOpen && selectedFile && selectedFile.path === file.path
+
+              return (
+                <li
+                  key={index}
+                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 dark:hover:border-neutral-600 dark:hover:bg-neutral-800 dark:focus:border-neutral-600 dark:focus:bg-neutral-800 ${
+                    isSelected
+                      ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
+                      : ''
+                  } ${
+                    file.isDirectory ? 'cursor-default' : 'cursor-pointer'
+                  }`}
+                  onClick={(e) => {
+                    console.log('Card clicked:', file.name)
+                    e.stopPropagation() // Evitar que el clic es propagui al div principal
+                    handleFileClick(file)
+                  }}
+                >
+                {/* Header amb títol i tag de categoria */}
+                <div className="p-4 md:p-5 pb-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-lg font-bold text-gray-800 dark:text-white leading-tight">
+                      {file.name}
+                    </h3>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 flex-shrink-0">
+                      {file.isDirectory ? 'FOLDER' : (file.category ? file.category.toUpperCase() : 'FILE')}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Previsualització del fitxer */}
-                <div className="relative pt-[50%] sm:pt-[60%] lg:pt-[80%] rounded-b-xl overflow-hidden">
-                  <FilePreview file={file} size="card" className="size-full absolute top-0 start-0 group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-b-xl" />
+                {/* Secció de detalls en dues columnes */}
+                <div className="px-4 md:px-5 pb-4">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300">Tipus:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                        {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Fitxer')}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300">Mida:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                        {file.size ? formatFileSize(file.size) : 'N/A'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300">Modificat:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                        {file.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Desconegut'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300">Categoria:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                        {file.category ? file.category.charAt(0).toUpperCase() + file.category.slice(1) : 'General'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </li>
-            ))}
-          </ul>
+
+                {/* Tags section */}
+                <div className="px-4 md:px-5 pb-4">
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tags:</span>
+                    {file.isDirectory ? (
+                      <>
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                          Directory
+                        </span>
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                          Navigation
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        {file.category && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                            {file.category}
+                          </span>
+                        )}
+                        {file.extension && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                            {file.extension.toUpperCase()}
+                          </span>
+                        )}
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                          Document
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Àrea de diagrama amb borde puntejat i previsualització */}
+                <div className="px-4 md:px-5 pb-4">
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 min-h-[120px] group-hover:border-gray-400 dark:group-hover:border-gray-500 transition-colors relative overflow-hidden">
+                    {file.isDirectory ? (
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-gray-500 dark:text-gray-400 text-sm">
+                          Contingut de la carpeta
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="relative h-full">
+                        <FilePreview
+                          file={file}
+                          size="card"
+                          className="w-full h-full object-cover rounded-md group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                </li>
+              )
+            })}
+            </ul>
+          </div>
         )}
       </div>
 

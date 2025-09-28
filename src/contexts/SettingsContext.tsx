@@ -16,6 +16,7 @@ export interface Settings {
   searchSettings: {
     fullTextSearch: boolean
     aiPoweredSearch: boolean
+    showFolders: boolean
   }
   languageAndDates: {
     language: string
@@ -38,6 +39,7 @@ const defaultSettings: Settings = {
   searchSettings: {
     fullTextSearch: true,
     aiPoweredSearch: true,
+    showFolders: false,
   },
   languageAndDates: {
     language: 'English',

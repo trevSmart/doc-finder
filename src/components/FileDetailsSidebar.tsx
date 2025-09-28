@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   XMarkIcon,
   DocumentIcon,
@@ -20,6 +20,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { FileItem, FileCategory } from '../types/file'
 import { formatFileSize } from '../utils/fileUtils'
+import FilePreview from './FilePreview'
 
 interface FileDetailsSidebarProps {
   isOpen: boolean
@@ -34,6 +35,14 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
   const [isEditing, setIsEditing] = useState(false)
   const [fileName, setFileName] = useState(file?.name || '')
   const [fileDescription, setFileDescription] = useState('A comprehensive proposal for the new marketing campaign including budget estimates and timeline.')
+
+  // Sincronitzar l'estat local quan canvia el prop file
+  useEffect(() => {
+    if (file) {
+      setFileName(file.name)
+      setIsEditing(false) // Cancel·lar l'edició quan canvia el fitxer
+    }
+  }, [file])
 
   const handleSave = () => {
     setIsEditing(false)
@@ -130,6 +139,19 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
+        {/* File Preview */}
+        {file && !file.isDirectory && (
+          <div className="mb-6">
+            <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+              <FilePreview
+                file={file}
+                size="sidebar"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        )}
+
         {/* File Icon and Name */}
         <div className="mb-6">
           <div className="flex items-center space-x-3">

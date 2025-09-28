@@ -19,7 +19,7 @@ import {
 interface FilePreviewProps {
 	file: FileItem;
 	className?: string;
-	size?: 'sm' | 'md' | 'lg' | 'card';
+	size?: 'sm' | 'md' | 'lg' | 'card' | 'sidebar';
 }
 
 export default function FilePreview({ file, className = '', size = 'md' }: FilePreviewProps) {
@@ -35,14 +35,16 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		sm: 'h-16 w-16',
 		md: 'h-24 w-24',
 		lg: 'h-32 w-32',
-		card: 'h-full w-full'
+		card: 'h-full w-full',
+		sidebar: 'h-full w-full'
 	};
 
 	const iconSizes = {
 		sm: 'h-6 w-6',
 		md: 'h-8 w-8',
 		lg: 'h-10 w-10',
-		card: 'h-16 w-16'
+		card: 'h-16 w-16',
+		sidebar: 'h-20 w-20'
 	};
 
 	useEffect(() => {

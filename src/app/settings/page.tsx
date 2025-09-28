@@ -1,31 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  BellIcon,
-  CreditCardIcon,
-  CubeIcon,
-  FingerPrintIcon,
-  UserCircleIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline'
 import { useSettings } from '../../contexts/SettingsContext'
 
-const secondaryNavigation = [
-  { name: 'General', href: '#', icon: UserCircleIcon, current: true },
-  { name: 'Security', href: '#', icon: FingerPrintIcon, current: false },
-  { name: 'Notifications', href: '#', icon: BellIcon, current: false },
-  { name: 'Plan', href: '#', icon: CubeIcon, current: false },
-  { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Team members', href: '#', icon: UsersIcon, current: false },
-]
-
-function classNames(...classes: (string | undefined | null | false)[]) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function SettingsPage() {
-  const { settings, updateProfile, updateDocumentSources, updateLanguageAndDates } = useSettings()
+  const { settings, updateProfile, updateDocumentSources, updateSearchSettings, updateLanguageAndDates } = useSettings()
   const [editingField, setEditingField] = useState<string | null>(null)
   const [tempValues, setTempValues] = useState<Record<string, string>>({})
 
@@ -63,42 +42,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
-        <h1 className="sr-only">General Settings</h1>
+    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Settings</h1>
 
-        <aside className="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20 dark:border-white/10">
-          <nav className="flex-none px-4 sm:px-6 lg:px-0">
-            <ul role="list" className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
-              {secondaryNavigation.map((item) => (
-                <li key={item.name}>
-                  <a
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-50 text-indigo-600 dark:bg-white/5 dark:text-white'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white',
-                      'group flex gap-x-3 rounded-md py-2 pr-3 pl-2 text-sm/6 font-semibold',
-                    )}
-                  >
-                    <item.icon
-                      aria-hidden="true"
-                      className={classNames(
-                        item.current
-                          ? 'text-indigo-600 dark:text-white'
-                          : 'text-gray-400 group-hover:text-indigo-600 dark:text-gray-500 dark:group-hover:text-white',
-                        'size-6 shrink-0',
-                      )}
-                    />
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </aside>
-
-        <main className="px-4 py-16 sm:px-6 lg:flex-auto lg:px-0 lg:py-20">
-          <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+      <div className="space-y-16 sm:space-y-20">
             <div>
               <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">Profile</h2>
               <p className="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">
@@ -344,6 +291,20 @@ export default function SettingsPage() {
                     Configure
                   </button>
                 </li>
+                <li className="flex justify-between gap-x-6 py-6">
+                  <div className="font-medium text-gray-900 dark:text-white">Show folders</div>
+                  <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${settings.searchSettings.showFolders ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'}`}>
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.searchSettings.showFolders ? 'translate-x-6' : 'translate-x-1'}`} />
+                    <input
+                      checked={settings.searchSettings.showFolders}
+                      onChange={(e) => updateSearchSettings({ showFolders: e.target.checked })}
+                      name="show-folders"
+                      type="checkbox"
+                      aria-label="Show folders"
+                      className="absolute inset-0 appearance-none"
+                    />
+                  </div>
+                </li>
               </ul>
 
               <div className="flex border-t border-gray-100 pt-6 dark:border-white/5">
@@ -408,8 +369,7 @@ export default function SettingsPage() {
                 </div>
               </dl>
             </div>
-          </div>
-        </main>
+      </div>
     </div>
   )
 }

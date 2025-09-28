@@ -37,7 +37,15 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
       >
         <Navigation onSidebarOpen={() => setSidebarOpen(true)} />
 
-        <main className="py-10 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <main
+          className="py-10 bg-gray-100 dark:bg-gray-800 min-h-screen"
+          onClick={(e) => {
+            // Només tancar si es clica directament al main (no a un fill)
+            if (e.target === e.currentTarget && isOpen) {
+              closeFileDetails()
+            }
+          }}
+        >
           <div className="px-4 sm:px-6 lg:px-8">
             {children}
           </div>
