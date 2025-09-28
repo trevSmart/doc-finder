@@ -5,6 +5,8 @@ import SidebarNavigation from './SidebarNavigation'
 import Navigation from './Navigation'
 import FileDetailsSidebar from './FileDetailsSidebar'
 import { useFileDetails } from '../contexts/FileDetailsContext'
+import { useResizableSidebar } from '../hooks/useResizableSidebar'
+import { useResizableRightSidebar } from '../hooks/useResizableRightSidebar'
 
 interface LayoutWrapperProps {
   children: React.ReactNode
@@ -13,15 +15,29 @@ interface LayoutWrapperProps {
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { isOpen, selectedFile, closeFileDetails } = useFileDetails()
+  const { sidebarWidth, startResize, isResizing } = useResizableSidebar()
+  const { sidebarWidth: rightSidebarWidth, startResize: startRightResize, isResizing: isRightResizing } = useResizableRightSidebar()
 
   return (
     <div>
-      <SidebarNavigation sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <SidebarNavigation
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        sidebarWidth={sidebarWidth}
+        startResize={startResize}
+        isResizing={isResizing}
+      />
 
-      <div className={`lg:pl-72 ${isOpen ? 'lg:pr-96 sm:pr-96' : ''}`}>
+      <div
+        style={{
+          paddingLeft: `${sidebarWidth}px`,
+          paddingRight: isOpen ? `${rightSidebarWidth}px` : '0px'
+        }}
+        data-content
+      >
         <Navigation onSidebarOpen={() => setSidebarOpen(true)} />
 
-        <main className="py-10 bg-white dark:bg-gray-900 min-h-screen">
+        <main className="py-10 bg-gray-50 dark:bg-gray-900 min-h-screen">
           <div className="px-4 sm:px-6 lg:px-8">
             {children}
           </div>
@@ -32,6 +48,9 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
         isOpen={isOpen}
         onClose={closeFileDetails}
         file={selectedFile}
+        sidebarWidth={rightSidebarWidth}
+        startResize={startRightResize}
+        isResizing={isRightResizing}
       />
     </div>
   )

@@ -8,16 +8,13 @@ import {
   DocumentTextIcon,
   FolderIcon,
   Cog6ToothIcon,
-  UserIcon,
-  MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
+import ThemeToggle from './ThemeToggle'
 
 const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon, current: true },
   { name: 'Documents', href: '#', icon: DocumentTextIcon, current: false },
   { name: 'Folders', href: '#', icon: FolderIcon, current: false },
-  { name: 'Search', href: '#', icon: MagnifyingGlassIcon, current: false },
-  { name: 'Profile', href: '#', icon: UserIcon, current: false },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon, current: false },
 ]
 
@@ -28,9 +25,12 @@ function classNames(...classes: (string | undefined | null | false)[]) {
 interface SidebarNavigationProps {
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
+  sidebarWidth: number
+  startResize: (e: React.MouseEvent) => void
+  isResizing: boolean
 }
 
-export default function SidebarNavigation({ sidebarOpen, setSidebarOpen }: SidebarNavigationProps) {
+export default function SidebarNavigation({ sidebarOpen, setSidebarOpen, sidebarWidth, startResize, isResizing }: SidebarNavigationProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -122,6 +122,11 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen }: Sideb
                       </li>
                     </ul>
                   </nav>
+
+                  {/* Theme Toggle at bottom */}
+                  <div className="flex justify-center pb-4">
+                    <ThemeToggle />
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -130,7 +135,11 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen }: Sideb
       </Transition.Root>
 
       {/* Static sidebar for desktop */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+      <div
+        className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col"
+        style={{ width: `${sidebarWidth}px` }}
+        data-sidebar
+      >
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 pb-4">
           <div className="flex h-16 shrink-0 items-center">
@@ -168,7 +177,22 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen }: Sideb
               </li>
             </ul>
           </nav>
+
+          {/* Theme Toggle at bottom */}
+          <div className="flex justify-center pb-4">
+            <ThemeToggle />
+          </div>
         </div>
+
+        {/* Resize handle */}
+        <div
+          className="absolute top-0 right-0 w-1 h-full cursor-col-resize bg-transparent hover:bg-indigo-500 hover:opacity-50 transition-colors duration-200"
+          onMouseDown={startResize}
+          style={{
+            backgroundColor: isResizing ? 'rgb(99 102 241)' : 'transparent',
+            opacity: isResizing ? 0.5 : 1
+          }}
+        />
       </div>
     </>
   )

@@ -25,9 +25,12 @@ interface FileDetailsSidebarProps {
   isOpen: boolean
   onClose: () => void
   file: FileItem | null
+  sidebarWidth: number
+  startResize: (e: React.MouseEvent) => void
+  isResizing: boolean
 }
 
-export default function FileDetailsSidebar({ isOpen, onClose, file }: FileDetailsSidebarProps) {
+export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize, isResizing }: FileDetailsSidebarProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [fileName, setFileName] = useState(file?.name || '')
   const [fileDescription, setFileDescription] = useState('A comprehensive proposal for the new marketing campaign including budget estimates and timeline.')
@@ -97,7 +100,17 @@ export default function FileDetailsSidebar({ isOpen, onClose, file }: FileDetail
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-white dark:bg-gray-800 shadow-xl border-l border-gray-200 dark:border-gray-700 flex flex-col">
+    <div
+      className="fixed inset-y-0 right-0 z-50 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col"
+      style={{ width: `${sidebarWidth}px` }}
+      data-right-sidebar
+    >
+      {/* Resize handle */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 hover:opacity-50 transition-colors"
+        onMouseDown={startResize}
+      />
+
       {/* Header */}
       <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">

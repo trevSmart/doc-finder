@@ -18,24 +18,35 @@ DocFinder is a document finder application built with Next.js 15.5.4, TypeScript
 ```
 src/
 ├── app/
-│   ├── layout.tsx          # Root layout with LayoutWrapper and SettingsProvider
+│   ├── api/
+│   │   ├── files/
+│   │   │   └── route.ts    # API endpoint for file listing
+│   │   └── file-preview/
+│   │       └── route.ts    # API endpoint for file preview content
+│   ├── layout.tsx          # Root layout with providers
 │   ├── page.tsx            # Home page with document listing and file grid
 │   ├── settings/
 │   │   └── page.tsx        # Settings page with stacked layout
 │   ├── globals.css         # Global styles
 │   └── favicon.png         # App favicon
 ├── components/
-│   ├── LayoutWrapper.tsx   # Main layout wrapper
+│   ├── LayoutWrapper.tsx   # Main layout wrapper with resizable sidebar
 │   ├── Navigation.tsx      # Top navigation bar
 │   ├── SidebarNavigation.tsx # Left sidebar navigation
 │   ├── ThemeToggle.tsx     # Dark/light mode toggle
-│   └── FileDetailsDrawer.tsx # File details drawer component
+│   ├── FileDetailsSidebar.tsx # File details sidebar component
+│   └── FilePreview.tsx     # File preview component with multiple formats
 ├── contexts/
-│   └── SettingsContext.tsx # React Context for settings management with localStorage
+│   ├── SettingsContext.tsx # React Context for settings management
+│   ├── FileDetailsContext.tsx # Context for file details sidebar state
+│   └── SearchContext.tsx   # Context for search functionality with debouncing
 ├── hooks/
-│   └── useFileList.ts      # Custom hook for file listing functionality
-└── types/
-    └── file.ts             # TypeScript interfaces for file management
+│   ├── useFileList.ts      # Custom hook for file listing functionality
+│   └── useResizableSidebar.ts # Hook for resizable sidebar functionality
+├── types/
+│   └── file.ts             # TypeScript interfaces for file management
+└── utils/
+    └── fileUtils.ts        # Utility functions for file operations
 ```
 
 ## Key Features
@@ -53,20 +64,24 @@ src/
 - **Inline Editing**: Edit fields directly with Save/Cancel functionality
 
 ### Document Management
-- **File Listing**: Displays files and folders from configured local path
+- **File Listing**: Displays files and folders from configured local path via API
 - **File Grid**: Tailwind CSS Grid Lists variant "Contact cards with small portraits"
 - **File Cards**: Two-section cards with content area and action buttons
-- **File Details**: Click on files to open drawer with detailed information
+- **File Details**: Click on files to open sidebar with detailed information
 - **Document Count**: Shows "(X found)" next to the folder path
 - **File Types**: Supports files and directories with appropriate icons and badges
 - **Actions**: View and Download buttons for files (folders are view-only)
+- **File Preview**: Supports preview for images, PDFs, Markdown, JSON, and text files
+- **Resizable Sidebar**: Sidebar can be resized with mouse drag, width persisted in localStorage
 
 ### UI Components
-- **FileDetailsDrawer**: Slide-out drawer for file information with dynamic content
+- **FileDetailsSidebar**: Slide-out sidebar for file information with dynamic content
+- **FilePreview**: Component for previewing different file types (images, PDFs, Markdown, JSON, text)
 - **File Grid**: Tailwind CSS Grid Lists with contact card layout
 - **File Cards**: Two-section cards with badges, icons, and action buttons
 - **Theme Toggle**: Dark/light mode switching
 - **Responsive Design**: Mobile-first approach with 1/2/3 column grid
+- **Resizable Sidebar**: Interactive sidebar with drag-to-resize functionality
 
 ## Development Setup
 
@@ -81,16 +96,17 @@ npm run dev
 ```
 
 ### Development Server
-- **Default Port**: 3000 (falls back to 3005 if occupied)
-- **URL**: http://localhost:3005
+- **Default Port**: 3000 (falls back to available port if occupied)
+- **URL**: http://localhost:3007 (current)
 - **Hot Reload**: Enabled with Turbopack
 
 ## Component Architecture
 
 ### LayoutWrapper
-- Manages sidebar state
+- Manages sidebar state and resizable functionality
 - Provides consistent layout structure
 - Handles responsive behavior
+- Integrates FileDetailsContext and SearchContext providers
 
 ### Navigation Components
 - **Navigation.tsx**: Top bar with search and user menu
@@ -122,12 +138,18 @@ npm run dev
 - ✅ Navigation system (top + sidebar)
 - ✅ Theme toggle (dark/light mode)
 - ✅ Responsive design
-- ✅ File details drawer with dynamic content
+- ✅ File details sidebar with dynamic content
 - ✅ Document count display
 - ✅ File/folder grid with click interactions
 - ✅ Settings persistence with localStorage
 - ✅ Inline editing for settings fields
 - ✅ Routing between pages
+- ✅ File preview system (images, PDFs, Markdown, JSON, text)
+- ✅ Resizable sidebar with localStorage persistence
+- ✅ API endpoints for file listing and preview
+- ✅ Search functionality with debouncing
+- ✅ File type detection and categorization
+- ✅ File utilities for size formatting and type checking
 
 ### Navigation Routes
 - `/` - Home page
@@ -143,13 +165,20 @@ npm run dev
 - Implemented document listing with file grid
 - Added document count display
 - Created useFileList hook for file management
-- Updated FileDetailsDrawer to accept dynamic file data
+- Updated FileDetailsSidebar to accept dynamic file data
 - Added inline editing for settings fields
 - Removed combobox demo from home page
 - Added file/folder click interactions
 - Implemented Tailwind CSS Grid Lists "Contact cards with small portraits" variant
 - Added View/Download action buttons for files
 - Enhanced file cards with badges and circular icons
+- **NEW**: Added API endpoints for file listing and preview
+- **NEW**: Implemented FilePreview component with support for multiple file types
+- **NEW**: Added FileDetailsContext for managing sidebar state
+- **NEW**: Added SearchContext with debounced search functionality
+- **NEW**: Created useResizableSidebar hook for interactive sidebar resizing
+- **NEW**: Added fileUtils with comprehensive file type detection and formatting
+- **NEW**: Enhanced file categorization with proper MIME types and extensions
 
 ## Development Notes
 
@@ -159,7 +188,7 @@ npm run dev
 
 ### Port Configuration
 - Development server automatically uses available port
-- Currently running on port 3005 (3000 was occupied)
+- Currently running on port 3007 (3000 was occupied)
 
 ### Code Quality
 - TypeScript for type safety
@@ -205,19 +234,24 @@ npm run dev
 ## Dependencies
 
 ### Core
-- `next`: ^15.5.4
-- `react`: ^18.3.1
-- `typescript`: ^5.6.3
+- `next`: 15.5.4
+- `react`: 19.1.0
+- `react-dom`: 19.1.0
+- `typescript`: ^5
 
 ### UI & Styling
-- `tailwindcss`: ^4.0.0
-- `@headlessui/react`: ^2.2.0
+- `tailwindcss`: ^4.1.13
+- `@headlessui/react`: ^2.2.9
 - `@heroicons/react`: ^2.2.0
+- `@tailwindplus/elements`: ^1.0.14
+- `react-markdown`: ^10.1.0
 
 ### Development
-- `@types/node`: ^22.10.2
-- `@types/react`: ^18.3.17
-- `eslint`: ^9.17.0
+- `@types/node`: ^20
+- `@types/react`: ^19
+- `@types/react-dom`: ^19
+- `eslint`: ^9
+- `eslint-config-next`: 15.5.4
 
 ## Environment
 
@@ -239,26 +273,35 @@ npm run dev
 ### File Management
 - **Hook**: `useFileList.ts` handles file listing logic
 - **Types**: `FileItem` interface defines file structure
-- **Mock Data**: Currently uses simulated file data
+- **API Integration**: Uses `/api/files` endpoint for real file system access
 - **States**: Loading, error, and success states handled
 - **Count Display**: Shows "(X found)" when files are available
+- **File Preview**: `/api/file-preview` endpoint serves file content for previews
+- **File Utils**: Comprehensive file type detection, MIME types, and size formatting
 
 ### Component Patterns
 - **Client Components**: Use `'use client'` directive for interactive components
 - **Hydration Safety**: Implement `mounted` state to prevent SSR/client mismatches
-- **Dynamic Content**: FileDetailsDrawer accepts `file` prop for dynamic data
+- **Dynamic Content**: FileDetailsSidebar accepts `file` prop for dynamic data
 - **Responsive Design**: Grid layouts adapt to screen size (1/2/3 columns)
 - **Grid Lists**: Use Tailwind CSS Grid Lists patterns for file cards
 - **Action Buttons**: Implement View/Download actions for files only
+- **Context Providers**: Multiple contexts for different feature areas
+- **Custom Hooks**: Reusable logic for file management and UI interactions
+- **API Integration**: Server-side file system access through Next.js API routes
 
 ### Data Flow
 1. Settings stored in localStorage via SettingsContext
 2. Home page reads local folder path from settings
-3. useFileList hook fetches files based on path
-4. File grid displays files with count
-5. Clicking files opens drawer with details
+3. useFileList hook fetches files via `/api/files` endpoint
+4. File grid displays files with count and previews
+5. Clicking files opens FileDetailsSidebar with details
+6. FilePreview component loads content via `/api/file-preview` endpoint
+7. SearchContext manages search state with debouncing
+8. FileDetailsContext manages sidebar open/close state
+9. useResizableSidebar manages sidebar width with localStorage persistence
 
 ---
 
 *Last updated: January 2025*
-*Project version: 0.3.0*
+*Project version: 0.1.0*
