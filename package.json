@@ -12,7 +12,7 @@
     "@headlessui/react": "^2.2.9",
     "@headlessui/tailwindcss": "^0.2.2",
     "@heroicons/react": "^2.2.0",
-    "@react-router/node": "^7.9.2",
+    "@react-router/node": "^7.9.3",
     "@react-router/serve": "^7.9.2",
     "isbot": "^5.1.31",
     "react": "^19.1.1",
