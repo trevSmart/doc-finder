@@ -19,7 +19,7 @@ import {
 interface FilePreviewProps {
 	file: FileItem;
 	className?: string;
-	size?: 'sm' | 'md' | 'lg';
+	size?: 'sm' | 'md' | 'lg' | 'card';
 }
 
 export default function FilePreview({ file, className = '', size = 'md' }: FilePreviewProps) {
@@ -34,13 +34,15 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 	const sizeClasses = {
 		sm: 'h-16 w-16',
 		md: 'h-24 w-24',
-		lg: 'h-32 w-32'
+		lg: 'h-32 w-32',
+		card: 'h-full w-full'
 	};
 
 	const iconSizes = {
 		sm: 'h-6 w-6',
 		md: 'h-8 w-8',
-		lg: 'h-10 w-10'
+		lg: 'h-10 w-10',
+		card: 'h-16 w-16'
 	};
 
 	useEffect(() => {
@@ -98,9 +100,8 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 
 				// Simular delay de càrrega
 				await new Promise(resolve => setTimeout(resolve, 100));
-			} catch (err) {
+			} catch {
 				setError('Error loading preview');
-				console.error('Preview error:', err);
 			} finally {
 				setIsLoading(false);
 			}
@@ -164,19 +165,12 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		if (!previewContent) return null;
 
 		return (
-			<div className="relative w-full h-full rounded-lg overflow-hidden">
-				<img
-					src={previewContent}
-					alt={`Preview of ${file.name}`}
-					className="w-full h-full object-cover"
-					onError={() => setError('Failed to load image preview')}
-				/>
-				{isLoading && (
-					<div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-						<div className="text-xs text-gray-500 dark:text-gray-400">Loading...</div>
-					</div>
-				)}
-			</div>
+			<img
+				src={previewContent}
+				alt={`Preview of ${file.name}`}
+				className="w-full h-full object-cover"
+				onError={() => setError('Failed to load image preview')}
+			/>
 		);
 	};
 
@@ -185,18 +179,13 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		if (!previewContent) return null;
 
 		return (
-			<div className="relative w-full h-full rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+			<div className="relative w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
 				<img
 					src={previewContent}
 					alt={`PDF preview of ${file.name}`}
 					className="w-full h-full object-contain"
 					onError={() => setError('Failed to load PDF preview')}
 				/>
-				{isLoading && (
-					<div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-						<div className="text-xs text-gray-500 dark:text-gray-400">Loading PDF...</div>
-					</div>
-				)}
 				{/* Overlay per indicar que és un PDF */}
 				<div className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1 py-0.5 rounded">
 					PDF
@@ -210,15 +199,10 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		if (!previewContent) return null;
 
 		return (
-			<div className="relative w-full h-full rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2">
+			<div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2">
 				<div className="text-xs text-gray-600 dark:text-gray-300 font-mono leading-tight">
 					{previewContent}
 				</div>
-				{isLoading && (
-					<div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-						<div className="text-xs text-gray-500 dark:text-gray-400">Loading text...</div>
-					</div>
-				)}
 			</div>
 		);
 	};
@@ -228,7 +212,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		if (!markdownContent) return null;
 
 		return (
-			<div className="relative w-full h-full rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
+			<div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
 				<div className="prose prose-sm dark:prose-invert max-w-none">
 					<ReactMarkdown
 						components={{
@@ -249,11 +233,6 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 						{markdownContent}
 					</ReactMarkdown>
 				</div>
-				{isLoading && (
-					<div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-						<div className="text-xs text-gray-500 dark:text-gray-400">Loading markdown...</div>
-					</div>
-				)}
 			</div>
 		);
 	};
@@ -282,7 +261,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		if (!jsonContent) return null;
 
 		return (
-			<div className="relative w-full h-full rounded-lg overflow-hidden bg-gray-900 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
+			<div className="w-full h-full bg-gray-900 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
 				<pre className="text-xs text-gray-100 dark:text-gray-200 font-mono leading-tight whitespace-pre-wrap">
 					<code
 						dangerouslySetInnerHTML={{
@@ -290,11 +269,6 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 						}}
 					/>
 				</pre>
-				{isLoading && (
-					<div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-						<div className="text-xs text-gray-500 dark:text-gray-400">Loading JSON...</div>
-					</div>
-				)}
 			</div>
 		);
 	};
@@ -304,15 +278,10 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 		if (!txtContent) return null;
 
 		return (
-			<div className="relative w-full h-full rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
+			<div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
 				<pre className="text-xs text-gray-600 dark:text-gray-300 font-mono leading-tight whitespace-pre-wrap">
 					{txtContent}
 				</pre>
-				{isLoading && (
-					<div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-						<div className="text-xs text-gray-500 dark:text-gray-400">Loading text...</div>
-					</div>
-				)}
 			</div>
 		);
 	};
@@ -330,16 +299,16 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 	return (
 		<div className={`${sizeClasses[size]} ${className} flex items-center justify-center`}>
 			{canShowPreview() && (previewContent || markdownContent || jsonContent || txtContent) && !isLoading && !error ? (
-				<div className="w-full h-full">
+				<>
 					{isImageFile(file.name) && renderImagePreview()}
 					{file.extension === 'pdf' && renderPDFPreview()}
 					{['html'].includes(file.extension || '') && renderTextPreview()}
 					{['md', 'markdown'].includes(file.extension || '') && renderMarkdownPreview()}
 					{file.extension === 'json' && renderJsonPreview()}
 					{file.extension === 'txt' && renderTxtPreview()}
-				</div>
+				</>
 			) : (
-				<div className={`${sizeClasses[size]} ${getBackgroundColor(file.category, file.isDirectory)} rounded-lg flex items-center justify-center`}>
+				<div className={`${sizeClasses[size]} ${getBackgroundColor(file.category, file.isDirectory)} ${size === 'card' ? 'rounded-b-xl' : 'rounded-lg'} flex items-center justify-center`}>
 					{isLoading ? (
 						<div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-500 dark:border-gray-400"></div>
 					) : error ? (
