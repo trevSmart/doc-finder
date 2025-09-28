@@ -4,9 +4,27 @@
 		{
 			"type": "npm",
 			"script": "lint",
-			"problemMatcher": ["$eslint-stylish"],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
 			"label": "npm: lint",
 			"detail": "eslint --fix"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "next build --turbopack"
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+			"group": "dev",
+			"problemMatcher": [],
+			"label": "npm: dev",
+			"detail": "next dev --turbopack"
 		}
 	]
 }

@@ -1,0 +1,33 @@
+{
+    "actionButtons": {
+        "commands": [
+            {
+                "name": "$(lightbulb) Lint",
+                "useVsCodeApi": true,
+                "command": "workbench.action.tasks.runTask",
+                "args": [
+                    "npm: lint"
+                ]
+            },
+            {
+                "name": "$(package) Build",
+                "useVsCodeApi": true,
+                "command": "workbench.action.tasks.runTask",
+                "args": [
+                    "npm: build"
+                ]
+            },
+            {
+                "name": "$(play) Start",
+                "useVsCodeApi": true,
+                "command": "workbench.action.tasks.runTask",
+                "args": [
+                    "npm: dev"
+                ]
+            }
+        ],
+        "defaultColor": "white",
+        "reloadButton": null,
+        "loadNpmCommands": false
+    }
+}
