@@ -18,6 +18,7 @@ export interface FileItem {
   isDirectory: boolean
   category?: FileCategory
   mimeType?: string
+  imageUrl?: string
 }
 
 export interface FileListResponse {

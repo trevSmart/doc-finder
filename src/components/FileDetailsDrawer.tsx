@@ -181,7 +181,7 @@ export default function FileDetailsDrawer({ isOpen, onClose, file }: FileDetails
                       <div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Modified</p>
                         <p className="text-sm text-gray-900 dark:text-white">
-                          {file?.lastModified ? file.lastModified.toLocaleDateString() : 'Unknown'}
+                          {file?.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Unknown'}
                         </p>
                       </div>
                     </div>

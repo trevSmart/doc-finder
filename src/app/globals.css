@@ -26,3 +26,131 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Estils per a la previsualització de Markdown */
+.prose {
+  color: inherit;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: inherit;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.prose p {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.prose ul,
+.prose ol {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+}
+
+.prose li {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.prose code {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-weight: 400;
+  padding: 0.125rem 0.25rem;
+}
+
+.prose pre {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 0.375rem;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+  margin: 0;
+  overflow-x: auto;
+  padding: 0.5rem;
+}
+
+.prose blockquote {
+  border-left-width: 0.25rem;
+  border-left-color: rgba(0, 0, 0, 0.1);
+  font-style: italic;
+  margin: 0;
+  padding-left: 0.5rem;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* Estils per al mode fosc */
+.dark .prose code {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .prose pre {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .prose blockquote {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Estils per a la previsualització de JSON */
+.json-key {
+  color: #61dafb;
+  font-weight: 600;
+}
+
+.json-string {
+  color: #98c379;
+}
+
+.json-number {
+  color: #d19a66;
+}
+
+.json-boolean {
+  color: #c678dd;
+  font-weight: 600;
+}
+
+.json-null {
+  color: #e06c75;
+  font-weight: 600;
+}
+
+/* Estils per al mode fosc */
+.dark .json-key {
+  color: #61dafb;
+}
+
+.dark .json-string {
+  color: #98c379;
+}
+
+.dark .json-number {
+  color: #d19a66;
+}
+
+.dark .json-boolean {
+  color: #c678dd;
+}
+
+.dark .json-null {
+  color: #e06c75;
+}

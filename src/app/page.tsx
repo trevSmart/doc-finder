@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/20/solid'
 import { useState, useEffect } from 'react'
 import FileDetailsDrawer from '../components/FileDetailsDrawer'
+import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
 import { useFileList } from '../hooks/useFileList'
 import { FileItem, FileCategory } from '../types/file'
@@ -145,43 +146,46 @@ export default function Home() {
                 }`}
                 onClick={() => handleFileClick(file)}
               >
-                <div className="flex w-full items-center justify-between space-x-6 p-6">
-                  <div className="flex-1 truncate">
-                    <div className="flex items-center space-x-3">
-                      <h3 className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                        {file.name}
-                      </h3>
-                      <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-medium inset-ring ${
-                        file.isDirectory
-                          ? 'bg-blue-50 text-blue-700 inset-ring-blue-600/20 dark:bg-blue-500/10 dark:text-blue-500 dark:inset-ring-blue-500/10'
-                          : file.category === 'image'
-                          ? 'bg-green-50 text-green-700 inset-ring-green-600/20 dark:bg-green-500/10 dark:text-green-500 dark:inset-ring-green-500/10'
-                          : file.category === 'audio'
-                          ? 'bg-purple-50 text-purple-700 inset-ring-purple-600/20 dark:bg-purple-500/10 dark:text-purple-500 dark:inset-ring-purple-500/10'
-                          : file.category === 'video'
-                          ? 'bg-red-50 text-red-700 inset-ring-red-600/20 dark:bg-red-500/10 dark:text-red-500 dark:inset-ring-red-500/10'
-                          : file.category === 'spreadsheet'
-                          ? 'bg-emerald-50 text-emerald-700 inset-ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-500 dark:inset-ring-emerald-500/10'
-                          : file.category === 'presentation'
-                          ? 'bg-orange-50 text-orange-700 inset-ring-orange-600/20 dark:bg-orange-500/10 dark:text-orange-500 dark:inset-ring-orange-500/10'
-                          : file.category === 'data'
-                          ? 'bg-gray-50 text-gray-700 inset-ring-gray-600/20 dark:bg-gray-500/10 dark:text-gray-500 dark:inset-ring-gray-500/10'
-                          : 'bg-blue-50 text-blue-700 inset-ring-blue-600/20 dark:bg-blue-500/10 dark:text-blue-500 dark:inset-ring-blue-500/10'
-                      }`}>
-                        {file.isDirectory ? 'Folder' : file.category ? file.category.charAt(0).toUpperCase() + file.category.slice(1) : 'File'}
-                      </span>
-                    </div>
-                    <p className="mt-1 truncate text-sm text-gray-500 dark:text-gray-400">
-                      {file.isDirectory
-                        ? 'Directory'
-                        : `${file.size ? formatFileSize(file.size) : 'Unknown size'} • ${file.lastModified ? file.lastModified.toLocaleDateString() : 'Unknown date'}`
-                      }
-                    </p>
-                  </div>
-                  <div className={`size-10 shrink-0 rounded-full ${getBackgroundColor(file.category, file.isDirectory)} outline -outline-offset-1 outline-black/5 dark:outline-white/10 flex items-center justify-center`}>
-                    {getFileIcon(file.category, file.isDirectory)}
-                  </div>
+                {/* Previsualització del fitxer */}
+                <div className="p-4">
+                  <FilePreview file={file} size="lg" className="mx-auto" />
                 </div>
+
+                {/* Informació del fitxer */}
+                <div className="px-6 pb-4">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <h3 className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                      {file.name}
+                    </h3>
+                    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-medium inset-ring ${
+                      file.isDirectory
+                        ? 'bg-blue-50 text-blue-700 inset-ring-blue-600/20 dark:bg-blue-500/10 dark:text-blue-500 dark:inset-ring-blue-500/10'
+                        : file.category === 'image'
+                        ? 'bg-green-50 text-green-700 inset-ring-green-600/20 dark:bg-green-500/10 dark:text-green-500 dark:inset-ring-green-500/10'
+                        : file.category === 'audio'
+                        ? 'bg-purple-50 text-purple-700 inset-ring-purple-600/20 dark:bg-purple-500/10 dark:text-purple-500 dark:inset-ring-purple-500/10'
+                        : file.category === 'video'
+                        ? 'bg-red-50 text-red-700 inset-ring-red-600/20 dark:bg-red-500/10 dark:text-red-500 dark:inset-ring-red-500/10'
+                        : file.category === 'spreadsheet'
+                        ? 'bg-emerald-50 text-emerald-700 inset-ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-500 dark:inset-ring-emerald-500/10'
+                        : file.category === 'presentation'
+                        ? 'bg-orange-50 text-orange-700 inset-ring-orange-600/20 dark:bg-orange-500/10 dark:text-orange-500 dark:inset-ring-orange-500/10'
+                        : file.category === 'data'
+                        ? 'bg-gray-50 text-gray-700 inset-ring-gray-600/20 dark:bg-gray-500/10 dark:text-gray-500 dark:inset-ring-gray-500/10'
+                        : 'bg-blue-50 text-blue-700 inset-ring-blue-600/20 dark:bg-blue-500/10 dark:text-blue-500 dark:inset-ring-blue-500/10'
+                    }`}>
+                      {file.isDirectory ? 'Folder' : file.category ? file.category.charAt(0).toUpperCase() + file.category.slice(1) : 'File'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {file.isDirectory
+                      ? 'Directory'
+                      : `${file.size ? formatFileSize(file.size) : 'Unknown size'} • ${file.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Unknown date'}`
+                    }
+                  </p>
+                </div>
+
+                {/* Accions del fitxer */}
                 {!file.isDirectory && (
                   <div>
                     <div className="-mt-px flex divide-x divide-gray-200 dark:divide-white/10">
