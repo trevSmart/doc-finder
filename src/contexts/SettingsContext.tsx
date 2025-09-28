@@ -29,7 +29,7 @@ const defaultSettings: Settings = {
   profile: {
     fullName: 'Tom Cook',
     email: 'tom.cook@example.com',
-    title: 'Document Manager',
+    title: 'Clip Manager',
   },
         documentSources: {
           googleDrive: false,

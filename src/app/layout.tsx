@@ -9,6 +9,7 @@ import { SearchProvider } from "../contexts/SearchContext";
 import { FilePreviewProvider } from "../contexts/FilePreviewContext";
 import { TagProvider } from "../contexts/TagContext";
 import { FileTagsProvider } from "../contexts/FileTagsContext";
+import { ClipProvider } from "../contexts/ClipContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,17 +48,19 @@ export default function RootLayout({
         <SettingsProvider>
           <TagProvider>
             <FileTagsProvider>
-              <FileDetailsProvider>
-                <FileListProvider>
-                  <FilePreviewProvider>
-                    <SearchProvider>
-                      <LayoutWrapper>
-                        {children}
-                      </LayoutWrapper>
-                    </SearchProvider>
-                  </FilePreviewProvider>
-                </FileListProvider>
-              </FileDetailsProvider>
+              <ClipProvider>
+                <FileDetailsProvider>
+                  <FileListProvider>
+                    <FilePreviewProvider>
+                      <SearchProvider>
+                        <LayoutWrapper>
+                          {children}
+                        </LayoutWrapper>
+                      </SearchProvider>
+                    </FilePreviewProvider>
+                  </FileListProvider>
+                </FileDetailsProvider>
+              </ClipProvider>
             </FileTagsProvider>
           </TagProvider>
         </SettingsProvider>

@@ -179,8 +179,8 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">Document Sources</h2>
-              <p className="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Connect document sources to your account.</p>
+              <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">Clip Sources</h2>
+              <p className="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Connect clip sources to your account.</p>
 
               <ul
                 role="list"
@@ -214,7 +214,7 @@ export default function SettingsPage() {
                             type="text"
                             value={tempValues.localFolder || settings.documentSources.localFolder}
                             onChange={(e) => setTempValues(prev => ({ ...prev, localFolder: e.target.value }))}
-                            placeholder="/path/to/documents"
+                            placeholder="/path/to/clips"
                             className="flex-1 rounded-md bg-white dark:bg-white/5 py-1.5 px-3 text-sm text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:focus:outline-indigo-500"
                           />
                           <button
@@ -237,7 +237,7 @@ export default function SettingsPage() {
                           <input
                             type="text"
                             value={settings.documentSources.localFolder}
-                            placeholder="/path/to/documents"
+                            placeholder="/path/to/clips"
                             readOnly
                             className="flex-1 rounded-md bg-gray-50 dark:bg-gray-800/50 py-1.5 px-3 text-sm text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                           />
@@ -267,7 +267,7 @@ export default function SettingsPage() {
 
             <div>
               <h2 className="text-base/7 font-semibold text-gray-900 dark:text-white">Search Settings</h2>
-              <p className="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Configure your document search preferences.</p>
+              <p className="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Configure your clip search preferences.</p>
 
               <ul
                 role="list"

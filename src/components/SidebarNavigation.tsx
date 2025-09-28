@@ -14,7 +14,7 @@ import ThemeToggle from './ThemeToggle'
 
 const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon, current: true },
-  { name: 'Documents', href: '#', icon: DocumentTextIcon, current: false },
+  { name: 'Clips', href: '#', icon: DocumentTextIcon, current: false },
   { name: 'Folders', href: '#', icon: FolderIcon, current: false },
   { name: 'Tags', href: '/tags', icon: TagIcon, current: false },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon, current: false },

@@ -88,7 +88,7 @@ export default function Navigation({ onSidebarOpen, sidebarOpen }: NavigationPro
                 <div className="relative w-full">
                   <input
                     name="search"
-                    placeholder="Search"
+                    placeholder="Search clips"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => {
