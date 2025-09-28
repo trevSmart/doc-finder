@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Exhaustiva de Triggers y Flujos de Objetos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        .critical {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+        .code {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            margin: 30px 0;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .toc ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .toc li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación Exhaustiva de Triggers y Flujos de Objetos</h1>
+
+        <div class="toc">
+            <h3>Índice</h3>
+            <ul>
+                <li><a href="#resumen-general">Resumen General</a></li>
+                <li><a href="#patrones-triggers">Patrones de Triggers Identificados</a></li>
+                <li><a href="#objetos-triggers">Objetos y sus Triggers</a></li>
+                <li><a href="#flujos-detallados">Flujos Detallados por Trigger</a></li>
+                <li><a href="#mecanismos-control">Mecanismos de Control y Bypass</a></li>
+                <li><a href="#dependencias">Dependencias y Interacciones</a></li>
+            </ul>
+        </div>
+
+        <h2 id="resumen-general">Resumen General</h2>
+        <p>El sistema contiene <strong>37 triggers</strong> que operan sobre <strong>25 objetos diferentes</strong>, incluyendo objetos estándar de Salesforce y objetos personalizados. Los triggers implementan principalmente dos patrones:</p>
+        <ol>
+            <li><strong>Patrón GSP_MetadataTriggerHandler</strong>: Usado en la mayoría de triggers para centralizar la lógica</li>
+            <li><strong>Patrón de Lógica Directa</strong>: Implementación directa en el trigger</li>
+            <li><strong>Patrón Comentado/Desactivado</strong>: Triggers con lógica comentada pero activos</li>
+        </ol>
+
+        <h2 id="patrones-triggers">Patrones de Triggers Identificados</h2>
+
+        <h3>Patrón 1: GSP_MetadataTriggerHandler</h3>
+        <div class="code">trigger [TriggerName] on [Object] ([Events]) {
+    new GSP_MetadataTriggerHandler().run();
+}</div>
+        <p><strong>Objetos que usan este patrón:</strong> 23 de 37 triggers</p>
+
+        <h3>Patrón 2: Lógica Directa en Trigger</h3>
+        <div class="code">trigger [TriggerName] on [Object] ([Events]) {
+    // Lógica específica implementada directamente
+}</div>
+        <p><strong>Objetos que usan este patrón:</strong> 8 de 37 triggers</p>
+
+        <h3>Patrón 3: Triggers Vacíos o Comentados</h3>
+        <div class="code">trigger [TriggerName] on [Object] ([Events]) {
+    // Lógica comentada o vacía
+}</div>
+        <p><strong>Objetos que usan este patrón:</strong> 6 de 37 triggers</p>
+
+        <h2 id="objetos-triggers">Objetos y sus Triggers</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Objeto</th>
+                    <th>Trigger(s)</th>
+                    <th>Eventos</th>
+                    <th>Patrón</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Account</strong></td>
+                    <td>CSP_AccountTrigger</td>
+                    <td>before delete, before insert, before update, after insert, after update, after delete, after Undelete</td>
+                    <td>GSP_MetadataTriggerHandler</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Account</strong></td>
+                    <td>ParentCreatedUpdateCreateUpdateChildRecords</td>
+                    <td>before insert, before update, after insert, after update</td>
+                    <td>Lógica Directa</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Asset</strong></td>
+                    <td>recursionexample</td>
+                    <td>before update</td>
+                    <td>Lógica Directa</td>
+                    <td>⚠️ Activo (Con Recursión)</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact</strong></td>
+                    <td>CSP_ContactTrigger</td>
+                    <td>before delete, before insert, before update, after insert, after update, after delete, after Undelete</td>
+                    <td>GSP_MetadataTriggerHandler</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact</strong></td>
+                    <td>CSP_trigger_cl</td>
+                    <td>before delete, before insert, before update, after insert, after update, after delete, after Undelete</td>
+                    <td>GSP_MetadataTriggerHandler</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact</strong></td>
+                    <td>CSP_AccountContactRelTrigger</td>
+                    <td>before update</td>
+                    <td>Vacío</td>
+                    <td>Inactivo</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact</strong></td>
+                    <td>CSP_ChildCreatedUpdateUdateParent</td>
+                    <td>before insert, before update, after insert, after update</td>
+                    <td>Lógica Directa</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Opportunity</strong></td>
+                    <td>CSP_OpportunityTrigger</td>
+                    <td>before insert, before update, before delete, after insert, after update, after delete, after Undelete</td>
+                    <td>GSP_MetadataTriggerHandler</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Order</strong></td>
+                    <td>CSP_OrderTrigger</td>
+                    <td>before insert, before update, before delete, after insert, after update, after delete, after Undelete</td>
+                    <td>GSP_MetadataTriggerHandler</td>
+                    <td>Activo</td>
+                </tr>
+                <tr>
+                    <td><strong>Order</strong></td>
+                    <td>CSP_OrderValidations</td>
+                    <td>before insert, before update, before delete, after insert, after update, after delete, after Undelete</td>
+                    <td>GSP_MetadataTriggerHandler + Lógica Directa</td>
+                    <td>Activo</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="flujos-detallados">Flujos Detallados por Trigger</h2>
+
+        <h3>1. Account - Flujos de Triggers</h3>
+
+        <h4>1.1 CSP_AccountTrigger</h4>
+        <p><strong>Objeto:</strong> Account<br>
+        <strong>Eventos:</strong> before delete, before insert, before update, after insert, after update, after delete, after Undelete</p>
+
+        <div class="code">Account Event → CSP_AccountTrigger → GSP_MetadataTriggerHandler().run()
+                                   ↓
+                         Metadata-driven trigger handling
+                                   ↓
+                         Handler class execution based on metadata</div>
+
+        <h4>1.2 ParentCreatedUpdateCreateUpdateChildRecords</h4>
+        <p><strong>Objeto:</strong> Account<br>
+        <strong>Eventos:</strong> before insert, before update, after insert, after update</p>
+
+        <div class="code">Account Event → ParentCreatedUpdateCreateUpdateChildRecords
+                                   ↓
+                if (Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate))
+                                   ↓
+                HelperForParentScenario.createUpdateChildRecord(Trigger.new, Trigger.oldMap)</div>
+
+        <h3>2. Contact - Flujos de Triggers</h3>
+
+        <h4>2.1 CSP_ContactTrigger</h4>
+        <p><strong>Objeto:</strong> Contact<br>
+        <strong>Eventos:</strong> before delete, before insert, before update, after insert, after update, after delete, after Undelete</p>
+
+        <div class="code">Contact Event → CSP_ContactTrigger → GSP_MetadataTriggerHandler().run()</div>
+
+        <h4>2.2 CSP_ChildCreatedUpdateUdateParent</h4>
+        <p><strong>Objeto:</strong> Contact<br>
+        <strong>Eventos:</strong> before insert, before update, after insert, after update</p>
+
+        <div class="code">Contact Event → CSP_ChildCreatedUpdateUdateParent
+                                   ↓
+                if (Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate))
+                                   ↓
+                CSP_ChildCreatedUpdateUdateParent.afterInsert(Trigger.new, Trigger.oldMap)</div>
+
+        <h3>3. Asset - Flujo de Trigger (¡ATENCIÓN: RECURSIÓN!)</h3>
+
+        <h4>3.1 recursionexample</h4>
+        <p><strong>Objeto:</strong> Asset<br>
+        <strong>Eventos:</strong> before update</p>
+
+        <div class="critical">
+            <strong>⚠️ ADVERTENCIA:</strong> Este trigger causa recursión infinita ya que modifica los mismos registros que activaron el trigger, sin mecanismo de control de recursión.
+        </div>
+
+        <div class="code">Asset Event → recursionexample
+                     ↓
+            for(Asset assetv : Trigger.New)
+                     ↓
+            assetv.Quantity = 5
+                     ↓
+            assets.add(assetv)
+                     ↓
+            update assets → ¡RECURSIÓN! → recursionexample se ejecuta nuevamente</div>
+
+        <h3>4. vlocity_cmt**OrchestrationItem**c - Flujo de Trigger</h3>
+
+        <h4>4.1 CSP_OrchItem_Trigger</h4>
+        <p><strong>Objeto:</strong> vlocity_cmt**OrchestrationItem**c<br>
+        <strong>Eventos:</strong> after update</p>
+
+        <div class="code">OrchestrationItem Event → CSP_OrchItem_Trigger
+                                   ↓
+                if (Trigger.isAfter && Trigger.isUpdate)
+                                   ↓
+                for each oldOrchItem in Trigger.old
+                                   ↓
+                for each newOrchItem in Trigger.new
+                                   ↓
+                if (oldOrchItem.Id == newOrchItem.Id)
+                                   ↓
+                if (state changed from not 'Completed' to 'Completed' &&
+                    name in createCRMClient set)
+                                   ↓
+                orchItemsToExecute.add(newOrchItem)
+                                   ↓
+                if (!orchItemsToExecute.isEmpty())
+                                   ↓
+                CSP_XomPushEventHanddler.execute(orchItemsToExecute)</div>
+
+        <h2 id="mecanismos-control">Mecanismos de Control y Bypass</h2>
+
+        <h3>1. Bypass Flags Identificados</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Trigger</th>
+                    <th>Bypass Flag</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CSP_PortfolioMngtTrigger</td>
+                    <td><code>CSP_PortfolioMngtHandler.bypassAccTrigger</code></td>
+                    <td>Bypass para evitar ejecución del trigger</td>
+                </tr>
+                <tr>
+                    <td>CSP_VodafoneBusinessTeamTrigger</td>
+                    <td><code>CSP_VodafoneBusinessTeamTriggerHandler.byPassVDFTrigger</code></td>
+                    <td>Bypass para evitar ejecución del trigger</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2. Mecanismos de Recursión</h3>
+
+        <div class="critical">
+            <strong>Problema Identificado:</strong><br>
+            - <strong>recursionexample trigger</strong>: Causa recursión infinita sin control
+        </div>
+
+        <h4>Soluciones Recomendadas:</h4>
+        <div class="code">// Implementar flag estático para prevenir recursión
+public class RecursionHelper {
+  private static Boolean isRunning = false;
+
+  public static Boolean shouldRun() {
+    if (isRunning)
+      return false;
+    isRunning = true;
+    return true;
+  }
+
+  public static void reset() {
+    isRunning = false;
+  }
+}</div>
+
+        <h2 id="dependencias">Dependencias y Interacciones</h2>
+
+        <h3>1. Handler Classes Principales</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Handler Class</th>
+                    <th>Triggers que lo usan</th>
+                    <th>Objetos Afectados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GSP_MetadataTriggerHandler</td>
+                    <td>23 triggers</td>
+                    <td>Múltiples objetos</td>
+                </tr>
+                <tr>
+                    <td>CSP_ChildCreatedUpdateUdateParent</td>
+                    <td>1 trigger</td>
+                    <td>Contact</td>
+                </tr>
+                <tr>
+                    <td>HelperForParentScenario</td>
+                    <td>1 trigger</td>
+                    <td>Account</td>
+                </tr>
+                <tr>
+                    <td>CSP_XomPushEventHanddler</td>
+                    <td>1 trigger</td>
+                    <td>vlocity_cmt**OrchestrationItem**c</td>
+                </tr>
+                <tr>
+                    <td>CSP_PremisesTriggerHandler</td>
+                    <td>1 trigger</td>
+                    <td>vlocity_cmt**Premises**c</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2. Interacciones entre Objetos</h3>
+
+        <h4>Account → Contact</h4>
+        <ul>
+            <li><strong>ParentCreatedUpdateCreateUpdateChildRecords</strong> en Account puede afectar Contact</li>
+            <li><strong>CSP_ChildCreatedUpdateUdateParent</strong> en Contact puede afectar Account padre</li>
+        </ul>
+
+        <h4>ContentDocument → Case</h4>
+        <ul>
+            <li><strong>POC_ContentDocument</strong> prepara notificaciones para sistemas externos</li>
+            <li><strong>POC_CaseContentDocumentLink</strong> maneja la relación Document-Case (comentado)</li>
+        </ul>
+
+        <h4>OrchestrationItem → External Systems</h4>
+        <ul>
+            <li><strong>CSP_OrchItem_Trigger</strong> ejecuta handlers para sincronización con sistemas externos</li>
+        </ul>
+
+        <h3>3. Triggers Múltiples en el Mismo Objeto</h3>
+
+        <h4>Contact (4 triggers):</h4>
+        <ol>
+            <li>CSP_ContactTrigger - Handler principal</li>
+            <li>CSP_trigger_cl - Handler secundario</li>
+            <li>CSP_AccountContactRelTrigger - Vacío</li>
+            <li>CSP_ChildCreatedUpdateUdateParent - Lógica específica parent-child</li>
+        </ol>
+
+        <h4>Account (2 triggers):</h4>
+        <ol>
+            <li>CSP_AccountTrigger - Handler principal</li>
+            <li>ParentCreatedUpdateCreateUpdateChildRecords - Lógica específica parent-child</li>
+        </ol>
+
+        <h4>Opportunity (3 triggers):</h4>
+        <ol>
+            <li>CSP_OpportunityTrigger - Handler principal</li>
+            <li>CSP_ValidateOpportunityTrigger - Validaciones específicas (comentado)</li>
+            <li>OpportunityContactTrigger - Vacío</li>
+        </ol>
+
+        <hr>
+
+        <h2>Recomendaciones y Mejores Prácticas</h2>
+
+        <h3>1. Problemas Identificados</h3>
+        <ol>
+            <li><strong>Recursión sin control</strong>: <code>recursionexample</code> trigger</li>
+            <li><strong>Triggers múltiples</strong>: Algunos objetos tienen múltiples triggers que podrían consolidarse</li>
+            <li><strong>Lógica comentada</strong>: Múltiples triggers con lógica importante comentada</li>
+            <li><strong>Triggers vacíos</strong>: Algunos triggers no tienen implementación</li>
+        </ol>
+
+        <h3>2. Mejoras Sugeridas</h3>
+        <ol>
+            <li><strong>Implementar control de recursión</strong> en <code>recursionexample</code></li>
+            <li><strong>Consolidar triggers múltiples</strong> por objeto cuando sea posible</li>
+            <li><strong>Revisar y activar lógica comentada</strong> si es necesaria</li>
+            <li><strong>Eliminar triggers vacíos</strong> o implementar la lógica necesaria</li>
+            <li><strong>Documentar bypass flags</strong> y su uso apropiado</li>
+            <li><strong>Implementar logging</strong> para debugging en triggers críticos</li>
+        </ol>
+
+        <h3>3. Orden de Ejecución Recomendado</h3>
+        <p>Para objetos con múltiples triggers, considerar:</p>
+        <ol>
+            <li>Validaciones primero</li>
+            <li>Lógica de negocio principal</li>
+            <li>Post-procesamiento y sincronización</li>
+            <li>Notificaciones y comunicaciones externas</li>
+        </ol>
+
+        <hr>
+
+        <div class="info">
+            <p><strong>Conclusión:</strong> El sistema de triggers presenta una arquitectura mixta con predominio del patrón <code>GSP_MetadataTriggerHandler</code>, lo que proporciona flexibilidad y centralización. Sin embargo, existen áreas de mejora en términos de control de recursión, consolidación de triggers múltiples y activación de lógica comentada esencial.</p>
+
+            <p>La documentación de estos flujos es fundamental para el mantenimiento y desarrollo futuro del sistema, especialmente considerando las múltiples interacciones entre objetos y la complejidad de las reglas de negocio implementadas.</p>
+        </div>
+    </div>
+</body>
+</html>

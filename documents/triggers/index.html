@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Triggers - Base de Coneixement Vodafone PYME</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+      }
+
+      .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 300;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        padding: 40px;
+        margin-right: 0;
+        transition: margin-right 0.3s ease;
+      }
+
+      .main-content.panel-open {
+        margin-right: 400px;
+      }
+
+      .trigger-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+      }
+
+      .trigger-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 25px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .trigger-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .trigger-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+      }
+
+      .trigger-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .trigger-name {
+        font-size: 1.3em;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .trigger-description {
+        color: #6c757d;
+        font-size: 0.95em;
+        line-height: 1.5;
+        margin-bottom: 15px;
+      }
+
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-active {
+        background: #28a745;
+        color: white;
+      }
+
+      .status-inactive {
+        background: #6c757d;
+        color: white;
+      }
+
+      .status-problematic {
+        background: #dc3545;
+        color: white;
+      }
+
+      .trigger-details {
+        margin-bottom: 15px;
+      }
+
+      .detail-row {
+        display: flex;
+        margin-bottom: 8px;
+        font-size: 0.9em;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: #495057;
+        min-width: 100px;
+      }
+
+      .detail-value {
+        color: #6c757d;
+      }
+
+      .tags-container {
+        margin-top: 15px;
+      }
+
+      .tags-title {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag {
+        background: #e9ecef;
+        color: #495057;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .tag:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+      }
+
+      .no-results h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+      }
+
+      /* Panell dret */
+      .right-panel {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 400px;
+        height: 100vh;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+      }
+
+      .right-panel.open {
+        right: 0;
+      }
+
+      .panel-header {
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .panel-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .panel-content {
+        padding: 20px;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        .trigger-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .main-content.panel-open {
+          margin-right: 0;
+        }
+
+        .right-panel {
+          width: 100%;
+          right: -100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <button class="back-btn" onclick="goBack()">← Tornar</button>
+        <h1>⚡ Triggers</h1>
+        <p>Documentació i anàlisi de triggers Salesforce</p>
+      </div>
+
+      <div class="main-content" id="mainContent">
+        <div class="trigger-grid" id="triggersContainer">
+          <!-- Els triggers es carregaran aquí -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Panell dret per documentació -->
+    <div class="overlay" id="overlay"></div>
+    <div class="right-panel" id="rightPanel">
+      <div class="panel-header">
+        <h3 id="panelTitle">Documentació</h3>
+        <button class="panel-close" onclick="closePanel()">&times;</button>
+      </div>
+      <div class="panel-content" id="panelContent">
+        <p>Selecciona un trigger per veure la seva documentació.</p>
+      </div>
+    </div>
+
+    <script>
+      // Dades de triggers (simulades - en un projecte real vindrien d'un API o JSON)
+      const triggersData = [
+        {
+          id: "account-trigger",
+          name: "Account Trigger",
+          description: "Trigger principal per gestionar operacions d'Account",
+          status: "active",
+          object: "Account",
+          events: [
+            "before insert",
+            "after insert",
+            "before update",
+            "after update"
+          ],
+          tags: ["account", "validation", "business-logic"],
+          documentation: "docs/triggers/account-trigger.md"
+        },
+        {
+          id: "contact-trigger",
+          name: "Contact Trigger",
+          description: "Trigger per gestionar operacions de Contact",
+          status: "active",
+          object: "Contact",
+          events: ["before insert", "after insert", "before update"],
+          tags: ["contact", "validation", "sync"],
+          documentation: "docs/triggers/contact-trigger.md"
+        },
+        {
+          id: "opportunity-trigger",
+          name: "Opportunity Trigger",
+          description: "Trigger per gestionar el cicle de vida d'Opportunity",
+          status: "active",
+          object: "Opportunity",
+          events: [
+            "before insert",
+            "after insert",
+            "before update",
+            "after update"
+          ],
+          tags: ["opportunity", "sales", "workflow"],
+          documentation: "docs/triggers/opportunity-trigger.md"
+        },
+        {
+          id: "asset-trigger",
+          name: "Asset Trigger",
+          description: "Trigger amb problemes de recursió infinita (CRÍTIC)",
+          status: "problematic",
+          object: "Asset",
+          events: [
+            "before insert",
+            "after insert",
+            "before update",
+            "after update"
+          ],
+          tags: ["asset", "recursion", "critical", "problem"],
+          documentation: "docs/triggers/asset-trigger.md"
+        },
+        {
+          id: "case-trigger",
+          name: "Case Trigger",
+          description: "Trigger per gestionar casos i tickets",
+          status: "active",
+          object: "Case",
+          events: ["before insert", "after insert", "before update"],
+          tags: ["case", "support", "ticket"],
+          documentation: "docs/triggers/case-trigger.md"
+        },
+        {
+          id: "order-trigger",
+          name: "Order Trigger",
+          description: "Trigger per gestionar ordres i provisionament",
+          status: "active",
+          object: "Order",
+          events: [
+            "before insert",
+            "after insert",
+            "before update",
+            "after update"
+          ],
+          tags: ["order", "provisioning", "integration"],
+          documentation: "docs/triggers/order-trigger.md"
+        }
+      ];
+
+      function goBack() {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "../";
+        }
+      }
+
+      function openPanel(title, content) {
+        document.getElementById("panelTitle").textContent = title;
+        document.getElementById("panelContent").innerHTML = content;
+        document.getElementById("rightPanel").classList.add("open");
+        document.getElementById("overlay").classList.add("show");
+        document.getElementById("mainContent").classList.add("panel-open");
+      }
+
+      function closePanel() {
+        document.getElementById("rightPanel").classList.remove("open");
+        document.getElementById("overlay").classList.remove("show");
+        document.getElementById("mainContent").classList.remove("panel-open");
+      }
+
+      function renderTriggers() {
+        const container = document.getElementById("triggersContainer");
+
+        container.innerHTML = triggersData
+          .map(
+            (trigger) => `
+                <div class="trigger-card" onclick="showTriggerDetails('${trigger.id}')">
+                    <div class="trigger-header">
+                        <div>
+                            <div class="trigger-name">${trigger.name}</div>
+                        </div>
+                        <div class="status-badge status-${trigger.status}">${trigger.status}</div>
+                    </div>
+
+                    <div class="trigger-description">${trigger.description}</div>
+
+                    <div class="trigger-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Objecte:</span>
+                            <span class="detail-value">${trigger.object}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Events:</span>
+                            <span class="detail-value">${trigger.events.join(", ")}</span>
+                        </div>
+                    </div>
+
+                    <div class="tags-container">
+                        <div class="tags-title">Tags:</div>
+                        <div class="tags">
+                            ${trigger.tags.map((tag) => `<span class="tag" onclick="event.stopPropagation(); searchByTag('${tag}')">${tag}</span>`).join("")}
+                        </div>
+                    </div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function showTriggerDetails(triggerId) {
+        const trigger = triggersData.find((t) => t.id === triggerId);
+        if (trigger) {
+          const content = `
+                    <h4>${trigger.name}</h4>
+                    <p><strong>Descripció:</strong> ${trigger.description}</p>
+                    <p><strong>Objecte:</strong> ${trigger.object}</p>
+                    <p><strong>Events:</strong> ${trigger.events.join(", ")}</p>
+                    <p><strong>Estat:</strong> ${trigger.status}</p>
+                    <p><strong>Tags:</strong> ${trigger.tags.join(", ")}</p>
+                    ${trigger.documentation ? `<p><strong>Documentació:</strong> <a href="${trigger.documentation}" target="_blank">Veure documentació</a></p>` : ""}
+                `;
+          openPanel(trigger.name, content);
+        }
+      }
+
+      function searchByTag(tag) {
+        // Implementar cerca per tag si cal
+        console.log("Cercant per tag:", tag);
+      }
+
+      // Tancar panell en clicar l'overlay
+      document.getElementById("overlay").addEventListener("click", closePanel);
+
+      // Tancar panell amb Escape
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closePanel();
+        }
+      });
+
+      // Carregar dades quan es carrega la pàgina
+      document.addEventListener("DOMContentLoaded", renderTriggers);
+    </script>
+  </body>
+</html>

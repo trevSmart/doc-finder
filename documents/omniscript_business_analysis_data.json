@@ -1,0 +1,2758 @@
+{
+  "summary": {
+    "total_components": 88,
+    "categories": {
+      "Contract Management": 4,
+      "Customer Service Portal": 7,
+      "Data Entry & Validation": 2,
+      "Document Generation": 3,
+      "Order Management": 11,
+      "Product Configuration": 9,
+      "Quote Management": 32,
+      "Service Provisioning": 17,
+      "Test & Development": 2,
+      "Uncategorized": 1
+    },
+    "languages": {
+      "English": 53,
+      "MultiLanguage": 34,
+      "Spanish": 1
+    },
+    "user_personas": {
+      "B2B Sales Representatives": 5,
+      "Contract Managers": 5,
+      "Customer Service Portal Users": 25,
+      "General Business Users": 12,
+      "Quality Assurance Teams": 2,
+      "Order Processing Staff": 8,
+      "Sales Quote Specialists": 9,
+      "Enterprise Sales Managers": 5,
+      "Order Management Specialists": 17
+    }
+  },
+  "components": [
+    {
+      "name": "b2bExpressCLMGenerateProposalDocumentLWCEnglish",
+      "category": "Contract Management",
+      "language": "English",
+      "businessProcess": "b2bExpressCLM - generateProposalDocumentLWC",
+      "userPersona": "B2B Sales Representatives",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./b2bExpressCLMGenerateProposalDocumentLWCEnglish_def.js",
+        "./b2bExpressCLMGenerateProposalDocumentLWCEnglish.html",
+        "./b2bExpressCLMGenerateProposalDocumentLWCEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add contract lifecycle tracking",
+        "Implement renewal notification system"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "b2bExpressCLMGenerateProposalDocumentLWCMultiLanguage",
+      "category": "Contract Management",
+      "language": "MultiLanguage",
+      "businessProcess": "b2bExpressCLM - generateProposalDocumentLWC",
+      "userPersona": "B2B Sales Representatives",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./b2bExpressCLMGenerateProposalDocumentLWCMultiLanguage_def.js",
+        "./b2bExpressCLMGenerateProposalDocumentLWCMultiLanguage.html",
+        "./b2bExpressCLMGenerateProposalDocumentLWCMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add contract lifecycle tracking",
+        "Implement renewal notification system"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "contractGenerateContractMultiLanguage",
+      "category": "Contract Management",
+      "language": "MultiLanguage",
+      "businessProcess": "Contract - GenerateContract",
+      "userPersona": "Contract Managers",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./contractGenerateContractMultiLanguage_def.js",
+        "./contractGenerateContractMultiLanguage.html",
+        "./contractGenerateContractMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add contract lifecycle tracking",
+        "Implement renewal notification system"
+      ],
+      "workflow_steps": 7
+    },
+    {
+      "name": "customContractRenewalEnglish",
+      "category": "Contract Management",
+      "language": "English",
+      "businessProcess": "CustomContract - Renewal",
+      "userPersona": "Contract Managers",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./customContractRenewalEnglish_def.js",
+        "./customContractRenewalEnglish.html",
+        "./customContractRenewalEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add contract lifecycle tracking",
+        "Implement renewal notification system"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cSP_CustomerContactMultiLanguage",
+      "category": "Customer Service Portal",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_Customer - Contact",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_CustomerContactMultiLanguage_def.js",
+        "./cSP_CustomerContactMultiLanguage.html",
+        "./cSP_CustomerContactMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_BillingAccountCreateOrUpdateEnglish",
+      "category": "Customer Service Portal",
+      "language": "English",
+      "businessProcess": "csp_os_BillingAccount - createOrUpdate",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_BillingAccountCreateOrUpdateEnglish_def.js",
+        "./csp_os_BillingAccountCreateOrUpdateEnglish.html",
+        "./csp_os_BillingAccountCreateOrUpdateEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_ContactCreateOrUpdateEnglish",
+      "category": "Customer Service Portal",
+      "language": "English",
+      "businessProcess": "csp_os_Contact - createOrUpdate",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_ContactCreateOrUpdateEnglish_def.js",
+        "./csp_os_ContactCreateOrUpdateEnglish.html",
+        "./csp_os_ContactCreateOrUpdateEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_mobileDataEntryEnglish",
+      "category": "Customer Service Portal",
+      "language": "English",
+      "businessProcess": "csp_os_mobile - dataEntry",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_mobileDataEntryEnglish_def.js",
+        "./csp_os_mobileDataEntryEnglish.html",
+        "./csp_os_mobileDataEntryEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_ServiceAccountCreateOrUpdateEnglish",
+      "category": "Customer Service Portal",
+      "language": "English",
+      "businessProcess": "csp_os_ServiceAccount - createOrUpdate",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_ServiceAccountCreateOrUpdateEnglish_def.js",
+        "./csp_os_ServiceAccountCreateOrUpdateEnglish.html",
+        "./csp_os_ServiceAccountCreateOrUpdateEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_vpnDataEntryEnglish",
+      "category": "Customer Service Portal",
+      "language": "English",
+      "businessProcess": "csp_os_vpn - dataEntry",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_vpnDataEntryEnglish_def.js",
+        "./csp_os_vpnDataEntryEnglish.html",
+        "./csp_os_vpnDataEntryEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "cSP_OSOfferEnrichmentMultiLanguage",
+      "category": "Customer Service Portal",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_OS - OfferEnrichment",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSOfferEnrichmentMultiLanguage_def.js",
+        "./cSP_OSOfferEnrichmentMultiLanguage.html",
+        "./cSP_OSOfferEnrichmentMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "dataEntryMockupsEnglish",
+      "category": "Data Entry & Validation",
+      "language": "English",
+      "businessProcess": "dataEntry - mockups",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./dataEntryMockupsEnglish_def.js",
+        "./dataEntryMockupsEnglish.html",
+        "./dataEntryMockupsEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "test_os_vpnDataEntryEnglish",
+      "category": "Data Entry & Validation",
+      "language": "English",
+      "businessProcess": "test_os_vpn - dataEntry",
+      "userPersona": "Quality Assurance Teams",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./test_os_vpnDataEntryEnglish_def.js",
+        "./test_os_vpnDataEntryEnglish.html",
+        "./test_os_vpnDataEntryEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "docGenerationSampleSingleDocxLwcEnglish",
+      "category": "Document Generation",
+      "language": "English",
+      "businessProcess": "docGenerationSample - singleDocxLwc",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./docGenerationSampleSingleDocxLwcEnglish_def.js",
+        "./docGenerationSampleSingleDocxLwcEnglish.html",
+        "./docGenerationSampleSingleDocxLwcEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "docGenerationSampleSingleDocxLwcGuestUserEnglish",
+      "category": "Document Generation",
+      "language": "English",
+      "businessProcess": "docGenerationSample - singleDocxLwcGuestUser",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./docGenerationSampleSingleDocxLwcGuestUserEnglish_def.js",
+        "./docGenerationSampleSingleDocxLwcGuestUserEnglish.html",
+        "./docGenerationSampleSingleDocxLwcGuestUserEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "genericDocuSignSendEsignatureEnglish",
+      "category": "Document Generation",
+      "language": "English",
+      "businessProcess": "genericDocuSign - sendEsignature",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./genericDocuSignSendEsignatureEnglish_def.js",
+        "./genericDocuSignSendEsignatureEnglish.html",
+        "./genericDocuSignSendEsignatureEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "cLIPartialOrderCLIPartialOrderEnglish",
+      "category": "Order Management",
+      "language": "English",
+      "businessProcess": "CLIPartialOrder - CLIPartialOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cLIPartialOrderCLIPartialOrderEnglish_def.js",
+        "./cLIPartialOrderCLIPartialOrderEnglish.html",
+        "./cLIPartialOrderCLIPartialOrderEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "cPQAssetViewerOrderFlowMultiLanguage",
+      "category": "Order Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - AssetViewerOrderFlow",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQAssetViewerOrderFlowMultiLanguage_def.js",
+        "./cPQAssetViewerOrderFlowMultiLanguage.html",
+        "./cPQAssetViewerOrderFlowMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "cPQChangeToOrderMultiLanguage",
+      "category": "Order Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - ChangeToOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQChangeToOrderMultiLanguage_def.js",
+        "./cPQChangeToOrderMultiLanguage.html",
+        "./cPQChangeToOrderMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cPQCreateOrderMultiLanguage",
+      "category": "Order Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - CreateOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": ["Vlocity OmniScript", "Remote Action Calls"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQCreateOrderMultiLanguage_def.js",
+        "./cPQCreateOrderMultiLanguage.html",
+        "./cPQCreateOrderMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cPQSplitAndSubmitOrderEnglish",
+      "category": "Order Management",
+      "language": "English",
+      "businessProcess": "CPQ - SplitAndSubmitOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQSplitAndSubmitOrderEnglish_def.js",
+        "./cPQSplitAndSubmitOrderEnglish.html",
+        "./cPQSplitAndSubmitOrderEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cPQSubmitOrderMultiLanguage",
+      "category": "Order Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - SubmitOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQSubmitOrderMultiLanguage_def.js",
+        "./cPQSubmitOrderMultiLanguage.html",
+        "./cPQSubmitOrderMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_OrderDataEntryEnglish",
+      "category": "Order Management",
+      "language": "English",
+      "businessProcess": "Unknown",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_OrderDataEntryEnglish_def.js",
+        "./csp_os_OrderDataEntryEnglish.html",
+        "./csp_os_OrderDataEntryEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ]
+    },
+    {
+      "name": "csp_os_OrderVdmpProductsConfigurationEnglish",
+      "category": "Order Management",
+      "language": "English",
+      "businessProcess": "csp_os_Order - vdmpProductsConfiguration",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_OrderVdmpProductsConfigurationEnglish_def.js",
+        "./csp_os_OrderVdmpProductsConfigurationEnglish.html",
+        "./csp_os_OrderVdmpProductsConfigurationEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cSP_OSCancelEnterpriseOrderEnglish",
+      "category": "Order Management",
+      "language": "English",
+      "businessProcess": "CSP_OS - CancelEnterpriseOrder",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSCancelEnterpriseOrderEnglish_def.js",
+        "./cSP_OSCancelEnterpriseOrderEnglish.html",
+        "./cSP_OSCancelEnterpriseOrderEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "lWCCPQAmendOrderMultiLanguage",
+      "category": "Order Management",
+      "language": "MultiLanguage",
+      "businessProcess": "LWCCPQ - AmendOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": ["Vlocity OmniScript", "Remote Action Calls"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./lWCCPQAmendOrderMultiLanguage_def.js",
+        "./lWCCPQAmendOrderMultiLanguage.html",
+        "./lWCCPQAmendOrderMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "lWCCPQCancelOrderEnglish",
+      "category": "Order Management",
+      "language": "English",
+      "businessProcess": "LWCCPQ - CancelOrder",
+      "userPersona": "Order Processing Staff",
+      "integrationPoints": ["Vlocity OmniScript", "Remote Action Calls"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./lWCCPQCancelOrderEnglish_def.js",
+        "./lWCCPQCancelOrderEnglish.html",
+        "./lWCCPQCancelOrderEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add order status tracking and notifications",
+        "Implement automated order processing rules"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "cPQBulkChangeMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - BulkChange",
+      "userPersona": "General Business Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQBulkChangeMultiLanguage_def.js",
+        "./cPQBulkChangeMultiLanguage.html",
+        "./cPQBulkChangeMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 6
+    },
+    {
+      "name": "cPQBulkReplaceMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - BulkReplace",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQBulkReplaceMultiLanguage_def.js",
+        "./cPQBulkReplaceMultiLanguage.html",
+        "./cPQBulkReplaceMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 3
+    },
+    {
+      "name": "cPQCartConfiguratorMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - cartConfigurator",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQCartConfiguratorMultiLanguage_def.js",
+        "./cPQCartConfiguratorMultiLanguage.html",
+        "./cPQCartConfiguratorMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 5
+    },
+    {
+      "name": "cPQMultisiteConfiguratorMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - MultisiteConfigurator",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQMultisiteConfiguratorMultiLanguage_def.js",
+        "./cPQMultisiteConfiguratorMultiLanguage.html",
+        "./cPQMultisiteConfiguratorMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 5
+    },
+    {
+      "name": "cPQSingleMoveMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - SingleMove",
+      "userPersona": "General Business Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQSingleMoveMultiLanguage_def.js",
+        "./cPQSingleMoveMultiLanguage.html",
+        "./cPQSingleMoveMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cSP_OSGuidedConfigureProductMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_OS - GuidedConfigureProduct",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSGuidedConfigureProductMultiLanguage_def.js",
+        "./cSP_OSGuidedConfigureProductMultiLanguage.html",
+        "./cSP_OSGuidedConfigureProductMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cSP_OSGuidedConfigureProductNewMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_OS - GuidedConfigureProductNew",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSGuidedConfigureProductNewMultiLanguage_def.js",
+        "./cSP_OSGuidedConfigureProductNewMultiLanguage.html",
+        "./cSP_OSGuidedConfigureProductNewMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cSP_OSGuidedConfigureRIProductMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_OS - GuidedConfigureRIProduct",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSGuidedConfigureRIProductMultiLanguage_def.js",
+        "./cSP_OSGuidedConfigureRIProductMultiLanguage.html",
+        "./cSP_OSGuidedConfigureRIProductMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "lWCCPQApproveDiscountItemsMultiLanguage",
+      "category": "Product Configuration",
+      "language": "MultiLanguage",
+      "businessProcess": "LWCCPQ - ApproveDiscountItems",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./lWCCPQApproveDiscountItemsMultiLanguage_def.js",
+        "./lWCCPQApproveDiscountItemsMultiLanguage.html",
+        "./lWCCPQApproveDiscountItemsMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Add product compatibility validation",
+        "Implement guided configuration wizards"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "b2bExpressCreateQuoteEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "b2bExpress - CreateQuote",
+      "userPersona": "B2B Sales Representatives",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./b2bExpressCreateQuoteEnglish_def.js",
+        "./b2bExpressCreateQuoteEnglish.html",
+        "./b2bExpressCreateQuoteEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "b2bExpressCreateQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "b2bExpress - CreateQuote",
+      "userPersona": "B2B Sales Representatives",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./b2bExpressCreateQuoteMultiLanguage_def.js",
+        "./b2bExpressCreateQuoteMultiLanguage.html",
+        "./b2bExpressCreateQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 7
+    },
+    {
+      "name": "b2bExpressCSPCreateConfigurationQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "b2bExpressCSP - CreateConfigurationQuote",
+      "userPersona": "B2B Sales Representatives",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./b2bExpressCSPCreateConfigurationQuoteMultiLanguage_def.js",
+        "./b2bExpressCSPCreateConfigurationQuoteMultiLanguage.html",
+        "./b2bExpressCSPCreateConfigurationQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "clmAsyncQuoteToContractEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "clm - asyncQuoteToContract",
+      "userPersona": "Contract Managers",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./clmAsyncQuoteToContractEnglish_def.js",
+        "./clmAsyncQuoteToContractEnglish.html",
+        "./clmAsyncQuoteToContractEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "contractSubmitApprovalCancelEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "Contract - SubmitApprovalCancel",
+      "userPersona": "Contract Managers",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./contractSubmitApprovalCancelEnglish_def.js",
+        "./contractSubmitApprovalCancelEnglish.html",
+        "./contractSubmitApprovalCancelEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 0
+    },
+    {
+      "name": "contractSubmitApprovalMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "Contract - SubmitApproval",
+      "userPersona": "Contract Managers",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./contractSubmitApprovalMultiLanguage_def.js",
+        "./contractSubmitApprovalMultiLanguage.html",
+        "./contractSubmitApprovalMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 5
+    },
+    {
+      "name": "cPQAssetViewerQuoteFlowMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - AssetViewerQuoteFlow",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQAssetViewerQuoteFlowMultiLanguage_def.js",
+        "./cPQAssetViewerQuoteFlowMultiLanguage.html",
+        "./cPQAssetViewerQuoteFlowMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "cPQBulkQuoteToOrderMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - BulkQuoteToOrder",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQBulkQuoteToOrderMultiLanguage_def.js",
+        "./cPQBulkQuoteToOrderMultiLanguage.html",
+        "./cPQBulkQuoteToOrderMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "cPQChangeToQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - ChangeToQuote",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQChangeToQuoteMultiLanguage_def.js",
+        "./cPQChangeToQuoteMultiLanguage.html",
+        "./cPQChangeToQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 0
+    },
+    {
+      "name": "cPQCreateQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CPQ - CreateQuote",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Remote Action Calls"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cPQCreateQuoteMultiLanguage_def.js",
+        "./cPQCreateQuoteMultiLanguage.html",
+        "./cPQCreateQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_QuoteAccountAssignmentEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - accountAssignment",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteAccountAssignmentEnglish_def.js",
+        "./csp_os_QuoteAccountAssignmentEnglish.html",
+        "./csp_os_QuoteAccountAssignmentEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "csp_os_QuoteCloneQuoteEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - CloneQuote",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteCloneQuoteEnglish_def.js",
+        "./csp_os_QuoteCloneQuoteEnglish.html",
+        "./csp_os_QuoteCloneQuoteEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_QuoteCloneQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "csp_os_Quote - CloneQuote",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteCloneQuoteMultiLanguage_def.js",
+        "./csp_os_QuoteCloneQuoteMultiLanguage.html",
+        "./csp_os_QuoteCloneQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 3
+    },
+    {
+      "name": "csp_os_QuoteCSP_OS_CloneQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "csp_os_Quote - CSP_OS_CloneQuote",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteCSP_OS_CloneQuoteMultiLanguage_def.js",
+        "./csp_os_QuoteCSP_OS_CloneQuoteMultiLanguage.html",
+        "./csp_os_QuoteCSP_OS_CloneQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 8
+    },
+    {
+      "name": "csp_os_QuoteDataEntryAtributosGeneralesEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - dataEntryAtributosGenerales",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteDataEntryAtributosGeneralesEnglish_def.js",
+        "./csp_os_QuoteDataEntryAtributosGeneralesEnglish.html",
+        "./csp_os_QuoteDataEntryAtributosGeneralesEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_QuoteDataEntryGeneralDataEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - DataEntryGeneralData",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteDataEntryGeneralDataEnglish_def.js",
+        "./csp_os_QuoteDataEntryGeneralDataEnglish.html",
+        "./csp_os_QuoteDataEntryGeneralDataEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_QuoteQuoteDataEntrySpanish",
+      "category": "Quote Management",
+      "language": "Spanish",
+      "businessProcess": "Unknown",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteQuoteDataEntrySpanish_def.js",
+        "./csp_os_QuoteQuoteDataEntrySpanish.html",
+        "./csp_os_QuoteQuoteDataEntrySpanish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ]
+    },
+    {
+      "name": "csp_os_QuoteValidateDataEntryEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - validateDataEntry",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteValidateDataEntryEnglish_def.js",
+        "./csp_os_QuoteValidateDataEntryEnglish.html",
+        "./csp_os_QuoteValidateDataEntryEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_QuoteVdmpProductsConfigurationEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - vdmpProductsConfiguration",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteVdmpProductsConfigurationEnglish_def.js",
+        "./csp_os_QuoteVdmpProductsConfigurationEnglish.html",
+        "./csp_os_QuoteVdmpProductsConfigurationEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "csp_os_QuoteVpnDataEntryEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "csp_os_Quote - vpnDataEntry",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./csp_os_QuoteVpnDataEntryEnglish_def.js",
+        "./csp_os_QuoteVpnDataEntryEnglish.html",
+        "./csp_os_QuoteVpnDataEntryEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "cSP_OSCreateQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_OS - CreateQuote",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSCreateQuoteMultiLanguage_def.js",
+        "./cSP_OSCreateQuoteMultiLanguage.html",
+        "./cSP_OSCreateQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "cSP_OSEnrichQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "CSP_OS - EnrichQuote",
+      "userPersona": "Customer Service Portal Users",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./cSP_OSEnrichQuoteMultiLanguage_def.js",
+        "./cSP_OSEnrichQuoteMultiLanguage.html",
+        "./cSP_OSEnrichQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 6
+    },
+    {
+      "name": "eSMGuidedConfigureQuoteMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "ESM - GuidedConfigureQuote",
+      "userPersona": "Enterprise Sales Managers",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./eSMGuidedConfigureQuoteMultiLanguage_def.js",
+        "./eSMGuidedConfigureQuoteMultiLanguage.html",
+        "./eSMGuidedConfigureQuoteMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "eSMQuoteEnrichForAllEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "ESM - QuoteEnrichForAll",
+      "userPersona": "Enterprise Sales Managers",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./eSMQuoteEnrichForAllEnglish_def.js",
+        "./eSMQuoteEnrichForAllEnglish.html",
+        "./eSMQuoteEnrichForAllEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 5
+    },
+    {
+      "name": "eSMQuoteEnrichForInstallationEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "ESM - QuoteEnrichForInstallation",
+      "userPersona": "Enterprise Sales Managers",
+      "integrationPoints": ["Vlocity OmniScript", "Remote Action Calls"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./eSMQuoteEnrichForInstallationEnglish_def.js",
+        "./eSMQuoteEnrichForInstallationEnglish.html",
+        "./eSMQuoteEnrichForInstallationEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "eSMQuoteEnrichForNumberAssignmentEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "ESM - QuoteEnrichForNumberAssignment",
+      "userPersona": "Enterprise Sales Managers",
+      "integrationPoints": ["Vlocity OmniScript", "Remote Action Calls"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./eSMQuoteEnrichForNumberAssignmentEnglish_def.js",
+        "./eSMQuoteEnrichForNumberAssignmentEnglish.html",
+        "./eSMQuoteEnrichForNumberAssignmentEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "eSMQuoteEnrichForPaymentEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "ESM - QuoteEnrichForPayment",
+      "userPersona": "Enterprise Sales Managers",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./eSMQuoteEnrichForPaymentEnglish_def.js",
+        "./eSMQuoteEnrichForPaymentEnglish.html",
+        "./eSMQuoteEnrichForPaymentEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "multiSiteQuoteOrderFlowMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "MultiSite - QuoteOrderFlow",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./multiSiteQuoteOrderFlowMultiLanguage_def.js",
+        "./multiSiteQuoteOrderFlowMultiLanguage.html",
+        "./multiSiteQuoteOrderFlowMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "quoteEmailProposalMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "Quote - EmailProposal",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./quoteEmailProposalMultiLanguage_def.js",
+        "./quoteEmailProposalMultiLanguage.html",
+        "./quoteEmailProposalMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 6
+    },
+    {
+      "name": "quoteGenerateProposalMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "Quote - GenerateProposal",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./quoteGenerateProposalMultiLanguage_def.js",
+        "./quoteGenerateProposalMultiLanguage.html",
+        "./quoteGenerateProposalMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 5
+    },
+    {
+      "name": "quoteSubmitApprovalCancelEnglish",
+      "category": "Quote Management",
+      "language": "English",
+      "businessProcess": "Quote - SubmitApprovalCancel",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./quoteSubmitApprovalCancelEnglish_def.js",
+        "./quoteSubmitApprovalCancelEnglish.html",
+        "./quoteSubmitApprovalCancelEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 0
+    },
+    {
+      "name": "quoteSubmitApprovalMultiLanguage",
+      "category": "Quote Management",
+      "language": "MultiLanguage",
+      "businessProcess": "Quote - SubmitApproval",
+      "userPersona": "Sales Quote Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./quoteSubmitApprovalMultiLanguage_def.js",
+        "./quoteSubmitApprovalMultiLanguage.html",
+        "./quoteSubmitApprovalMultiLanguage_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution",
+        "Implement quote approval workflow automation",
+        "Add real-time pricing validation"
+      ],
+      "workflow_steps": 9
+    },
+    {
+      "name": "xOMAltaConsolaGoogleEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - AltaConsolaGoogle",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMAltaConsolaGoogleEnglish_def.js",
+        "./xOMAltaConsolaGoogleEnglish.html",
+        "./xOMAltaConsolaGoogleEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMAltaConsolaMicrosoftEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - AltaConsolaMicrosoft",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMAltaConsolaMicrosoftEnglish_def.js",
+        "./xOMAltaConsolaMicrosoftEnglish.html",
+        "./xOMAltaConsolaMicrosoftEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMAltaGSM_GPRSEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - AltaGSM_GPRS",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMAltaGSM_GPRSEnglish_def.js",
+        "./xOMAltaGSM_GPRSEnglish.html",
+        "./xOMAltaGSM_GPRSEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMAltaVPNEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - AltaVPN",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMAltaVPNEnglish_def.js",
+        "./xOMAltaVPNEnglish.html",
+        "./xOMAltaVPNEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMAsociarCuentaEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - AsociarCuenta",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMAsociarCuentaEnglish_def.js",
+        "./xOMAsociarCuentaEnglish.html",
+        "./xOMAsociarCuentaEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMCancelAddOnsEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - CancelAddOns",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMCancelAddOnsEnglish_def.js",
+        "./xOMCancelAddOnsEnglish.html",
+        "./xOMCancelAddOnsEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMCancelSubscriptionEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - CancelSubscription",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMCancelSubscriptionEnglish_def.js",
+        "./xOMCancelSubscriptionEnglish.html",
+        "./xOMCancelSubscriptionEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMClientCRMEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - ClientCRM",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMClientCRMEnglish_def.js",
+        "./xOMClientCRMEnglish.html",
+        "./xOMClientCRMEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 4
+    },
+    {
+      "name": "xOMCreateDiscountEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - CreateDiscount",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMCreateDiscountEnglish_def.js",
+        "./xOMCreateDiscountEnglish.html",
+        "./xOMCreateDiscountEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMCreateGroupEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - CreateGroup",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMCreateGroupEnglish_def.js",
+        "./xOMCreateGroupEnglish.html",
+        "./xOMCreateGroupEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMCreateRangeEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - CreateRange",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Salesforce Object Lookups",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMCreateRangeEnglish_def.js",
+        "./xOMCreateRangeEnglish.html",
+        "./xOMCreateRangeEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMLinkTenantEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - LinkTenant",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMLinkTenantEnglish_def.js",
+        "./xOMLinkTenantEnglish.html",
+        "./xOMLinkTenantEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMModifyGDPREnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - ModifyGDPR",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMModifyGDPREnglish_def.js",
+        "./xOMModifyGDPREnglish.html",
+        "./xOMModifyGDPREnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMVDMPCreateAddonEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - VDMPCreateAddon",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMVDMPCreateAddonEnglish_def.js",
+        "./xOMVDMPCreateAddonEnglish.html",
+        "./xOMVDMPCreateAddonEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMVDMPCreateAdministratorEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - VDMPCreateAdministrator",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMVDMPCreateAdministratorEnglish_def.js",
+        "./xOMVDMPCreateAdministratorEnglish.html",
+        "./xOMVDMPCreateAdministratorEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMVDMPCreateClientCompanyEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - VDMPCreateClientCompany",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": ["Vlocity OmniScript", "Data Transformation"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMVDMPCreateClientCompanyEnglish_def.js",
+        "./xOMVDMPCreateClientCompanyEnglish.html",
+        "./xOMVDMPCreateClientCompanyEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "xOMVDMPCreateSuscriptionEnglish",
+      "category": "Service Provisioning",
+      "language": "English",
+      "businessProcess": "XOM - VDMPCreateSuscription",
+      "userPersona": "Order Management Specialists",
+      "integrationPoints": [
+        "Vlocity OmniScript",
+        "Remote Action Calls",
+        "Data Transformation"
+      ],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./xOMVDMPCreateSuscriptionEnglish_def.js",
+        "./xOMVDMPCreateSuscriptionEnglish.html",
+        "./xOMVDMPCreateSuscriptionEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 2
+    },
+    {
+      "name": "simpleViewEnglish",
+      "category": "Test & Development",
+      "language": "English",
+      "businessProcess": "simple - view",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./simpleViewEnglish_def.js",
+        "./simpleViewEnglish.html",
+        "./simpleViewEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "testTest_os_lwcEnglish",
+      "category": "Test & Development",
+      "language": "English",
+      "businessProcess": "test - test_os_lwc",
+      "userPersona": "Quality Assurance Teams",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./testTest_os_lwcEnglish_def.js",
+        "./testTest_os_lwcEnglish.html",
+        "./testTest_os_lwcEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 1
+    },
+    {
+      "name": "dcLwccheckoutEnglish",
+      "category": "Uncategorized",
+      "language": "English",
+      "businessProcess": "dc - lwccheckout",
+      "userPersona": "General Business Users",
+      "integrationPoints": ["Vlocity OmniScript"],
+      "dependencies": [
+        "lwc",
+        "vlocity_cmt/omniscriptHeader",
+        "vlocity_cmt/omniscriptRestApi",
+        "vlocity_cmt/omniscriptInternalUtils",
+        "./dcLwccheckoutEnglish_def.js",
+        "./dcLwccheckoutEnglish.html",
+        "./dcLwccheckoutEnglish_nds.html"
+      ],
+      "usabilityGaps": [
+        "Business purpose not clearly identifiable from naming",
+        "Auto-generated component - limited customization options"
+      ],
+      "improvement_suggestions": [
+        "Add comprehensive business process documentation",
+        "Create user training materials specific to business role",
+        "Consider creating multilingual variant for broader user adoption",
+        "Implement comprehensive error handling for external integrations",
+        "Add audit trail for business process execution"
+      ],
+      "workflow_steps": 4
+    }
+  ],
+  "recommendations": {
+    "high_priority": [
+      "Implement comprehensive multilingual support across all business processes",
+      "Standardize error handling and user feedback patterns",
+      "Create unified documentation framework for all business processes",
+      "Establish consistent audit trail mechanisms across components"
+    ],
+    "medium_priority": [
+      "Develop component naming conventions that clearly indicate business purpose",
+      "Implement automated testing framework for business process workflows",
+      "Create user role-based training materials",
+      "Standardize integration patterns with external systems"
+    ],
+    "low_priority": [
+      "Optimize component performance for large-scale deployments",
+      "Implement advanced analytics for business process usage",
+      "Create component reusability guidelines",
+      "Develop automated code quality checks"
+    ]
+  }
+}

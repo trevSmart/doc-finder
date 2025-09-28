@@ -1,0 +1,436 @@
+{
+  "categories": [
+    "Business Process",
+    "Integration",
+    "Interactive Process",
+    "Object-Specific"
+  ],
+  "integrations": [
+    "External System",
+    "Platform Events",
+    "REST/SOAP API"
+  ],
+  "mechanisms": [
+    "Database Trigger",
+    "Manual Process",
+    "Omniscript"
+  ],
+  "objects": [
+    "Account",
+    "Case",
+    "Contact",
+    "Opportunity"
+  ],
+  "tags": [
+    "Apex",
+    "Approval",
+    "Batch Processing",
+    "Integration",
+    "Lightning Web Components",
+    "Omniscript",
+    "Platform Events",
+    "Triggers"
+  ],
+  "tagColors": {
+    "Apex": "#3B82F6",
+    "Approval": "#EF4444",
+    "Batch Processing": "#10B981",
+    "Integration": "#F59E0B",
+    "Lightning Web Components": "#8B5CF6",
+    "Omniscript": "#06B6D4",
+    "Platform Events": "#84CC16",
+    "Triggers": "#F97316"
+  },
+  "processes": [
+    {
+      "id": 1,
+      "name": "OmniscriptHeader Components: Executive Summary",
+      "description": "",
+      "category": "Interactive Process",
+      "mechanism": "Omniscript",
+      "objects": [
+        "Opportunity"
+      ],
+      "integrations": [
+        "External System"
+      ],
+      "tags": [
+        "Integration",
+        "Omniscript"
+      ],
+      "documentation": "doc-finder/documents/omniscript_analysis_summary.md",
+      "lastModified": "2025-09-25T07:12:03.418094",
+      "fileSize": 6041,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 2,
+      "name": "Omniscript Business Analysis Data",
+      "description": "",
+      "category": "Interactive Process",
+      "mechanism": "Omniscript",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "REST/SOAP API"
+      ],
+      "tags": [
+        "Approval",
+        "Lightning Web Components",
+        "Integration",
+        "Omniscript"
+      ],
+      "documentation": "doc-finder/documents/omniscript_business_analysis_data.json",
+      "lastModified": "2025-09-25T07:12:03.449607",
+      "fileSize": 108423,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 3,
+      "name": "Test Upload 1",
+      "description": "",
+      "category": "Business Process",
+      "mechanism": "Manual Process",
+      "objects": [
+        "Account",
+        "Contact",
+        "Opportunity",
+        "Case"
+      ],
+      "integrations": [],
+      "tags": [],
+      "documentation": "doc-finder/documents/test-upload-1.txt",
+      "lastModified": "2025-09-25T07:33:03.785430",
+      "fileSize": 25,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 4,
+      "name": "Platform Events & Integration Business Process Analysis",
+      "description": "",
+      "category": "Integration",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "Platform Events"
+      ],
+      "tags": [
+        "Batch Processing",
+        "Triggers",
+        "Integration",
+        "Platform Events"
+      ],
+      "documentation": "doc-finder/documents/platform-events-integration-analysis.md",
+      "lastModified": "2025-09-25T07:12:03.514449",
+      "fileSize": 12929,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 5,
+      "name": "OmniscriptHeader Components Business Process Analysis",
+      "description": "",
+      "category": "Interactive Process",
+      "mechanism": "Omniscript",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "External System"
+      ],
+      "tags": [
+        "Approval",
+        "Lightning Web Components",
+        "Integration",
+        "Omniscript"
+      ],
+      "documentation": "doc-finder/documents/omniscript_business_process_analysis.md",
+      "lastModified": "2025-09-25T07:12:03.492709",
+      "fileSize": 34621,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 6,
+      "name": "Requerimientos",
+      "description": "",
+      "category": "Business Process",
+      "mechanism": "Manual Process",
+      "objects": [
+        "Account",
+        "Contact",
+        "Opportunity",
+        "Case"
+      ],
+      "integrations": [],
+      "tags": [],
+      "documentation": "doc-finder/documents/requerimientos.md",
+      "lastModified": "2025-09-25T07:35:44.901258",
+      "fileSize": 3250,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 7,
+      "name": "Integration Points Catalog - Vodafone PYME Salesforce",
+      "description": "",
+      "category": "Integration",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "REST/SOAP API"
+      ],
+      "tags": [
+        "Batch Processing",
+        "Triggers",
+        "Integration"
+      ],
+      "documentation": "doc-finder/documents/integration-catalog.md",
+      "lastModified": "2025-09-25T07:12:03.284454",
+      "fileSize": 13105,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 8,
+      "name": "Base de Coneixement Web - Processos de Negoci Vodafone PYME",
+      "description": "",
+      "category": "Business Process",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "REST/SOAP API"
+      ],
+      "tags": [
+        "Batch Processing",
+        "Triggers",
+        "Integration",
+        "Omniscript"
+      ],
+      "documentation": "doc-finder/documents/README.md",
+      "lastModified": "2025-09-25T07:20:40.145272",
+      "fileSize": 5652,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 9,
+      "name": "Requerimientos 1",
+      "description": "",
+      "category": "Business Process",
+      "mechanism": "Manual Process",
+      "objects": [
+        "Account",
+        "Contact",
+        "Opportunity",
+        "Case"
+      ],
+      "integrations": [],
+      "tags": [],
+      "documentation": "doc-finder/documents/requerimientos-1.md",
+      "lastModified": "2025-09-25T07:37:06.531179",
+      "fileSize": 3283,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 10,
+      "name": "Test Upload",
+      "description": "",
+      "category": "Business Process",
+      "mechanism": "Manual Process",
+      "objects": [
+        "Account",
+        "Contact",
+        "Opportunity",
+        "Case"
+      ],
+      "integrations": [],
+      "tags": [],
+      "documentation": "doc-finder/documents/test-upload.txt",
+      "lastModified": "2025-09-25T06:54:24.550549",
+      "fileSize": 23,
+      "subdirectory": ".",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 11,
+      "name": "Documentación Exhaustiva de Triggers y Flujos de Objetos",
+      "description": "",
+      "category": "Object-Specific",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "REST/SOAP API"
+      ],
+      "tags": [
+        "Triggers",
+        "Apex"
+      ],
+      "documentation": "doc-finder/documents/triggers/trigger-flows-documentation.md",
+      "lastModified": "2025-09-25T07:12:04.776595",
+      "fileSize": 30249,
+      "subdirectory": "triggers",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 12,
+      "name": "Documentación de Triggers - Índice Principal",
+      "description": "",
+      "category": "Object-Specific",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [],
+      "tags": [
+        "Triggers"
+      ],
+      "documentation": "doc-finder/documents/triggers/README-TRIGGERS.md",
+      "lastModified": "2025-09-25T07:12:03.531491",
+      "fileSize": 7891,
+      "subdirectory": "triggers",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 13,
+      "name": "Diagramas de Flujo de Triggers - Representación Visual",
+      "description": "",
+      "category": "Object-Specific",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "External System"
+      ],
+      "tags": [
+        "Triggers",
+        "Integration"
+      ],
+      "documentation": "doc-finder/documents/triggers/trigger-flowcharts-fixed.md",
+      "lastModified": "2025-09-25T05:39:00.677055",
+      "fileSize": 9381,
+      "subdirectory": "triggers",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 14,
+      "name": "Documentació de Triggers - Índex",
+      "description": "",
+      "category": "Business Process",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account",
+        "Contact",
+        "Opportunity",
+        "Case"
+      ],
+      "integrations": [],
+      "tags": [
+        "Triggers"
+      ],
+      "documentation": "doc-finder/documents/triggers/README.md",
+      "lastModified": "2025-09-25T07:12:03.536904",
+      "fileSize": 2097,
+      "subdirectory": "triggers",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 15,
+      "name": "Resumen de Triggers - Tabla de Referencia Rápida",
+      "description": "",
+      "category": "Object-Specific",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [],
+      "tags": [
+        "Batch Processing",
+        "Triggers"
+      ],
+      "documentation": "doc-finder/documents/triggers/trigger-summary-table.md",
+      "lastModified": "2025-09-25T07:12:04.795692",
+      "fileSize": 12782,
+      "subdirectory": "triggers",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 16,
+      "name": "Diagramas de Flujo de Triggers - Representación Visual",
+      "description": "",
+      "category": "Object-Specific",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "External System"
+      ],
+      "tags": [
+        "Triggers",
+        "Integration"
+      ],
+      "documentation": "doc-finder/documents/triggers/trigger-flowcharts.md",
+      "lastModified": "2025-09-24T21:15:14.879292",
+      "fileSize": 9440,
+      "subdirectory": "triggers",
+      "priority": "medium",
+      "complexity": "medium"
+    },
+    {
+      "id": 17,
+      "name": "Integrations Database",
+      "description": "",
+      "category": "Integration",
+      "mechanism": "Database Trigger",
+      "objects": [
+        "Account"
+      ],
+      "integrations": [
+        "REST/SOAP API"
+      ],
+      "tags": [
+        "Batch Processing",
+        "Triggers",
+        "Integration"
+      ],
+      "documentation": "doc-finder/documents/integrations/integrations-database.json",
+      "lastModified": "2025-09-25T07:12:03.403037",
+      "fileSize": 23375,
+      "subdirectory": "integrations",
+      "priority": "medium",
+      "complexity": "medium"
+    }
+  ],
+  "generatedAt": "2025-09-25T07:39:14.014646",
+  "totalDocuments": 17
+}
