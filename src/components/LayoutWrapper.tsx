@@ -7,6 +7,7 @@ import FileDetailsSidebar from './FileDetailsSidebar'
 import { useFileDetails } from '../contexts/FileDetailsContext'
 import { useResizableSidebar } from '../hooks/useResizableSidebar'
 import { useResizableRightSidebar } from '../hooks/useResizableRightSidebar'
+import { useFileTags } from '../contexts/FileTagsContext'
 
 interface LayoutWrapperProps {
   children: React.ReactNode
@@ -17,6 +18,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const { isOpen, selectedFile, closeFileDetails } = useFileDetails()
   const { sidebarWidth, startResize, isResizing } = useResizableSidebar()
   const { sidebarWidth: rightSidebarWidth, startResize: startRightResize, isResizing: isRightResizing } = useResizableRightSidebar()
+  const { setFileTags } = useFileTags()
 
   return (
     <div>
@@ -30,12 +32,15 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
 
       <div
         style={{
-          paddingLeft: `${sidebarWidth}px`,
+          paddingLeft: sidebarOpen ? `${sidebarWidth}px` : '0px',
           paddingRight: isOpen ? `${rightSidebarWidth}px` : '0px'
         }}
         data-content
       >
-        <Navigation onSidebarOpen={() => setSidebarOpen(true)} />
+        <Navigation
+          onSidebarOpen={() => setSidebarOpen(true)}
+          sidebarOpen={sidebarOpen}
+        />
 
         <main
           className="py-10 min-h-screen"
@@ -59,6 +64,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
         sidebarWidth={rightSidebarWidth}
         startResize={startRightResize}
         isResizing={isRightResizing}
+        onFileTagsChange={setFileTags}
       />
     </div>
   )

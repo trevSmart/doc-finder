@@ -5,9 +5,13 @@ import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
 import { useFileDetails } from '../contexts/FileDetailsContext'
 import { useSearch } from '../contexts/SearchContext'
+import { useFileTags } from '../contexts/FileTagsContext'
+import { useTags } from '../contexts/TagContext'
 import { useFileList } from '../hooks/useFileList'
 import { FileItem } from '../types/file'
 import { formatFileSize, getFileTypeIcon, getFileTypeIconColor } from '../utils/fileUtils'
+import { TAG_COLORS } from '../types/tag'
+import Image from 'next/image'
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -17,6 +21,8 @@ export default function Home() {
   const { files, loading, error } = useFileList(settings.documentSources.localFolder)
   const { openFileDetails, selectedFile, isOpen, closeFileDetails } = useFileDetails()
   const { debouncedSearchQuery } = useSearch()
+  const { getFileTags } = useFileTags()
+  const { getTagById } = useTags()
 
   useEffect(() => {
     setMounted(true)
@@ -46,53 +52,41 @@ export default function Home() {
       return filteredFiles
     }
 
-    const searchTerm = query.toLowerCase().trim()
+    // Dividir la consulta en paraules individuals
+    const searchTerms = query.toLowerCase().trim().split(/\s+/)
 
     return filteredFiles.filter(file => {
-      // Cerca en el nom del fitxer
-      if (file.name.toLowerCase().includes(searchTerm)) {
-        return true
-      }
+      // Crear un array amb tots els textos cercables del fitxer
+      const searchableTexts: string[] = [
+        file.name.toLowerCase(),
+        file.extension?.toLowerCase() || '',
+        file.category?.toLowerCase() || '',
+        file.mimeType?.toLowerCase() || '',
+        file.type?.toLowerCase() || '',
+        file.path.toLowerCase(),
+        file.size ? formatFileSize(file.size).toLowerCase() : '',
+        file.lastModified ? new Date(file.lastModified).toLocaleDateString().toLowerCase() : ''
+      ]
 
-      // Cerca en l'extensió
-      if (file.extension && file.extension.toLowerCase().includes(searchTerm)) {
-        return true
-      }
+      // Afegir tags
+      const fileTagIds = getFileTags(file.path)
+      const fileTags = fileTagIds.map(tagId => getTagById(tagId)).filter(Boolean)
 
-      // Cerca en la categoria
-      if (file.category && file.category.toLowerCase().includes(searchTerm)) {
-        return true
-      }
+      for (const tag of fileTags) {
+        if (!tag) continue
+        searchableTexts.push(tag.text.toLowerCase())
+        searchableTexts.push(tag.color.toLowerCase())
 
-      // Cerca en el tipus MIME
-      if (file.mimeType && file.mimeType.toLowerCase().includes(searchTerm)) {
-        return true
-      }
-
-      // Cerca en el tipus (file/directory)
-      if (file.type && file.type.toLowerCase().includes(searchTerm)) {
-        return true
-      }
-
-      // Cerca en la ruta
-      if (file.path.toLowerCase().includes(searchTerm)) {
-        return true
-      }
-
-      // Cerca en la mida (convertir a text)
-      if (file.size && formatFileSize(file.size).toLowerCase().includes(searchTerm)) {
-        return true
-      }
-
-      // Cerca en la data de modificació
-      if (file.lastModified) {
-        const dateStr = new Date(file.lastModified).toLocaleDateString().toLowerCase()
-        if (dateStr.includes(searchTerm)) {
-          return true
+        const colorInfo = TAG_COLORS[tag.color]
+        if (colorInfo) {
+          searchableTexts.push(colorInfo.name.toLowerCase())
         }
       }
 
-      return false
+      // Verificar que TOTES les paraules de cerca es troben en ALGUN dels textos cercables
+      return searchTerms.every(searchTerm =>
+        searchableTexts.some(text => text.includes(searchTerm))
+      )
     })
   }
 
@@ -180,7 +174,7 @@ export default function Home() {
           <div onClick={handleGridAreaClick}>
             <ul
               role="list"
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
             >
             {filteredFiles.map((file, index) => {
               const isSelected = isOpen && selectedFile && selectedFile.path === file.path
@@ -189,7 +183,7 @@ export default function Home() {
                 <li
                   key={index}
                   data-file-card
-                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 dark:hover:border-neutral-600 dark:hover:bg-neutral-800 dark:focus:border-neutral-600 dark:focus:bg-neutral-800 ${
+                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500 dark:hover:from-gray-50 dark:hover:to-gray-400 dark:focus:border-gray-500 dark:focus:from-gray-50 dark:focus:to-gray-400 ${
                     isSelected
                       ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
                       : ''
@@ -204,14 +198,16 @@ export default function Home() {
                 {/* Header amb títol i icona de tipus */}
                 <div className="p-4 md:p-5 pb-3">
                   <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-white leading-tight">
+                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-800 leading-tight">
                       {file.name}
                     </h3>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex-shrink-0">
-                      <img
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-300 flex-shrink-0">
+                      <Image
                         src={getFileTypeIcon(file.extension || '', file.isDirectory)}
                         alt={file.isDirectory ? 'Folder' : `${file.extension} file`}
-                        className={`h-5 w-5 ${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
+                        width={20}
+                        height={20}
+                        className={`${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
                       />
                     </div>
                   </div>
@@ -221,31 +217,33 @@ export default function Home() {
                 <div className="px-4 md:px-5 pb-4">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                     <div>
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">Tipus:</span>
-                      <span className="ml-2 text-gray-600 dark:text-gray-400 inline-flex items-center gap-1">
-                        <img
+                      <span className="font-semibold text-gray-700 dark:text-gray-700">Tipus:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-600 inline-flex items-center gap-1">
+                        <Image
                           src={getFileTypeIcon(file.extension || '', file.isDirectory)}
                           alt={file.isDirectory ? 'Folder' : `${file.extension} file`}
-                          className={`h-4 w-4 ${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
+                          width={16}
+                          height={16}
+                          className={`${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
                         />
                         {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Fitxer')}
                       </span>
                     </div>
                     <div>
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">Mida:</span>
-                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold text-gray-700 dark:text-gray-700">Mida:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-600">
                         {file.size ? formatFileSize(file.size) : 'N/A'}
                       </span>
                     </div>
                     <div>
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">Modificat:</span>
-                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold text-gray-700 dark:text-gray-700">Modificat:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-600">
                         {file.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Desconegut'}
                       </span>
                     </div>
                     <div>
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">Categoria:</span>
-                      <span className="ml-2 text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold text-gray-700 dark:text-gray-700">Categoria:</span>
+                      <span className="ml-2 text-gray-600 dark:text-gray-600">
                         {file.category ? file.category.charAt(0).toUpperCase() + file.category.slice(1) : 'General'}
                       </span>
                     </div>
@@ -255,42 +253,68 @@ export default function Home() {
                 {/* Tags section */}
                 <div className="px-4 md:px-5 pb-4">
                   <div className="flex flex-wrap gap-2">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tags:</span>
-                    {file.isDirectory ? (
-                      <>
-                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                          Directory
-                        </span>
-                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                          Navigation
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        {file.category && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                            {file.category}
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-700">Tags:</span>
+                    {(() => {
+                      const fileTagIds = getFileTags(file.path)
+                      const fileTags = fileTagIds.map(tagId => getTagById(tagId)).filter(Boolean)
+
+                      if (fileTags.length === 0) {
+                        // Mostrar tags per defecte si no hi ha tags vinculades
+                        if (file.isDirectory) {
+                          return (
+                            <>
+                              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-300 dark:text-gray-800">
+                                Directory
+                              </span>
+                              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-300 dark:text-gray-800">
+                                Navigation
+                              </span>
+                            </>
+                          )
+                        } else {
+                          return (
+                            <>
+                              {file.category && (
+                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-300 dark:text-gray-800">
+                                  {file.category}
+                                </span>
+                              )}
+                              {file.extension && (
+                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-300 dark:text-gray-800">
+                                  {file.extension.toUpperCase()}
+                                </span>
+                              )}
+                              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-300 dark:text-gray-800">
+                                Document
+                              </span>
+                            </>
+                          )
+                        }
+                      }
+
+                      // Mostrar les tags vinculades
+                      return fileTags.map(tag => {
+                        if (!tag) return null
+                        const colorConfig = TAG_COLORS[tag.color]
+                        return (
+                          <span
+                            key={tag.id}
+                            className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${colorConfig.bgClass} ${colorConfig.textClass} dark:${colorConfig.bgClass} dark:${colorConfig.textClass}`}
+                          >
+                            {tag.text}
                           </span>
-                        )}
-                        {file.extension && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                            {file.extension.toUpperCase()}
-                          </span>
-                        )}
-                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                          Document
-                        </span>
-                      </>
-                    )}
+                        )
+                      })
+                    })()}
                   </div>
                 </div>
 
                 {/* Àrea de diagrama amb borde puntejat i previsualització */}
                 <div className="px-4 md:px-5 pb-4">
-                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 min-h-[120px] max-h-[310px] group-hover:border-gray-400 dark:group-hover:border-gray-500 transition-colors relative overflow-hidden">
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg p-4 min-h-[120px] max-h-[310px] group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors relative overflow-hidden bg-gray-100 dark:bg-gray-700">
                     {file.isDirectory ? (
                       <div className="flex items-center justify-center h-full">
-                        <span className="text-gray-500 dark:text-gray-400 text-sm">
+                        <span className="text-gray-500 dark:text-gray-500 text-sm">
                           Contingut de la carpeta
                         </span>
                       </div>

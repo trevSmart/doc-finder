@@ -13,6 +13,9 @@ import {
 import { FileItem, FileCategory } from '../types/file'
 import { formatFileSize, getFileTypeIcon, getFileTypeIconColor } from '../utils/fileUtils'
 import FilePreview from './FilePreview'
+import TagSelector from './TagSelector'
+import { useFileTags } from '../contexts/FileTagsContext'
+import Image from 'next/image'
 
 interface FileDetailsSidebarProps {
   isOpen: boolean
@@ -21,15 +24,17 @@ interface FileDetailsSidebarProps {
   sidebarWidth: number
   startResize: (e: React.MouseEvent) => void
   isResizing: boolean
+  onFileTagsChange?: (filePath: string, tagIds: string[]) => void
 }
 
 type TransitionState = 'closed' | 'entering' | 'open' | 'leaving'
 
-export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize }: FileDetailsSidebarProps) {
+export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize, onFileTagsChange }: FileDetailsSidebarProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [fileName, setFileName] = useState('')
   const [fileDescription, setFileDescription] = useState('A comprehensive proposal for the new marketing campaign including budget estimates and timeline.')
   const [transitionState, setTransitionState] = useState<TransitionState>('closed')
+  const { getFileTags } = useFileTags()
 
   // Sincronitzar l'estat local quan canvia el prop file
   useEffect(() => {
@@ -88,10 +93,12 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
     const iconColor = getFileTypeIconColor(extension || '', isDirectory || false)
 
     return (
-      <img
+      <Image
         src={iconSrc}
         alt={isDirectory ? 'Folder' : `${extension} file`}
-        className={`h-6 w-6 ${iconColor}`}
+        width={24}
+        height={24}
+        className={iconColor}
       />
     )
   }
@@ -157,9 +164,27 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
       {/* Header */}
       <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            File Details
-          </h2>
+          <div className="flex items-center space-x-3">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${getBackgroundColor(file?.category, file?.isDirectory)}`}>
+              {getFileIcon(file?.extension, file?.isDirectory)}
+            </div>
+            <div className="flex-1">
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={fileName}
+                  onChange={(e) => setFileName(e.target.value)}
+                  className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  autoFocus
+                />
+              ) : (
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white break-words overflow-wrap-anywhere">{fileName}</h2>
+              )}
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {file?.extension ? file.extension.toUpperCase() : file?.isDirectory ? 'Folder' : 'File'}
+              </p>
+            </div>
+          </div>
           <button
             type="button"
             onClick={onClose}
@@ -173,42 +198,20 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
-        {/* File Preview */}
-        {file && !file.isDirectory && (
-          <div className="mb-6">
-            <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
-              <FilePreview
-                file={file}
-                size="sidebar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* File Icon and Name */}
+        {/* Tags */}
         <div className="mb-6">
-          <div className="flex items-center space-x-3">
-            <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${getBackgroundColor(file?.category, file?.isDirectory)}`}>
-              {getFileIcon(file?.extension, file?.isDirectory)}
-            </div>
-            <div className="flex-1">
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={fileName}
-                  onChange={(e) => setFileName(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  autoFocus
-                />
-              ) : (
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">{fileName}</h3>
-              )}
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {file?.extension ? file.extension.toUpperCase() : file?.isDirectory ? 'Folder' : 'File'}
-              </p>
-            </div>
-          </div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Tags
+          </label>
+          <TagSelector
+            selectedTagIds={file ? getFileTags(file.path) : []}
+            onTagsChange={(tagIds) => {
+              if (file && onFileTagsChange) {
+                onFileTagsChange(file.path, tagIds);
+              }
+            }}
+            disabled={!file || file.isDirectory}
+          />
         </div>
 
         {/* Description */}
@@ -228,80 +231,83 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
           )}
         </div>
 
-        {/* File Information */}
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <CalendarIcon className="h-4 w-4 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Created</p>
-              <p className="text-sm text-gray-900 dark:text-white">March 15, 2024</p>
+        {/* Preview */}
+        {file && !file.isDirectory && (
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Preview
+            </label>
+            <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+              <FilePreview
+                file={file}
+                size="sidebar"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
+        )}
 
-          <div className="flex items-center space-x-3">
-            <CalendarIcon className="h-4 w-4 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Modified</p>
-              <p className="text-sm text-gray-900 dark:text-white">
-                {file?.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Unknown'}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <UserIcon className="h-4 w-4 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Owner</p>
-              <p className="text-sm text-gray-900 dark:text-white">John Doe</p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <TagIcon className="h-4 w-4 text-gray-400" />
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Size</p>
-              <p className="text-sm text-gray-900 dark:text-white">
-                {file?.size ? formatFileSize(file.size) : 'Unknown'}
-              </p>
-            </div>
-          </div>
-
-          {file?.mimeType && (
-            <div className="flex items-center space-x-3">
-              <TagIcon className="h-4 w-4 text-gray-400" />
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Type</p>
-                <p className="text-sm text-gray-900 dark:text-white">{file.mimeType}</p>
-              </div>
-            </div>
-          )}
-
-          {file?.category && (
-            <div className="flex items-center space-x-3">
-              <TagIcon className="h-4 w-4 text-gray-400" />
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Category</p>
-                <p className="text-sm text-gray-900 dark:text-white capitalize">{file.category}</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Tags */}
-        <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Tags
+        {/* Details */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            Details
           </label>
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/20 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-200">
-              Proposal
-            </span>
-            <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/20 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:text-green-200">
-              Marketing
-            </span>
-            <span className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/20 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:text-purple-200">
-              Q1 2024
-            </span>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
+              <CalendarIcon className="h-4 w-4 text-gray-400" />
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Created</p>
+                <p className="text-sm text-gray-900 dark:text-white">March 15, 2024</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <CalendarIcon className="h-4 w-4 text-gray-400" />
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Modified</p>
+                <p className="text-sm text-gray-900 dark:text-white">
+                  {file?.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Unknown'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <UserIcon className="h-4 w-4 text-gray-400" />
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Owner</p>
+                <p className="text-sm text-gray-900 dark:text-white">John Doe</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <TagIcon className="h-4 w-4 text-gray-400" />
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Size</p>
+                <p className="text-sm text-gray-900 dark:text-white">
+                  {file?.size ? formatFileSize(file.size) : 'Unknown'}
+                </p>
+              </div>
+            </div>
+
+            {file?.mimeType && (
+              <div className="flex items-center space-x-3">
+                <TagIcon className="h-4 w-4 text-gray-400" />
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Type</p>
+                  <p className="text-sm text-gray-900 dark:text-white">{file.mimeType}</p>
+                </div>
+              </div>
+            )}
+
+            {file?.category && (
+              <div className="flex items-center space-x-3">
+                <TagIcon className="h-4 w-4 text-gray-400" />
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Category</p>
+                  <p className="text-sm text-gray-900 dark:text-white capitalize">{file.category}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -326,28 +332,61 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
             </button>
           </div>
         ) : (
-          <div className="flex space-x-3">
+          <div className="flex items-center justify-between">
+            <div className="flex space-x-3">
+              <button
+                type="button"
+                onClick={() => {
+                  if (file) {
+                    // Open file with system default application
+                    const link = document.createElement('a')
+                    link.href = `/api/file-preview?path=${encodeURIComponent(file.path)}`
+                    link.target = '_blank'
+                    link.rel = 'noopener noreferrer'
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
+                  }
+                }}
+                className="flex items-center space-x-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                <PencilIcon className="h-4 w-4" />
+                <span>Open</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (file) {
+                    // Download file
+                    const link = document.createElement('a')
+                    link.href = `/api/file-preview?path=${encodeURIComponent(file.path)}&download=true`
+                    link.download = file.name
+                    link.target = '_blank'
+                    link.rel = 'noopener noreferrer'
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
+                  }
+                }}
+                className="flex items-center space-x-2 rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <ShareIcon className="h-4 w-4" />
+                <span>Download</span>
+              </button>
+            </div>
             <button
               type="button"
-              onClick={() => setIsEditing(true)}
-              className="flex items-center space-x-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              <PencilIcon className="h-4 w-4" />
-              <span>Edit</span>
-            </button>
-            <button
-              type="button"
-              className="flex items-center space-x-2 rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
-            >
-              <ShareIcon className="h-4 w-4" />
-              <span>Share</span>
-            </button>
-            <button
-              type="button"
-              className="flex items-center space-x-2 rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+              onClick={() => {
+                if (file && window.confirm(`Are you sure you want to delete "${file.name}"? This action cannot be undone.`)) {
+                  // TODO: Implement file deletion logic
+                  // eslint-disable-next-line no-console
+                  console.log('Delete file:', file.path)
+                }
+              }}
+              className="flex items-center justify-center rounded-md bg-white dark:bg-gray-800 p-2 text-red-600 dark:text-red-400 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+              title="Delete file"
             >
               <TrashIcon className="h-4 w-4" />
-              <span>Delete</span>
             </button>
           </div>
         )}

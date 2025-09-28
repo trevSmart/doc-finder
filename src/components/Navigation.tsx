@@ -19,9 +19,10 @@ function classNames(...classes: (string | undefined | null | false)[]) {
 
 interface NavigationProps {
   onSidebarOpen?: () => void
+  sidebarOpen?: boolean
 }
 
-export default function Navigation({ onSidebarOpen }: NavigationProps) {
+export default function Navigation({ onSidebarOpen, sidebarOpen }: NavigationProps) {
   const { searchQuery, setSearchQuery } = useSearch()
 
   return (
@@ -44,6 +45,18 @@ export default function Navigation({ onSidebarOpen }: NavigationProps) {
                   <span className="sr-only">Open sidebar</span>
                   <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </button>
+
+                {/* Desktop sidebar toggle button */}
+                {!sidebarOpen && (
+                  <button
+                    type="button"
+                    className="-m-2.5 p-2.5 text-gray-700 dark:text-gray-300 hidden lg:block"
+                    onClick={onSidebarOpen}
+                  >
+                    <span className="sr-only">Open sidebar</span>
+                    <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                )}
 
                 {/* Separator */}
                 <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 lg:hidden ml-2" aria-hidden="true" />

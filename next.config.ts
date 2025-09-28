@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/file-preview',
       },
+      {
+        pathname: '/icons/file-types/*',
+      },
     ],
   },
 };

@@ -1,0 +1,5 @@
+---
+description: only-test-with-playright-if-user-requests-so
+alwaysApply: false
+---
+No facis servir Playwright a no ser que ho demani l'usuari.

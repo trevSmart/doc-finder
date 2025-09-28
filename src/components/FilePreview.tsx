@@ -187,7 +187,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
           alt={`Preview of ${file.name}`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover"
+          className="object-contain"
           onError={() => {
             // noop: handled by cache error state on next ensure
           }}
@@ -202,7 +202,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto" style={{ backgroundColor: 'var(--color-amber-100)' }}>
         <div className="prose prose-sm dark:prose-invert max-w-none">
           <ReactMarkdown
             components={{
@@ -233,8 +233,8 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     return (
-      <div className="w-full h-full bg-gray-900 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
-        <pre className="text-xs text-gray-100 dark:text-gray-200 font-mono leading-tight whitespace-pre-wrap">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto" style={{ backgroundColor: 'var(--color-amber-100)' }}>
+        <pre className="text-xs text-gray-800 dark:text-gray-200 font-mono leading-tight whitespace-pre-wrap">
           <code
             dangerouslySetInnerHTML={{
               __html: formatJsonWithSyntaxHighlighting(jsonContent),
@@ -251,7 +251,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 p-2 overflow-y-auto" style={{ backgroundColor: 'var(--color-amber-100)' }}>
         <pre className="text-xs text-gray-600 dark:text-gray-300 font-mono leading-tight whitespace-pre-wrap">{txtContent}</pre>
       </div>
     )
@@ -263,7 +263,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ backgroundColor: 'var(--color-amber-100)' }}>
         <div className="h-full overflow-auto">
           <table className="w-full text-xs">
             <tbody>
@@ -303,7 +303,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     const rows = lines.map((line: string) => line.split(','))
 
     return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ backgroundColor: 'var(--color-amber-100)' }}>
         <div className="h-full overflow-auto">
           <table className="w-full text-xs">
             <tbody>
@@ -334,7 +334,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ backgroundColor: 'var(--color-amber-100)' }}>
         <div className="h-full overflow-auto p-2">
           <div className="prose prose-sm dark:prose-invert max-w-none text-xs" dangerouslySetInnerHTML={{ __html: docxContent }} />
         </div>
@@ -348,7 +348,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="w-full h-full border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ backgroundColor: 'var(--color-amber-100)' }}>
         <div className="h-full overflow-auto p-2">
           <div className="space-y-2">
             {pptxContent.slice(0, 5).map((slide: PptxSlide, index) => (

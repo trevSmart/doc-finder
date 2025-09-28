@@ -7,6 +7,8 @@ import { FileDetailsProvider } from "../contexts/FileDetailsContext";
 import { FileListProvider } from "../contexts/FileListContext";
 import { SearchProvider } from "../contexts/SearchContext";
 import { FilePreviewProvider } from "../contexts/FilePreviewContext";
+import { TagProvider } from "../contexts/TagContext";
+import { FileTagsProvider } from "../contexts/FileTagsContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,17 +45,21 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SettingsProvider>
-          <FileDetailsProvider>
-            <FileListProvider>
-              <FilePreviewProvider>
-                <SearchProvider>
-                  <LayoutWrapper>
-                    {children}
-                  </LayoutWrapper>
-                </SearchProvider>
-              </FilePreviewProvider>
-            </FileListProvider>
-          </FileDetailsProvider>
+          <TagProvider>
+            <FileTagsProvider>
+              <FileDetailsProvider>
+                <FileListProvider>
+                  <FilePreviewProvider>
+                    <SearchProvider>
+                      <LayoutWrapper>
+                        {children}
+                      </LayoutWrapper>
+                    </SearchProvider>
+                  </FilePreviewProvider>
+                </FileListProvider>
+              </FileDetailsProvider>
+            </FileTagsProvider>
+          </TagProvider>
         </SettingsProvider>
       </body>
     </html>

@@ -128,25 +128,25 @@ body {
 
 /* Estils per a la previsualització de JSON */
 .json-key {
-  color: #61dafb;
+  color: #2563eb;
   font-weight: 600;
 }
 
 .json-string {
-  color: #98c379;
+  color: #059669;
 }
 
 .json-number {
-  color: #d19a66;
+  color: #d97706;
 }
 
 .json-boolean {
-  color: #c678dd;
+  color: #7c3aed;
   font-weight: 600;
 }
 
 .json-null {
-  color: #e06c75;
+  color: #dc2626;
   font-weight: 600;
 }
 

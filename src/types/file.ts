@@ -19,6 +19,7 @@ export interface FileItem {
   category?: FileCategory
   mimeType?: string
   imageUrl?: string
+  tags?: string[] // Array of tag IDs
 }
 
 export interface FileListResponse {

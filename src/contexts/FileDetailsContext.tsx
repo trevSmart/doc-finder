@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react'
 import { FileItem } from '../types/file'
+import { useFileTags } from './FileTagsContext'
 
 interface FileDetailsContextType {
   isOpen: boolean
@@ -15,9 +16,15 @@ const FileDetailsContext = createContext<FileDetailsContextType | undefined>(und
 export function FileDetailsProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null)
+  const { getFileTags } = useFileTags()
 
   const openFileDetails = (file: FileItem) => {
-    setSelectedFile(file)
+    // Add tags to the file object
+    const fileWithTags = {
+      ...file,
+      tags: getFileTags(file.path)
+    }
+    setSelectedFile(fileWithTags)
     setIsOpen(true)
   }
 

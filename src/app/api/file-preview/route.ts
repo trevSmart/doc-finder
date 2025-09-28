@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const filePath = searchParams.get('path')
+    const download = searchParams.get('download') === 'true'
 
     if (!filePath) {
       return NextResponse.json(
@@ -63,7 +64,8 @@ export async function GET(request: NextRequest) {
       try {
         const fileBuffer = await fs.readFile(filePath)
         const workbook = new ExcelJS.Workbook()
-        await workbook.xlsx.load(fileBuffer as Buffer)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await workbook.xlsx.load(fileBuffer as any)
 
         // Obtenir la primera fulla de càlcul
         const worksheet = workbook.worksheets[0]
@@ -166,6 +168,7 @@ export async function GET(request: NextRequest) {
 
     // Per a altres fitxers, llegir com a buffer
     const fileBuffer = await fs.readFile(filePath)
+    const fileName = path.basename(filePath)
 
     switch (ext) {
       case '.jpg':
@@ -187,15 +190,56 @@ export async function GET(request: NextRequest) {
       case '.bmp':
         contentType = 'image/bmp'
         break
+      case '.pdf':
+        contentType = 'application/pdf'
+        break
+      case '.doc':
+        contentType = 'application/msword'
+        break
+      case '.docx':
+        contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        break
+      case '.xls':
+        contentType = 'application/vnd.ms-excel'
+        break
+      case '.xlsx':
+        contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        break
+      case '.ppt':
+        contentType = 'application/vnd.ms-powerpoint'
+        break
+      case '.pptx':
+        contentType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        break
+      case '.txt':
+        contentType = 'text/plain'
+        break
+      case '.csv':
+        contentType = 'text/csv'
+        break
+      case '.json':
+        contentType = 'application/json'
+        break
+      case '.md':
+      case '.markdown':
+        contentType = 'text/markdown'
+        break
       default:
         contentType = 'application/octet-stream'
     }
 
+    const headers: Record<string, string> = {
+      'Content-Type': contentType,
+      'Cache-Control': 'public, max-age=3600', // Cache per 1 hora
+    }
+
+    // Si es demana descàrrega, afegir headers per forçar la descàrrega
+    if (download) {
+      headers['Content-Disposition'] = `attachment; filename="${fileName}"`
+    }
+
     return new NextResponse(new Uint8Array(fileBuffer), {
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=3600', // Cache per 1 hora
-      },
+      headers,
     })
 
   } catch {

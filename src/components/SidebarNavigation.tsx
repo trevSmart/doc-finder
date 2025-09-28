@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import {
   HomeIcon,
@@ -34,10 +34,61 @@ interface SidebarNavigationProps {
 
 export default function SidebarNavigation({ sidebarOpen, setSidebarOpen, sidebarWidth, startResize, isResizing }: SidebarNavigationProps) {
   const [mounted, setMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!mounted) {
+      return
+    }
+
+    const mediaQuery = window.matchMedia('(max-width: 1023px)')
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches)
+    }
+
+    const legacyHandleChange: (this: MediaQueryList, event: MediaQueryListEvent) => void = function (event) {
+      handleChange(event)
+    }
+
+    setIsMobile(mediaQuery.matches)
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleChange)
+    } else {
+      mediaQuery.addListener(legacyHandleChange)
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', handleChange)
+      } else {
+        mediaQuery.removeListener(legacyHandleChange)
+      }
+    }
+  }, [mounted])
+
+  useEffect(() => {
+    if (!mounted || !sidebarOpen) {
+      return
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSidebarOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [mounted, sidebarOpen, setSidebarOpen])
 
   if (!mounted) {
     return null
@@ -46,21 +97,9 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen, sidebar
   return (
     <>
       {/* Mobile sidebar */}
-      <Transition.Root show={sidebarOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="transition-opacity ease-linear duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition-opacity ease-linear duration-300"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-gray-900/80" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 flex">
+      {isMobile && (
+        <Transition show={sidebarOpen} as={Fragment}>
+          <div className="pointer-events-none fixed inset-y-0 left-0 z-50 flex lg:hidden">
             <Transition.Child
               as={Fragment}
               enter="transition ease-in-out duration-300 transform"
@@ -70,25 +109,16 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen, sidebar
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-in-out duration-300"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="ease-in-out duration-300"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
+              <div className="pointer-events-auto relative flex w-full max-w-xs flex-1">
+                <button
+                  type="button"
+                  className="absolute left-full top-0 ml-2 mt-5 rounded-full bg-white/90 p-2 text-gray-700 shadow ring-1 ring-black/10 transition hover:bg-white dark:bg-gray-800/90 dark:text-gray-200 dark:ring-white/10"
+                  onClick={() => setSidebarOpen(false)}
                 >
-                  <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
-                      <span className="sr-only">Close sidebar</span>
-                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                    </button>
-                  </div>
-                </Transition.Child>
-                {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4">
+                  <span className="sr-only">Close sidebar</span>
+                  <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 shadow-lg ring-1 ring-black/10 dark:bg-gray-900 dark:ring-white/10">
                   <div className="flex h-16 shrink-0 items-center">
                     <h1 className="text-xl font-bold text-gray-900 dark:text-white">DocFinder</h1>
                   </div>
@@ -130,22 +160,33 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen, sidebar
                     <ThemeToggle />
                   </div>
                 </div>
-              </Dialog.Panel>
+              </div>
             </Transition.Child>
           </div>
-        </Dialog>
-      </Transition.Root>
+        </Transition>
+      )}
 
       {/* Static sidebar for desktop */}
       <div
-        className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col"
+        className={`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-transform duration-300 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
         style={{ width: `${sidebarWidth}px` }}
         data-sidebar
       >
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 pb-4">
-          <div className="flex h-16 shrink-0 items-center">
+          <div className="flex h-16 shrink-0 items-center justify-between">
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">DocFinder</h1>
+            {/* Desktop close button */}
+            <button
+              type="button"
+              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <span className="sr-only">Close sidebar</span>
+              <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
           </div>
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">

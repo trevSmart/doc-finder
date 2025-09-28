@@ -35,16 +35,25 @@ src/
 │   ├── SidebarNavigation.tsx # Left sidebar navigation
 │   ├── ThemeToggle.tsx     # Dark/light mode toggle
 │   ├── FileDetailsSidebar.tsx # File details sidebar component
-│   └── FilePreview.tsx     # File preview component with multiple formats
+│   ├── FilePreview.tsx     # File preview component with multiple formats
+│   └── TagSelector.tsx     # Tag selection component for file tagging
 ├── contexts/
 │   ├── SettingsContext.tsx # React Context for settings management
 │   ├── FileDetailsContext.tsx # Context for file details sidebar state
-│   └── SearchContext.tsx   # Context for search functionality with debouncing
+│   ├── SearchContext.tsx   # Context for search functionality with debouncing
+│   ├── FileTagsContext.tsx # Context for file-specific tag management
+│   ├── TagContext.tsx      # Context for global tag definitions
+│   ├── FileListContext.tsx # Context for file list state management
+│   └── FilePreviewContext.tsx # Context for file preview state
 ├── hooks/
 │   ├── useFileList.ts      # Custom hook for file listing functionality
-│   └── useResizableSidebar.ts # Hook for resizable sidebar functionality
+│   ├── useResizableSidebar.ts # Hook for resizable sidebar functionality
+│   └── useResizableRightSidebar.ts # Hook for right sidebar resizing
 ├── types/
-│   └── file.ts             # TypeScript interfaces for file management
+│   ├── file.ts             # TypeScript interfaces for file management
+│   ├── filePreview.ts      # TypeScript interfaces for file preview
+│   ├── tag.ts              # TypeScript interfaces for tag management
+│   └── pptx2json.d.ts      # TypeScript declarations for PPTX parsing
 └── utils/
     └── fileUtils.ts        # Utility functions for file operations
 ```
@@ -150,10 +159,14 @@ npm run dev
 - ✅ Search functionality with debouncing
 - ✅ File type detection and categorization
 - ✅ File utilities for size formatting and type checking
+- ✅ Tag management system with persistence
+- ✅ File tagging functionality
+- ✅ Search by tags (name and color)
 
 ### Navigation Routes
 - `/` - Home page
 - `/settings` - Settings page
+- `/tags` - Tags management page
 - Other routes are placeholders (`#`)
 
 ### Recent Changes
@@ -181,6 +194,11 @@ npm run dev
 - **NEW**: Enhanced file categorization with proper MIME types and extensions
 - **NEW**: Implemented smooth transitions for FileDetailsSidebar (slide in/out from right)
 - **NEW**: Removed overlay/backdrop from FileDetailsSidebar to allow continued work on main content
+- **NEW**: Added tag management system with TagContext and TagSelector component
+- **NEW**: Implemented file tagging functionality with FileTagsContext
+- **NEW**: Added tags management page with create, edit, and delete capabilities
+- **NEW**: Enhanced search functionality to include tag name and color search
+- **NEW**: Added tag persistence to localStorage with automatic save/load
 
 ## Development Notes
 
@@ -190,7 +208,7 @@ npm run dev
 
 ### Port Configuration
 - Development server automatically uses available port
-- Currently running on port 3005 (3000 was occupied)
+- Currently running on port 3007 (3000 was occupied)
 
 ### Code Quality
 - TypeScript for type safety
@@ -229,17 +247,24 @@ npm run dev
 - State management: Use React hooks, consider context for global state
 - File management: Use `useFileList` hook and `FileItem` types
 - Settings: Use `useSettings` hook from `SettingsContext`
+- Tag management: Use `useTags` hook from `TagContext`
+- File tagging: Use `useFileTags` hook from `FileTagsContext`
 - Adding new file types: Update `FileItem` interface in `src/types/file.ts`
 - Adding new settings: Update `Settings` interface in `SettingsContext.tsx`
+- Adding new tag properties: Update `Tag` interface in `src/types/tag.ts`
 
 ### File Locations
 - **Main layout**: `src/app/layout.tsx`
 - **Home page**: `src/app/page.tsx`
 - **Settings**: `src/app/settings/page.tsx`
+- **Tags**: `src/app/tags/page.tsx`
 - **Navigation**: `src/components/Navigation.tsx`, `src/components/SidebarNavigation.tsx`
 - **Settings Context**: `src/contexts/SettingsContext.tsx`
+- **Tag Context**: `src/contexts/TagContext.tsx`
+- **File Tags Context**: `src/contexts/FileTagsContext.tsx`
 - **File List Hook**: `src/hooks/useFileList.ts`
 - **File Types**: `src/types/file.ts`
+- **Tag Types**: `src/types/tag.ts`
 - **Styles**: `src/app/globals.css`
 
 ## Dependencies
@@ -319,6 +344,10 @@ npm run dev
 8. FileDetailsContext manages sidebar open/close state
 9. useResizableSidebar manages sidebar width with localStorage persistence
 10. FileDetailsSidebar transitions managed with CSS transforms and state management
+11. TagContext manages global tag definitions with localStorage persistence
+12. FileTagsContext manages file-specific tag assignments
+13. Search functionality includes tag name and color filtering
+14. TagSelector component provides UI for assigning tags to files
 
 ---
 
