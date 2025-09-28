@@ -3,20 +3,12 @@
 import { useState, useEffect } from 'react'
 import {
   XMarkIcon,
-  DocumentIcon,
   CalendarIcon,
   UserIcon,
   TagIcon,
   ShareIcon,
   TrashIcon,
-  PencilIcon,
-  FolderIcon,
-  PhotoIcon,
-  MusicalNoteIcon,
-  VideoCameraIcon,
-  TableCellsIcon,
-  PresentationChartBarIcon,
-  CodeBracketIcon
+  PencilIcon
 } from '@heroicons/react/24/outline'
 import { FileItem, FileCategory } from '../types/file'
 import { formatFileSize, getFileTypeIcon, getFileTypeIconColor } from '../utils/fileUtils'
@@ -192,7 +184,7 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
         <div className="mb-6">
           <div className="flex items-center space-x-3">
             <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${getBackgroundColor(file?.category, file?.isDirectory)}`}>
-              {getFileIcon(file?.category, file?.isDirectory)}
+              {getFileIcon(file?.extension, file?.isDirectory)}
             </div>
             <div className="flex-1">
               {isEditing ? (

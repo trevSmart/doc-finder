@@ -7,7 +7,7 @@ import { useFileDetails } from '../contexts/FileDetailsContext'
 import { useSearch } from '../contexts/SearchContext'
 import { useFileList } from '../hooks/useFileList'
 import { FileItem } from '../types/file'
-import { formatFileSize } from '../utils/fileUtils'
+import { formatFileSize, getFileTypeIcon, getFileTypeIconColor } from '../utils/fileUtils'
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -201,15 +201,19 @@ export default function Home() {
                     handleFileClick(file)
                   }}
                 >
-                {/* Header amb títol i tag de categoria */}
+                {/* Header amb títol i icona de tipus */}
                 <div className="p-4 md:p-5 pb-3">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-lg font-bold text-gray-800 dark:text-white leading-tight">
                       {file.name}
                     </h3>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 flex-shrink-0">
-                      {file.isDirectory ? 'FOLDER' : (file.category ? file.category.toUpperCase() : 'FILE')}
-                    </span>
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                      {(() => {
+                        const IconComponent = getFileTypeIcon(file.extension || '', file.isDirectory)
+                        const iconColor = getFileTypeIconColor(file.extension || '', file.isDirectory)
+                        return <IconComponent className={`h-5 w-5 ${iconColor}`} />
+                      })()}
+                    </div>
                   </div>
                 </div>
 
@@ -218,8 +222,17 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                     <div>
                       <span className="font-semibold text-gray-700 dark:text-gray-300">Tipus:</span>
-                      <span className="ml-2 text-gray-600 dark:text-gray-400">
-                        {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Fitxer')}
+                      <span className="ml-2 text-gray-600 dark:text-gray-400 inline-flex items-center gap-1">
+                        {(() => {
+                          const IconComponent = getFileTypeIcon(file.extension || '', file.isDirectory)
+                          const iconColor = getFileTypeIconColor(file.extension || '', file.isDirectory)
+                          return (
+                            <>
+                              <IconComponent className={`h-4 w-4 ${iconColor}`} />
+                              {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Fitxer')}
+                            </>
+                          )
+                        })()}
                       </span>
                     </div>
                     <div>

@@ -10,15 +10,10 @@ import {
   CodeBracketIcon,
   FolderIcon,
   DocumentArrowDownIcon,
-  DocumentDuplicateIcon,
-  CpuChipIcon,
-  FilmIcon,
-  SpeakerWaveIcon,
   ChartBarIcon,
   CommandLineIcon,
   GlobeAltIcon,
-  PaintBrushIcon,
-  ArchiveBoxIcon
+  PaintBrushIcon
 } from '@heroicons/react/24/outline'
 
 // Mapeig d'extensions a categories i MIME types
