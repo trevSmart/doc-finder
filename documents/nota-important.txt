@@ -1,0 +1,14 @@
+Nota important sobre la gestió de documents
+
+Aquesta aplicació DocFinder permet:
+
+1. Escanejar documents locals d'una carpeta configurada
+2. Visualitzar-los en una quadrícula de cards
+3. Veure detalls de cada document
+4. Organitzar-los per tipus i data
+
+Per configurar la ruta dels documents, edita el fitxer config.json
+i canvia la propietat "documentsPath" a la ruta desitjada.
+
+Data de creació: 2024
+Versió: 1.0
