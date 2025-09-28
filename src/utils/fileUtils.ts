@@ -1,4 +1,25 @@
 import { FileCategory } from '../types/file'
+import {
+  DocumentIcon,
+  DocumentTextIcon,
+  PhotoIcon,
+  MusicalNoteIcon,
+  VideoCameraIcon,
+  TableCellsIcon,
+  PresentationChartBarIcon,
+  CodeBracketIcon,
+  FolderIcon,
+  DocumentArrowDownIcon,
+  DocumentDuplicateIcon,
+  CpuChipIcon,
+  FilmIcon,
+  SpeakerWaveIcon,
+  ChartBarIcon,
+  CommandLineIcon,
+  GlobeAltIcon,
+  PaintBrushIcon,
+  ArchiveBoxIcon
+} from '@heroicons/react/24/outline'
 
 // Mapeig d'extensions a categories i MIME types
 const FILE_TYPE_MAP: Record<string, { category: FileCategory; mimeType: string }> = {
@@ -165,4 +186,142 @@ export function isOfficeFile(filename: string): boolean {
 export function isMediaFile(filename: string): boolean {
   const category = getFileCategory(filename)
   return category === 'image' || category === 'audio' || category === 'video'
+}
+
+/**
+ * Obté la icona específica per a cada extensió de fitxer
+ */
+export function getFileTypeIcon(extension: string, isDirectory: boolean = false) {
+  if (isDirectory) {
+    return FolderIcon
+  }
+
+  const ext = extension.toLowerCase()
+  
+  switch (ext) {
+    // Documents
+    case 'doc':
+    case 'docx':
+      return DocumentTextIcon
+    case 'pdf':
+      return DocumentArrowDownIcon
+    case 'md':
+    case 'markdown':
+      return DocumentIcon
+    case 'txt':
+      return DocumentTextIcon
+    case 'html':
+    case 'htm':
+      return GlobeAltIcon
+    
+    // Spreadsheets
+    case 'xls':
+    case 'xlsx':
+      return TableCellsIcon
+    case 'csv':
+      return ChartBarIcon
+    
+    // Presentations
+    case 'ppt':
+    case 'pptx':
+      return PresentationChartBarIcon
+    
+    // Images
+    case 'bmp':
+    case 'jpg':
+    case 'jpeg':
+    case 'webp':
+    case 'png':
+      return PhotoIcon
+    case 'svg':
+      return PaintBrushIcon
+    
+    // Audio
+    case 'mp3':
+    case 'wav':
+      return MusicalNoteIcon
+    
+    // Video
+    case 'mpg':
+    case 'mpeg':
+    case 'mov':
+    case 'avi':
+      return VideoCameraIcon
+    
+    // Data
+    case 'json':
+      return CodeBracketIcon
+    case 'log':
+      return CommandLineIcon
+    
+    // Default
+    default:
+      return DocumentIcon
+  }
+}
+
+/**
+ * Obté el color de la icona segons l'extensió del fitxer
+ */
+export function getFileTypeIconColor(extension: string, isDirectory: boolean = false): string {
+  if (isDirectory) {
+    return 'text-blue-600 dark:text-blue-400'
+  }
+
+  const ext = extension.toLowerCase()
+  
+  switch (ext) {
+    // Documents
+    case 'doc':
+    case 'docx':
+    case 'pdf':
+    case 'md':
+    case 'markdown':
+    case 'txt':
+      return 'text-blue-600 dark:text-blue-400'
+    case 'html':
+    case 'htm':
+      return 'text-orange-600 dark:text-orange-400'
+    
+    // Spreadsheets
+    case 'xls':
+    case 'xlsx':
+    case 'csv':
+      return 'text-emerald-600 dark:text-emerald-400'
+    
+    // Presentations
+    case 'ppt':
+    case 'pptx':
+      return 'text-orange-600 dark:text-orange-400'
+    
+    // Images
+    case 'bmp':
+    case 'jpg':
+    case 'jpeg':
+    case 'webp':
+    case 'png':
+    case 'svg':
+      return 'text-green-600 dark:text-green-400'
+    
+    // Audio
+    case 'mp3':
+    case 'wav':
+      return 'text-purple-600 dark:text-purple-400'
+    
+    // Video
+    case 'mpg':
+    case 'mpeg':
+    case 'mov':
+    case 'avi':
+      return 'text-red-600 dark:text-red-400'
+    
+    // Data
+    case 'json':
+    case 'log':
+      return 'text-gray-600 dark:text-gray-400'
+    
+    // Default
+    default:
+      return 'text-gray-600 dark:text-gray-400'
+  }
 }

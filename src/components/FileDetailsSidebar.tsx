@@ -19,7 +19,7 @@ import {
   CodeBracketIcon
 } from '@heroicons/react/24/outline'
 import { FileItem, FileCategory } from '../types/file'
-import { formatFileSize } from '../utils/fileUtils'
+import { formatFileSize, getFileTypeIcon, getFileTypeIconColor } from '../utils/fileUtils'
 import FilePreview from './FilePreview'
 
 interface FileDetailsSidebarProps {
@@ -90,29 +90,12 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
     // Reset to original values if needed
   }
 
-  // Funció per obtenir la icona adequada segons la categoria del fitxer
-  const getFileIcon = (category?: FileCategory, isDirectory?: boolean) => {
-    if (isDirectory) {
-      return <FolderIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-    }
-
-    switch (category) {
-      case 'image':
-        return <PhotoIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
-      case 'audio':
-        return <MusicalNoteIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-      case 'video':
-        return <VideoCameraIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
-      case 'spreadsheet':
-        return <TableCellsIcon className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
-      case 'presentation':
-        return <PresentationChartBarIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-      case 'data':
-        return <CodeBracketIcon className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-      case 'document':
-      default:
-        return <DocumentIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-    }
+  // Funció per obtenir la icona adequada segons l'extensió del fitxer
+  const getFileIcon = (extension?: string, isDirectory?: boolean) => {
+    const IconComponent = getFileTypeIcon(extension || '', isDirectory || false)
+    const iconColor = getFileTypeIconColor(extension || '', isDirectory || false)
+    
+    return <IconComponent className={`h-6 w-6 ${iconColor}`} />
   }
 
   // Funció per obtenir el color de fons segons la categoria
