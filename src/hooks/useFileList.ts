@@ -32,7 +32,6 @@ export function useFileList(folderPath: string) {
 			} catch (err) {
 				const errorMessage = err instanceof Error ? err.message : 'Error al carregar els fitxers';
 				setError(errorMessage);
-				console.error('Error fetching files:', err);
 			} finally {
 				setLoading(false);
 			}

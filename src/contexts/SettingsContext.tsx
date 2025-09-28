@@ -84,8 +84,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
         const parsed = JSON.parse(savedSettings)
         setSettings({ ...defaultSettings, ...parsed })
       }
-    } catch (error) {
-      console.error('Error loading settings from localStorage:', error)
+    } catch {
+      // Silently handle localStorage errors
     } finally {
       setIsLoaded(true)
     }
@@ -96,8 +96,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     if (isLoaded) {
       try {
         localStorage.setItem('docfinder-settings', JSON.stringify(settings))
-      } catch (error) {
-        console.error('Error saving settings to localStorage:', error)
+      } catch {
+        // Silently handle localStorage errors
       }
     }
   }, [settings, isLoaded])

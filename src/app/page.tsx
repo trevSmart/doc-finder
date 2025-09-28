@@ -110,7 +110,14 @@ export default function Home() {
     >
       {/* File List Section */}
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <h2
+          className="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+          onClick={() => {
+            if (isOpen) {
+              closeFileDetails()
+            }
+          }}
+        >
           Documents
           {settings.documentSources.localFolder && (
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
@@ -161,15 +168,20 @@ export default function Home() {
         {!loading && !error && files.length > 0 && filteredFiles.length > 0 && (
           <div
             onClick={(e) => {
-              // Si es clica directament al div del grid (no a una targeta), deseleccionar
-              console.log('Grid clicked:', e.target, e.currentTarget, e.target === e.currentTarget, isOpen)
-              if (e.target === e.currentTarget && isOpen) {
-                console.log('Closing file details')
+              if ((e.target === e.currentTarget || (e.target as HTMLElement)?.tagName === 'UL') && isOpen) {
                 closeFileDetails()
               }
             }}
           >
-            <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <ul
+              role="list"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              onClick={(e) => {
+                if (e.target === e.currentTarget && isOpen) {
+                  closeFileDetails()
+                }
+              }}
+            >
             {filteredFiles.map((file, index) => {
               const isSelected = isOpen && selectedFile && selectedFile.path === file.path
 
@@ -184,8 +196,7 @@ export default function Home() {
                     file.isDirectory ? 'cursor-default' : 'cursor-pointer'
                   }`}
                   onClick={(e) => {
-                    console.log('Card clicked:', file.name)
-                    e.stopPropagation() // Evitar que el clic es propagui al div principal
+                    e.stopPropagation()
                     handleFileClick(file)
                   }}
                 >

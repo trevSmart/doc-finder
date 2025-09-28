@@ -31,7 +31,7 @@ interface FileDetailsSidebarProps {
   isResizing: boolean
 }
 
-export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize, isResizing }: FileDetailsSidebarProps) {
+export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize }: FileDetailsSidebarProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [fileName, setFileName] = useState(file?.name || '')
   const [fileDescription, setFileDescription] = useState('A comprehensive proposal for the new marketing campaign including budget estimates and timeline.')

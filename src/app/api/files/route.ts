@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     // Verificar que el path existeixi
     try {
       await fs.access(folderPath)
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: 'Folder does not exist or access denied' },
         { status: 404 }
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       let stats
       try {
         stats = await fs.stat(fullPath)
-      } catch (error) {
+      } catch {
         // Si no podem llegir les estadístiques, saltem aquest fitxer
         continue
       }
@@ -81,8 +81,7 @@ export async function GET(request: NextRequest) {
       totalCount: files.length
     })
 
-  } catch (error) {
-    console.error('Error reading directory:', error)
+  } catch {
     return NextResponse.json(
       { error: 'Failed to read directory' },
       { status: 500 }
