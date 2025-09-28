@@ -16,6 +16,7 @@ import FilePreview from './FilePreview'
 import TagSelector from './TagSelector'
 import { useFileTags } from '../contexts/FileTagsContext'
 import Image from 'next/image'
+import { useClips } from '../contexts/ClipContext'
 
 interface FileDetailsSidebarProps {
   isOpen: boolean
@@ -31,22 +32,23 @@ type TransitionState = 'closed' | 'entering' | 'open' | 'leaving'
 
 export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize, onFileTagsChange }: FileDetailsSidebarProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [fileName, setFileName] = useState('')
+  const [clipTitleInput, setClipTitleInput] = useState('')
   const [fileDescription, setFileDescription] = useState('A comprehensive proposal for the new marketing campaign including budget estimates and timeline.')
   const [transitionState, setTransitionState] = useState<TransitionState>('closed')
   const { getFileTags } = useFileTags()
+  const { getClipTitle, updateClipTitle, clearClip } = useClips()
 
   // Sincronitzar l'estat local quan canvia el prop file
   useEffect(() => {
     if (file) {
-      setFileName(file.name)
+      setClipTitleInput(getClipTitle(file.path, file.name))
       setIsEditing(false) // Cancel·lar l'edició quan canvia el fitxer
     } else {
       // Reset quan no hi ha fitxer seleccionat
-      setFileName('')
+      setClipTitleInput('')
       setIsEditing(false)
     }
-  }, [file])
+  }, [file, getClipTitle])
 
   // Gestionar les transicions
   useEffect(() => {
@@ -78,11 +80,28 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
   }, [isOpen])
 
   const handleSave = () => {
+    if (!file) {
+      return
+    }
+
+    const trimmed = clipTitleInput.trim()
+    if (!trimmed || trimmed === file.name) {
+      clearClip(file.path)
+      setClipTitleInput(getClipTitle(file.path, file.name))
+    } else {
+      updateClipTitle(file.path, trimmed)
+    }
+
     setIsEditing(false)
     // Here you would typically save the changes to your backend
   }
 
   const handleCancel = () => {
+    if (file) {
+      setClipTitleInput(getClipTitle(file.path, file.name))
+    } else {
+      setClipTitleInput('')
+    }
     setIsEditing(false)
     // Reset to original values if needed
   }
@@ -172,27 +191,42 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
               {isEditing ? (
                 <input
                   type="text"
-                  value={fileName}
-                  onChange={(e) => setFileName(e.target.value)}
+                  value={clipTitleInput}
+                  onChange={(e) => setClipTitleInput(e.target.value)}
                   className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   autoFocus
                 />
               ) : (
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white break-words overflow-wrap-anywhere">{fileName}</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white break-words overflow-wrap-anywhere">
+                  {file ? getClipTitle(file.path, file.name) : ''}
+                </h2>
               )}
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                {file?.extension ? file.extension.toUpperCase() : file?.isDirectory ? 'Folder' : 'File'}
+                {file?.name}
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:hover:text-white dark:focus-visible:outline-indigo-500"
-          >
-            <span className="sr-only">Close panel</span>
-            <XMarkIcon aria-hidden="true" className="size-6" />
-          </button>
+          <div className="flex items-center space-x-2">
+            {!isEditing && (
+              <button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="rounded-md p-2 text-gray-400 hover:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-gray-400 dark:hover:text-white dark:focus-visible:outline-blue-500"
+                disabled={!file}
+              >
+                <span className="sr-only">Edit clip information</span>
+                <PencilIcon aria-hidden="true" className="h-5 w-5" />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:hover:text-white dark:focus-visible:outline-indigo-500"
+            >
+              <span className="sr-only">Close panel</span>
+              <XMarkIcon aria-hidden="true" className="size-6" />
+            </button>
+          </div>
         </div>
       </div>
 
