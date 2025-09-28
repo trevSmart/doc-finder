@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
       try {
         const fileBuffer = await fs.readFile(filePath)
         const workbook = new ExcelJS.Workbook()
-        await workbook.xlsx.load(fileBuffer as any)
+        await workbook.xlsx.load(fileBuffer as Buffer)
 
         // Obtenir la primera fulla de càlcul
         const worksheet = workbook.worksheets[0]

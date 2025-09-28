@@ -14,17 +14,33 @@
   --font-mono: var(--font-geist-mono);
 }
 
+body {
+  background: linear-gradient(135deg,
+    #1e3a8a 0%,
+    #3b82f6 25%,
+    #1e40af 50%,
+    #1f2937 75%,
+    #111827 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background: linear-gradient(135deg,
+      #0f172a 0%,
+      #1e293b 25%,
+      #334155 50%,
+      #1f2937 75%,
+      #0f172a 100%);
+  }
 }
 
 /* Estils per a la previsualització de Markdown */
@@ -153,4 +169,14 @@ body {
 
 .dark .json-null {
   color: #e06c75;
+}
+
+/* Gradient de fons per al mode fosc manual */
+.dark body {
+  background: linear-gradient(135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1f2937 75%,
+    #0f172a 100%);
 }

@@ -1,9 +1,20 @@
 'use client'
 
 import { useMemo } from 'react'
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import { FileItem, FileCategory } from '../types/file'
-import { ImagePreview } from '../types/filePreview'
+import {
+  ImagePreview,
+  MarkdownPreview,
+  JsonPreview,
+  TextPreview,
+  ExcelPreview,
+  CsvPreview,
+  DocxPreview,
+  PptxPreview,
+  PptxErrorPreview
+} from '../types/filePreview'
 import { isImageFile } from '../utils/fileUtils'
 import {
   DocumentIcon,
@@ -29,8 +40,8 @@ const sizeClasses: Record<NonNullable<FilePreviewProps['size']>, string> = {
   sm: 'h-16 w-16',
   md: 'h-24 w-24',
   lg: 'h-32 w-32',
-  card: 'h-full w-full',
-  sidebar: 'h-full w-full',
+  card: 'h-full w-full min-h-[120px]',
+  sidebar: 'h-full w-full min-h-[192px]',
 }
 
 const iconSizes: Record<NonNullable<FilePreviewProps['size']>, string> = {
@@ -63,14 +74,14 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     return null
   }, [data, file])
 
-  const markdownContent = data?.type === 'markdown' ? (data as any).content : null
-  const jsonContent = data?.type === 'json' ? (data as any).content : null
-  const txtContent = data?.type === 'txt' ? (data as any).content : null
-  const excelContent = data?.type === 'excel' ? (data as any).content : null
-  const csvContent = data?.type === 'csv' ? (data as any).content : null
-  const docxContent = data?.type === 'docx' ? (data as any).content : null
-  const pptxContent = data?.type === 'pptx' ? (data as any).content : null
-  const pptxError = data?.type === 'pptx-error' ? (data as any).error : null
+  const markdownContent = data?.type === 'markdown' ? (data as MarkdownPreview).content : null
+  const jsonContent = data?.type === 'json' ? (data as JsonPreview).content : null
+  const txtContent = data?.type === 'txt' ? (data as TextPreview).content : null
+  const excelContent = data?.type === 'excel' ? (data as ExcelPreview).content : null
+  const csvContent = data?.type === 'csv' ? (data as CsvPreview).content : null
+  const docxContent = data?.type === 'docx' ? (data as DocxPreview).content : null
+  const pptxContent = data?.type === 'pptx' ? (data as PptxPreview).content : null
+  const pptxError = data?.type === 'pptx-error' ? (data as PptxErrorPreview).error : null
 
   const effectiveError = cachedError ?? pptxError
   const isPending = status === 'idle' || status === 'queued' || status === 'loading'
@@ -162,15 +173,26 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
       return null
     }
 
+    const imageContainerClassName =
+      size === 'card'
+        ? 'relative w-full h-full min-h-[120px] overflow-hidden'
+        : size === 'sidebar'
+          ? 'relative w-full h-full min-h-[192px] overflow-hidden'
+          : 'relative w-full h-full overflow-hidden'
+
     return (
-      <img
-        src={imageUrl}
-        alt={`Preview of ${file.name}`}
-        className="w-full h-full object-cover"
-        onError={() => {
-          // noop: handled by cache error state on next ensure
-        }}
-      />
+      <div className={imageContainerClassName}>
+        <Image
+          src={imageUrl}
+          alt={`Preview of ${file.name}`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover"
+          onError={() => {
+            // noop: handled by cache error state on next ensure
+          }}
+        />
+      </div>
     )
   }
 
@@ -352,8 +374,12 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 
   const canShowPreview = !file.isDirectory && hasPreviewContent && !effectiveError
 
+  const containerClassName = `${sizeClasses[size]} ${className} ${
+    canShowPreview ? 'relative overflow-hidden' : 'flex items-center justify-center'
+  }`
+
   return (
-    <div className={`${sizeClasses[size]} ${className} flex items-center justify-center`}>
+    <div className={containerClassName}>
       {canShowPreview ? (
         <>
           {imageUrl && renderImagePreview()}

@@ -84,10 +84,16 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
 
   // Funció per obtenir la icona adequada segons l'extensió del fitxer
   const getFileIcon = (extension?: string, isDirectory?: boolean) => {
-    const IconComponent = getFileTypeIcon(extension || '', isDirectory || false)
+    const iconSrc = getFileTypeIcon(extension || '', isDirectory || false)
     const iconColor = getFileTypeIconColor(extension || '', isDirectory || false)
 
-    return <IconComponent className={`h-6 w-6 ${iconColor}`} />
+    return (
+      <img
+        src={iconSrc}
+        alt={isDirectory ? 'Folder' : `${extension} file`}
+        className={`h-6 w-6 ${iconColor}`}
+      />
+    )
   }
 
   // Funció per obtenir el color de fons segons la categoria

@@ -208,11 +208,11 @@ export default function Home() {
                       {file.name}
                     </h3>
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex-shrink-0">
-                      {(() => {
-                        const IconComponent = getFileTypeIcon(file.extension || '', file.isDirectory)
-                        const iconColor = getFileTypeIconColor(file.extension || '', file.isDirectory)
-                        return <IconComponent className={`h-5 w-5 ${iconColor}`} />
-                      })()}
+                      <img
+                        src={getFileTypeIcon(file.extension || '', file.isDirectory)}
+                        alt={file.isDirectory ? 'Folder' : `${file.extension} file`}
+                        className={`h-5 w-5 ${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -223,16 +223,12 @@ export default function Home() {
                     <div>
                       <span className="font-semibold text-gray-700 dark:text-gray-300">Tipus:</span>
                       <span className="ml-2 text-gray-600 dark:text-gray-400 inline-flex items-center gap-1">
-                        {(() => {
-                          const IconComponent = getFileTypeIcon(file.extension || '', file.isDirectory)
-                          const iconColor = getFileTypeIconColor(file.extension || '', file.isDirectory)
-                          return (
-                            <>
-                              <IconComponent className={`h-4 w-4 ${iconColor}`} />
-                              {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Fitxer')}
-                            </>
-                          )
-                        })()}
+                        <img
+                          src={getFileTypeIcon(file.extension || '', file.isDirectory)}
+                          alt={file.isDirectory ? 'Folder' : `${file.extension} file`}
+                          className={`h-4 w-4 ${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
+                        />
+                        {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Fitxer')}
                       </span>
                     </div>
                     <div>

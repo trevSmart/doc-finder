@@ -1,20 +1,4 @@
 import { FileCategory } from '../types/file'
-import {
-  DocumentIcon,
-  DocumentTextIcon,
-  PhotoIcon,
-  MusicalNoteIcon,
-  VideoCameraIcon,
-  TableCellsIcon,
-  PresentationChartBarIcon,
-  CodeBracketIcon,
-  FolderIcon,
-  DocumentArrowDownIcon,
-  ChartBarIcon,
-  CommandLineIcon,
-  GlobeAltIcon,
-  PaintBrushIcon
-} from '@heroicons/react/24/outline'
 
 // Mapeig d'extensions a categories i MIME types
 const FILE_TYPE_MAP: Record<string, { category: FileCategory; mimeType: string }> = {
@@ -184,11 +168,11 @@ export function isMediaFile(filename: string): boolean {
 }
 
 /**
- * Obté la icona específica per a cada extensió de fitxer
+ * Obté la ruta de la icona específica per a cada extensió de fitxer
  */
-export function getFileTypeIcon(extension: string, isDirectory: boolean = false) {
+export function getFileTypeIcon(extension: string, isDirectory: boolean = false): string {
   if (isDirectory) {
-    return FolderIcon
+    return '/icons/file-types/folder.svg'
   }
 
   const ext = extension.toLowerCase()
@@ -197,29 +181,29 @@ export function getFileTypeIcon(extension: string, isDirectory: boolean = false)
     // Documents
     case 'doc':
     case 'docx':
-      return DocumentTextIcon
+      return '/icons/file-types/docx.svg'
     case 'pdf':
-      return DocumentArrowDownIcon
+      return '/icons/file-types/pdf.svg'
     case 'md':
     case 'markdown':
-      return DocumentIcon
+      return '/icons/file-types/markdown.png'
     case 'txt':
-      return DocumentTextIcon
+      return '/icons/file-types/txt.svg'
     case 'html':
     case 'htm':
-      return GlobeAltIcon
+      return '/icons/file-types/html.svg'
 
     // Spreadsheets
     case 'xls':
     case 'xlsx':
-      return TableCellsIcon
+      return '/icons/file-types/xlsx.svg'
     case 'csv':
-      return ChartBarIcon
+      return '/icons/file-types/csv.svg'
 
     // Presentations
     case 'ppt':
     case 'pptx':
-      return PresentationChartBarIcon
+      return '/icons/file-types/pptx.svg'
 
     // Images
     case 'bmp':
@@ -227,31 +211,32 @@ export function getFileTypeIcon(extension: string, isDirectory: boolean = false)
     case 'jpeg':
     case 'webp':
     case 'png':
-      return PhotoIcon
+    case 'gif':
     case 'svg':
-      return PaintBrushIcon
+      return '/icons/file-types/image.svg'
 
     // Audio
     case 'mp3':
     case 'wav':
-      return MusicalNoteIcon
+      return '/icons/file-types/audio.svg'
 
     // Video
     case 'mpg':
     case 'mpeg':
     case 'mov':
     case 'avi':
-      return VideoCameraIcon
+    case 'mp4':
+      return '/icons/file-types/video.svg'
 
     // Data
     case 'json':
-      return CodeBracketIcon
+      return '/icons/file-types/json.svg'
     case 'log':
-      return CommandLineIcon
+      return '/icons/file-types/txt.svg'
 
     // Default
     default:
-      return DocumentIcon
+      return '/icons/file-types/default.svg'
   }
 }
 
