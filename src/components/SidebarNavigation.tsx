@@ -8,6 +8,7 @@ import {
   DocumentTextIcon,
   FolderIcon,
   Cog6ToothIcon,
+  TagIcon,
 } from '@heroicons/react/24/outline'
 import ThemeToggle from './ThemeToggle'
 
@@ -15,6 +16,7 @@ const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon, current: true },
   { name: 'Documents', href: '#', icon: DocumentTextIcon, current: false },
   { name: 'Folders', href: '#', icon: FolderIcon, current: false },
+  { name: 'Tags', href: '/tags', icon: TagIcon, current: false },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon, current: false },
 ]
 

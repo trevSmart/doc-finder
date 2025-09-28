@@ -4,7 +4,9 @@ import "./globals.css";
 import LayoutWrapper from "../components/LayoutWrapper";
 import { SettingsProvider } from "../contexts/SettingsContext";
 import { FileDetailsProvider } from "../contexts/FileDetailsContext";
+import { FileListProvider } from "../contexts/FileListContext";
 import { SearchProvider } from "../contexts/SearchContext";
+import { FilePreviewProvider } from "../contexts/FilePreviewContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,11 +44,15 @@ export default function RootLayout({
       >
         <SettingsProvider>
           <FileDetailsProvider>
-            <SearchProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
-            </SearchProvider>
+            <FileListProvider>
+              <FilePreviewProvider>
+                <SearchProvider>
+                  <LayoutWrapper>
+                    {children}
+                  </LayoutWrapper>
+                </SearchProvider>
+              </FilePreviewProvider>
+            </FileListProvider>
           </FileDetailsProvider>
         </SettingsProvider>
       </body>

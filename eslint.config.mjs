@@ -4,6 +4,7 @@ import typescriptParser from "@typescript-eslint/parser";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
+import nextPlugin from "@next/eslint-plugin-next";
 
 const eslintConfig = [
   js.configs.recommended,
@@ -28,8 +29,12 @@ const eslintConfig = [
       "@typescript-eslint": typescript,
       react,
       "react-hooks": reactHooks,
+      "@next/next": nextPlugin,
     },
     rules: {
+      // Next.js rules
+      ...nextPlugin.configs.recommended.rules,
+
       // TypeScript rules
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "warn",

@@ -114,6 +114,52 @@ export function isDocumentFile(filename: string): boolean {
 }
 
 /**
+ * Verifica si un fitxer és d'un tipus Excel
+ */
+export function isExcelFile(filename: string): boolean {
+  const extension = getFileExtension(filename)
+  return extension === 'xlsx' || extension === 'xls'
+}
+
+/**
+ * Verifica si un fitxer és d'un tipus CSV
+ */
+export function isCsvFile(filename: string): boolean {
+  const extension = getFileExtension(filename)
+  return extension === 'csv'
+}
+
+/**
+ * Verifica si un fitxer és d'un tipus de fulla de càlcul (Excel o CSV)
+ */
+export function isSpreadsheetFile(filename: string): boolean {
+  return isExcelFile(filename) || isCsvFile(filename)
+}
+
+/**
+ * Verifica si un fitxer és d'un tipus DOCX
+ */
+export function isDocxFile(filename: string): boolean {
+  const extension = getFileExtension(filename)
+  return extension === 'docx'
+}
+
+/**
+ * Verifica si un fitxer és d'un tipus PPTX
+ */
+export function isPptxFile(filename: string): boolean {
+  const extension = getFileExtension(filename)
+  return extension === 'pptx'
+}
+
+/**
+ * Verifica si un fitxer és d'un tipus de document Office (DOCX, PPTX)
+ */
+export function isOfficeFile(filename: string): boolean {
+  return isDocxFile(filename) || isPptxFile(filename)
+}
+
+/**
  * Verifica si un fitxer és d'un tipus multimèdia
  */
 export function isMediaFile(filename: string): boolean {

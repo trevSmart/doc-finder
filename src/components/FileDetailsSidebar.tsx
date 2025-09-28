@@ -31,18 +31,54 @@ interface FileDetailsSidebarProps {
   isResizing: boolean
 }
 
+type TransitionState = 'closed' | 'entering' | 'open' | 'leaving'
+
 export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth, startResize }: FileDetailsSidebarProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [fileName, setFileName] = useState(file?.name || '')
+  const [fileName, setFileName] = useState('')
   const [fileDescription, setFileDescription] = useState('A comprehensive proposal for the new marketing campaign including budget estimates and timeline.')
+  const [transitionState, setTransitionState] = useState<TransitionState>('closed')
 
   // Sincronitzar l'estat local quan canvia el prop file
   useEffect(() => {
     if (file) {
       setFileName(file.name)
       setIsEditing(false) // Cancel·lar l'edició quan canvia el fitxer
+    } else {
+      // Reset quan no hi ha fitxer seleccionat
+      setFileName('')
+      setIsEditing(false)
     }
   }, [file])
+
+  // Gestionar les transicions
+  useEffect(() => {
+    let animationFrame: number | null = null
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+    if (isOpen) {
+      setTransitionState((prev) => (prev === 'open' ? prev : 'entering'))
+      // Forçar un re-render per activar la transició
+      animationFrame = requestAnimationFrame(() => {
+        setTransitionState('open')
+      })
+    } else {
+      setTransitionState((prev) => (prev === 'closed' ? prev : 'leaving'))
+      // Esperar a que acabi la transició abans de tancar
+      timeoutId = setTimeout(() => {
+        setTransitionState('closed')
+      }, 300) // 300ms per coincidir amb la durada de la transició CSS
+    }
+
+    return () => {
+      if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame)
+      }
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [isOpen])
 
   const handleSave = () => {
     setIsEditing(false)
@@ -104,19 +140,36 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
     }
   }
 
-  if (!isOpen) {
+  // No renderitzar res si està completament tancat o no hi ha fitxer
+  if (transitionState === 'closed' || !file) {
     return null
+  }
+
+  // Classes CSS per a les transicions
+  const getTransitionClasses = () => {
+    const baseClasses = "fixed inset-y-0 right-0 z-50 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300 ease-in-out"
+
+    switch (transitionState) {
+      case 'entering':
+        return `${baseClasses} transform translate-x-full`
+      case 'open':
+        return `${baseClasses} transform translate-x-0`
+      case 'leaving':
+        return `${baseClasses} transform translate-x-full`
+      default:
+        return baseClasses
+    }
   }
 
   return (
     <div
-      className="fixed inset-y-0 right-0 z-50 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col"
+      className={getTransitionClasses()}
       style={{ width: `${sidebarWidth}px` }}
       data-right-sidebar
     >
       {/* Resize handle */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-blue-500 hover:opacity-50 transition-colors"
+        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-gray-300 hover:opacity-50 transition-colors"
         onMouseDown={startResize}
       />
 

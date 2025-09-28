@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type MouseEvent } from 'react'
 import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
 import { useFileDetails } from '../contexts/FileDetailsContext'
@@ -98,6 +98,17 @@ export default function Home() {
 
   const filteredFiles = filterFiles(files, debouncedSearchQuery)
 
+  const handleGridAreaClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (!isOpen) {
+      return
+    }
+
+    const target = event.target as HTMLElement
+    if (!target.closest('[data-file-card]')) {
+      closeFileDetails()
+    }
+  }
+
 
   return (
     <div
@@ -166,21 +177,10 @@ export default function Home() {
         )}
 
         {!loading && !error && files.length > 0 && filteredFiles.length > 0 && (
-          <div
-            onClick={(e) => {
-              if ((e.target === e.currentTarget || (e.target as HTMLElement)?.tagName === 'UL') && isOpen) {
-                closeFileDetails()
-              }
-            }}
-          >
+          <div onClick={handleGridAreaClick}>
             <ul
               role="list"
               className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-              onClick={(e) => {
-                if (e.target === e.currentTarget && isOpen) {
-                  closeFileDetails()
-                }
-              }}
             >
             {filteredFiles.map((file, index) => {
               const isSelected = isOpen && selectedFile && selectedFile.path === file.path
@@ -188,6 +188,7 @@ export default function Home() {
               return (
                 <li
                   key={index}
+                  data-file-card
                   className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 dark:hover:border-neutral-600 dark:hover:bg-neutral-800 dark:focus:border-neutral-600 dark:focus:bg-neutral-800 ${
                     isSelected
                       ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
@@ -277,7 +278,7 @@ export default function Home() {
 
                 {/* Àrea de diagrama amb borde puntejat i previsualització */}
                 <div className="px-4 md:px-5 pb-4">
-                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 min-h-[120px] group-hover:border-gray-400 dark:group-hover:border-gray-500 transition-colors relative overflow-hidden">
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 min-h-[120px] max-h-[310px] group-hover:border-gray-400 dark:group-hover:border-gray-500 transition-colors relative overflow-hidden">
                     {file.isDirectory ? (
                       <div className="flex items-center justify-center h-full">
                         <span className="text-gray-500 dark:text-gray-400 text-sm">

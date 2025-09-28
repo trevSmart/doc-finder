@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { MagnifyingGlassIcon, XMarkIcon as XMarkIconSolid } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -48,15 +49,23 @@ export default function Navigation({ onSidebarOpen }: NavigationProps) {
                 <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 lg:hidden ml-2" aria-hidden="true" />
 
                 <a href="#" className="ml-2 lg:ml-0">
-                  <img
+                  <Image
                     alt="Your Company"
                     src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                    className="h-8 w-auto dark:hidden"
+                    width={32}
+                    height={32}
+                    priority
+                    sizes="(max-width: 1024px) 32px, 32px"
+                    className="size-8 dark:hidden"
                   />
-                  <img
+                  <Image
                     alt="Your Company"
                     src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                    className="h-8 w-auto not-dark:hidden"
+                    width={32}
+                    height={32}
+                    priority
+                    sizes="(max-width: 1024px) 32px, 32px"
+                    className="size-8 not-dark:hidden"
                   />
                 </a>
               </div>

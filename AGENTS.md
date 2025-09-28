@@ -97,7 +97,7 @@ npm run dev
 
 ### Development Server
 - **Default Port**: 3000 (falls back to available port if occupied)
-- **URL**: http://localhost:3007 (current)
+- **URL**: http://localhost:3005 (current)
 - **Hot Reload**: Enabled with Turbopack
 
 ## Component Architecture
@@ -179,6 +179,8 @@ npm run dev
 - **NEW**: Created useResizableSidebar hook for interactive sidebar resizing
 - **NEW**: Added fileUtils with comprehensive file type detection and formatting
 - **NEW**: Enhanced file categorization with proper MIME types and extensions
+- **NEW**: Implemented smooth transitions for FileDetailsSidebar (slide in/out from right)
+- **NEW**: Removed overlay/backdrop from FileDetailsSidebar to allow continued work on main content
 
 ## Development Notes
 
@@ -188,7 +190,7 @@ npm run dev
 
 ### Port Configuration
 - Development server automatically uses available port
-- Currently running on port 3007 (3000 was occupied)
+- Currently running on port 3005 (3000 was occupied)
 
 ### Code Quality
 - TypeScript for type safety
@@ -197,6 +199,13 @@ npm run dev
 - Component-based architecture
 
 ## AI Agent Guidelines
+
+### Autonomous Testing Capabilities
+- **Playwright MCP Server**: The agent has access to a Playwright MCP server for autonomous browser testing
+- **Direct Testing**: Can automatically test features by navigating to the application and interacting with UI elements
+- **Real-time Validation**: Can verify implementations work correctly in the browser without manual intervention
+- **Screenshot Capture**: Can take screenshots to document UI changes and verify visual implementations
+- **Interactive Testing**: Can click buttons, fill forms, and test user workflows autonomously
 
 ### When Working on This Project
 1. **Always use TypeScript** for new components
@@ -209,6 +218,8 @@ npm run dev
 8. **Use client-side mounting** for components with hooks to avoid hydration issues
 9. **Implement persistence** using localStorage for user settings
 10. **Follow the established file structure** (contexts/, hooks/, types/)
+11. **Test implementations autonomously** using the Playwright MCP server when possible
+12. **Verify UI changes** with screenshots and interactive testing
 
 ### Common Tasks
 - Adding new pages: Create in `src/app/` directory
@@ -279,6 +290,13 @@ npm run dev
 - **File Preview**: `/api/file-preview` endpoint serves file content for previews
 - **File Utils**: Comprehensive file type detection, MIME types, and size formatting
 
+### Sidebar Transitions
+- **FileDetailsSidebar**: Smooth slide-in/out transitions from the right (300ms)
+- **No Overlay**: Sidebar doesn't block interaction with main content or left sidebar
+- **Transition States**: Manages entering, open, leaving, and closed states
+- **CSS Transforms**: Uses `translate-x-full` and `translate-x-0` for smooth animations
+- **Non-blocking**: Allows continued work on main content while sidebar is open
+
 ### Component Patterns
 - **Client Components**: Use `'use client'` directive for interactive components
 - **Hydration Safety**: Implement `mounted` state to prevent SSR/client mismatches
@@ -300,6 +318,7 @@ npm run dev
 7. SearchContext manages search state with debouncing
 8. FileDetailsContext manages sidebar open/close state
 9. useResizableSidebar manages sidebar width with localStorage persistence
+10. FileDetailsSidebar transitions managed with CSS transforms and state management
 
 ---
 
