@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { FileItem, FileCategory } from '../types/file'
+import { ImagePreview } from '../types/filePreview'
 import { isImageFile } from '../utils/fileUtils'
 import {
   DocumentIcon,
@@ -54,7 +55,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 
   const imageUrl = useMemo(() => {
     if (data?.type === 'image') {
-      return data.url
+      return (data as ImagePreview).url
     }
     if (isImageFile(file.name) && file.imageUrl) {
       return file.imageUrl
@@ -62,14 +63,14 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     return null
   }, [data, file])
 
-  const markdownContent = data?.type === 'markdown' ? data.content : null
-  const jsonContent = data?.type === 'json' ? data.content : null
-  const txtContent = data?.type === 'txt' ? data.content : null
-  const excelContent = data?.type === 'excel' ? data.content : null
-  const csvContent = data?.type === 'csv' ? data.content : null
-  const docxContent = data?.type === 'docx' ? data.content : null
-  const pptxContent = data?.type === 'pptx' ? data.content : null
-  const pptxError = data?.type === 'pptx-error' ? data.error : null
+  const markdownContent = data?.type === 'markdown' ? (data as any).content : null
+  const jsonContent = data?.type === 'json' ? (data as any).content : null
+  const txtContent = data?.type === 'txt' ? (data as any).content : null
+  const excelContent = data?.type === 'excel' ? (data as any).content : null
+  const csvContent = data?.type === 'csv' ? (data as any).content : null
+  const docxContent = data?.type === 'docx' ? (data as any).content : null
+  const pptxContent = data?.type === 'pptx' ? (data as any).content : null
+  const pptxError = data?.type === 'pptx-error' ? (data as any).error : null
 
   const effectiveError = cachedError ?? pptxError
   const isPending = status === 'idle' || status === 'queued' || status === 'loading'
@@ -277,7 +278,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     }
 
     const lines = csvContent.split('\n').slice(0, 20)
-    const rows = lines.map(line => line.split(','))
+    const rows = lines.map((line: string) => line.split(','))
 
     return (
       <div className="w-full h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">

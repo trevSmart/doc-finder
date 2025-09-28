@@ -86,7 +86,7 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
   const getFileIcon = (extension?: string, isDirectory?: boolean) => {
     const IconComponent = getFileTypeIcon(extension || '', isDirectory || false)
     const iconColor = getFileTypeIconColor(extension || '', isDirectory || false)
-    
+
     return <IconComponent className={`h-6 w-6 ${iconColor}`} />
   }
 

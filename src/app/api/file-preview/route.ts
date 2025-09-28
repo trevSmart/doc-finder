@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
-import * as XLSX from 'xlsx'
+import * as ExcelJS from 'exceljs'
 import mammoth from 'mammoth'
 import { Pptx2Json } from 'pptx2json'
 
@@ -62,14 +62,27 @@ export async function GET(request: NextRequest) {
     if (ext === '.xlsx' || ext === '.xls') {
       try {
         const fileBuffer = await fs.readFile(filePath)
-        const workbook = XLSX.read(fileBuffer, { type: 'buffer' })
+        const workbook = new ExcelJS.Workbook()
+        await workbook.xlsx.load(fileBuffer as any)
 
         // Obtenir la primera fulla de càlcul
-        const firstSheetName = workbook.SheetNames[0]
-        const worksheet = workbook.Sheets[firstSheetName]
+        const worksheet = workbook.worksheets[0]
+        if (!worksheet) {
+          return NextResponse.json(
+            { error: 'No worksheets found in Excel file' },
+            { status: 500 }
+          )
+        }
 
         // Convertir a JSON amb headers
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+        const jsonData: unknown[][] = []
+        worksheet.eachRow((row) => {
+          const rowData: unknown[] = []
+          row.eachCell((cell, colNumber) => {
+            rowData[colNumber - 1] = cell.value
+          })
+          jsonData.push(rowData)
+        })
 
         // Limitar a les primeres 50 files per a la previsualització
         const limitedData = jsonData.slice(0, 50)
@@ -77,7 +90,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           type: 'excel',
           content: limitedData,
-          sheetName: firstSheetName,
+          sheetName: worksheet.name,
           totalRows: jsonData.length
         })
       } catch {

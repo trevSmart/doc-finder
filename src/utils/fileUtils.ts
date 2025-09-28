@@ -192,7 +192,7 @@ export function getFileTypeIcon(extension: string, isDirectory: boolean = false)
   }
 
   const ext = extension.toLowerCase()
-  
+
   switch (ext) {
     // Documents
     case 'doc':
@@ -208,19 +208,19 @@ export function getFileTypeIcon(extension: string, isDirectory: boolean = false)
     case 'html':
     case 'htm':
       return GlobeAltIcon
-    
+
     // Spreadsheets
     case 'xls':
     case 'xlsx':
       return TableCellsIcon
     case 'csv':
       return ChartBarIcon
-    
+
     // Presentations
     case 'ppt':
     case 'pptx':
       return PresentationChartBarIcon
-    
+
     // Images
     case 'bmp':
     case 'jpg':
@@ -230,25 +230,25 @@ export function getFileTypeIcon(extension: string, isDirectory: boolean = false)
       return PhotoIcon
     case 'svg':
       return PaintBrushIcon
-    
+
     // Audio
     case 'mp3':
     case 'wav':
       return MusicalNoteIcon
-    
+
     // Video
     case 'mpg':
     case 'mpeg':
     case 'mov':
     case 'avi':
       return VideoCameraIcon
-    
+
     // Data
     case 'json':
       return CodeBracketIcon
     case 'log':
       return CommandLineIcon
-    
+
     // Default
     default:
       return DocumentIcon
@@ -264,7 +264,7 @@ export function getFileTypeIconColor(extension: string, isDirectory: boolean = f
   }
 
   const ext = extension.toLowerCase()
-  
+
   switch (ext) {
     // Documents
     case 'doc':
@@ -277,18 +277,18 @@ export function getFileTypeIconColor(extension: string, isDirectory: boolean = f
     case 'html':
     case 'htm':
       return 'text-orange-600 dark:text-orange-400'
-    
+
     // Spreadsheets
     case 'xls':
     case 'xlsx':
     case 'csv':
       return 'text-emerald-600 dark:text-emerald-400'
-    
+
     // Presentations
     case 'ppt':
     case 'pptx':
       return 'text-orange-600 dark:text-orange-400'
-    
+
     // Images
     case 'bmp':
     case 'jpg':
@@ -297,24 +297,24 @@ export function getFileTypeIconColor(extension: string, isDirectory: boolean = f
     case 'png':
     case 'svg':
       return 'text-green-600 dark:text-green-400'
-    
+
     // Audio
     case 'mp3':
     case 'wav':
       return 'text-purple-600 dark:text-purple-400'
-    
+
     // Video
     case 'mpg':
     case 'mpeg':
     case 'mov':
     case 'avi':
       return 'text-red-600 dark:text-red-400'
-    
+
     // Data
     case 'json':
     case 'log':
       return 'text-gray-600 dark:text-gray-400'
-    
+
     // Default
     default:
       return 'text-gray-600 dark:text-gray-400'
