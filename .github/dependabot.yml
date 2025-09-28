@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # Enable version updates for npm
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -19,15 +18,12 @@ updates:
       - "dependencies"
       - "javascript"
     ignore:
-      # Ignore major version updates for React Router to avoid breaking changes
       - dependency-name: "@remix-run/*"
         update-types: ["version-update:semver-major"]
-      # Ignore major version updates for React to avoid breaking changes
       - dependency-name: "react"
         update-types: ["version-update:semver-major"]
       - dependency-name: "react-dom"
         update-types: ["version-update:semver-major"]
-    # Group minor and patch updates for related packages
     groups:
       react-router:
         patterns:
