@@ -13,21 +13,20 @@ import {
   CodeBracketIcon
 } from '@heroicons/react/20/solid'
 import { useState, useEffect } from 'react'
-import FileDetailsDrawer from '../components/FileDetailsDrawer'
 import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
+import { useFileDetails } from '../contexts/FileDetailsContext'
 import { useFileList } from '../hooks/useFileList'
 import { FileItem, FileCategory } from '../types/file'
 import { formatFileSize } from '../utils/fileUtils'
 
 export default function Home() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<FileItem | null>(null)
   const [mounted, setMounted] = useState(false)
 
   // Llegir la ruta dels settings
   const { settings } = useSettings()
   const { files, loading, error } = useFileList(settings.documentSources.localFolder)
+  const { openFileDetails } = useFileDetails()
 
   useEffect(() => {
     setMounted(true)
@@ -39,8 +38,7 @@ export default function Home() {
 
   const handleFileClick = (file: FileItem) => {
     if (!file.isDirectory) {
-      setSelectedFile(file)
-      setIsDrawerOpen(true)
+      openFileDetails(file)
     }
   }
 
@@ -216,12 +214,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* File Details Drawer */}
-      <FileDetailsDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        file={selectedFile}
-      />
     </div>
   )
 }

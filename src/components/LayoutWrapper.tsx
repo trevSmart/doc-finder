@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import SidebarNavigation from './SidebarNavigation'
 import Navigation from './Navigation'
+import FileDetailsSidebar from './FileDetailsSidebar'
+import { useFileDetails } from '../contexts/FileDetailsContext'
 
 interface LayoutWrapperProps {
   children: React.ReactNode
@@ -10,12 +12,13 @@ interface LayoutWrapperProps {
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { isOpen, selectedFile, closeFileDetails } = useFileDetails()
 
   return (
     <div>
       <SidebarNavigation sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <div className="lg:pl-72">
+      <div className={`lg:pl-72 ${isOpen ? 'lg:pr-96' : ''}`}>
         <Navigation onSidebarOpen={() => setSidebarOpen(true)} />
 
         <main className="py-10 bg-white dark:bg-gray-900 min-h-screen">
@@ -24,6 +27,12 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
           </div>
         </main>
       </div>
+
+      <FileDetailsSidebar
+        isOpen={isOpen}
+        onClose={closeFileDetails}
+        file={selectedFile}
+      />
     </div>
   )
 }
