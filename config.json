@@ -1,6 +1,0 @@
-{
-  "documentsPath": "/Users/marcpla/Downloads/library",
-  "supportedExtensions": [".pdf", ".doc", ".docx", ".txt", ".md", ".rtf", ".odt", ".jpg", ".jpeg", ".png", ".webp", ".bmp"],
-  "maxFileSize": 10485760,
-  "scanSubdirectories": true
-}
