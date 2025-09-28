@@ -18,7 +18,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
     <div>
       <SidebarNavigation sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <div className={`lg:pl-72 ${isOpen ? 'lg:pr-96' : ''}`}>
+      <div className={`lg:pl-72 ${isOpen ? 'lg:pr-96 sm:pr-96' : ''}`}>
         <Navigation onSidebarOpen={() => setSidebarOpen(true)} />
 
         <main className="py-10 bg-white dark:bg-gray-900 min-h-screen">

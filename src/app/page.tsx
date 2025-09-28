@@ -1,23 +1,16 @@
 'use client'
 
 import {
-  DocumentIcon,
-  FolderIcon,
   EyeIcon,
-  ArrowDownTrayIcon,
-  PhotoIcon,
-  MusicalNoteIcon,
-  VideoCameraIcon,
-  TableCellsIcon,
-  PresentationChartBarIcon,
-  CodeBracketIcon
+  ArrowDownTrayIcon
 } from '@heroicons/react/20/solid'
 import { useState, useEffect } from 'react'
 import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
 import { useFileDetails } from '../contexts/FileDetailsContext'
+import { useSearch } from '../contexts/SearchContext'
 import { useFileList } from '../hooks/useFileList'
-import { FileItem, FileCategory } from '../types/file'
+import { FileItem } from '../types/file'
 import { formatFileSize } from '../utils/fileUtils'
 
 export default function Home() {
@@ -27,6 +20,7 @@ export default function Home() {
   const { settings } = useSettings()
   const { files, loading, error } = useFileList(settings.documentSources.localFolder)
   const { openFileDetails } = useFileDetails()
+  const { debouncedSearchQuery } = useSearch()
 
   useEffect(() => {
     setMounted(true)
@@ -42,55 +36,64 @@ export default function Home() {
     }
   }
 
-  // Funció per obtenir la icona adequada segons la categoria del fitxer
-  const getFileIcon = (category?: FileCategory, isDirectory?: boolean) => {
-    if (isDirectory) {
-      return <FolderIcon className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+  // Funció per filtrar documents segons la cerca
+  const filterFiles = (files: FileItem[], query: string): FileItem[] => {
+    if (!query.trim()) {
+      return files
     }
 
-    switch (category) {
-      case 'image':
-        return <PhotoIcon className="h-5 w-5 text-green-500 dark:text-green-400" />
-      case 'audio':
-        return <MusicalNoteIcon className="h-5 w-5 text-purple-500 dark:text-purple-400" />
-      case 'video':
-        return <VideoCameraIcon className="h-5 w-5 text-red-500 dark:text-red-400" />
-      case 'spreadsheet':
-        return <TableCellsIcon className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
-      case 'presentation':
-        return <PresentationChartBarIcon className="h-5 w-5 text-orange-500 dark:text-orange-400" />
-      case 'data':
-        return <CodeBracketIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-      case 'document':
-      default:
-        return <DocumentIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-    }
+    const searchTerm = query.toLowerCase().trim()
+
+    return files.filter(file => {
+      // Cerca en el nom del fitxer
+      if (file.name.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en l'extensió
+      if (file.extension && file.extension.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en la categoria
+      if (file.category && file.category.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en el tipus MIME
+      if (file.mimeType && file.mimeType.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en el tipus (file/directory)
+      if (file.type && file.type.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en la ruta
+      if (file.path.toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en la mida (convertir a text)
+      if (file.size && formatFileSize(file.size).toLowerCase().includes(searchTerm)) {
+        return true
+      }
+
+      // Cerca en la data de modificació
+      if (file.lastModified) {
+        const dateStr = new Date(file.lastModified).toLocaleDateString().toLowerCase()
+        if (dateStr.includes(searchTerm)) {
+          return true
+        }
+      }
+
+      return false
+    })
   }
 
-  // Funció per obtenir el color de fons segons la categoria
-  const getBackgroundColor = (category?: FileCategory, isDirectory?: boolean) => {
-    if (isDirectory) {
-      return 'bg-blue-50 dark:bg-blue-500/10'
-    }
+  const filteredFiles = filterFiles(files, debouncedSearchQuery)
 
-    switch (category) {
-      case 'image':
-        return 'bg-green-50 dark:bg-green-500/10'
-      case 'audio':
-        return 'bg-purple-50 dark:bg-purple-500/10'
-      case 'video':
-        return 'bg-red-50 dark:bg-red-500/10'
-      case 'spreadsheet':
-        return 'bg-emerald-50 dark:bg-emerald-500/10'
-      case 'presentation':
-        return 'bg-orange-50 dark:bg-orange-500/10'
-      case 'data':
-        return 'bg-gray-50 dark:bg-gray-500/10'
-      case 'document':
-      default:
-        return 'bg-gray-50 dark:bg-gray-500/10'
-    }
-  }
 
   return (
     <div>
@@ -102,7 +105,9 @@ export default function Home() {
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
               from {settings.documentSources.localFolder}
               {!loading && !error && files.length > 0 && (
-                <span className="ml-1">({files.length} found)</span>
+                <span className="ml-1">
+                  ({debouncedSearchQuery ? `${filteredFiles.length} of ${files.length} found` : `${files.length} found`})
+                </span>
               )}
             </span>
           )}
@@ -134,9 +139,17 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && !error && files.length > 0 && (
+        {!loading && !error && files.length > 0 && debouncedSearchQuery && filteredFiles.length === 0 && (
+          <div className="text-center py-8">
+            <div className="text-gray-500 dark:text-gray-400">
+              No documents found matching "{debouncedSearchQuery}"
+            </div>
+          </div>
+        )}
+
+        {!loading && !error && files.length > 0 && filteredFiles.length > 0 && (
           <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {files.map((file, index) => (
+            {filteredFiles.map((file, index) => (
               <li
                 key={index}
                 className={`col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10 ${

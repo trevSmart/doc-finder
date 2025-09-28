@@ -97,7 +97,7 @@ export default function FileDetailsSidebar({ isOpen, onClose, file }: FileDetail
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-96 bg-white dark:bg-gray-800 shadow-xl border-l border-gray-200 dark:border-gray-700 flex flex-col">
+    <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-white dark:bg-gray-800 shadow-xl border-l border-gray-200 dark:border-gray-700 flex flex-col">
       {/* Header */}
       <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">

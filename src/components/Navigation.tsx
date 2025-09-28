@@ -1,9 +1,10 @@
 'use client'
 
 import { Menu, MenuButton, MenuItem, MenuItems, Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { MagnifyingGlassIcon, XMarkIcon as XMarkIconSolid } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ThemeToggle from './ThemeToggle'
+import { useSearch } from '../contexts/SearchContext'
 
 const user = {
   name: 'Chelsea Hagon',
@@ -32,6 +33,8 @@ interface NavigationProps {
 }
 
 export default function Navigation({ onSidebarOpen }: NavigationProps) {
+  const { searchQuery, setSearchQuery } = useSearch()
+
   return (
     <>
       {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
@@ -72,16 +75,33 @@ export default function Navigation({ onSidebarOpen }: NavigationProps) {
             </div>
             <div className="min-w-0 flex-1 md:px-8 lg:px-0 xl:col-span-6">
               <div className="flex items-center px-6 py-3.5 md:mx-auto md:max-w-3xl lg:mx-0 lg:max-w-none xl:px-0">
-                <div className="grid w-full grid-cols-1">
+                <div className="relative w-full">
                   <input
                     name="search"
                     placeholder="Search"
-                    className="col-start-1 row-start-1 block w-full rounded-md bg-white dark:bg-white/5 py-1.5 pr-3 pl-10 text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:focus:outline-indigo-500 sm:text-sm/6"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setSearchQuery('')
+                      }
+                    }}
+                    className="block w-full rounded-md bg-white dark:bg-white/5 py-1.5 pr-10 pl-10 text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:focus:outline-indigo-500 sm:text-sm/6"
                   />
                   <MagnifyingGlassIcon
                     aria-hidden="true"
-                    className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-gray-400 dark:text-gray-500"
+                    className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-gray-400 dark:text-gray-500"
                   />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                    >
+                      <XMarkIconSolid className="size-4" aria-hidden="true" />
+                      <span className="sr-only">Clear search</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
