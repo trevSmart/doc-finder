@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback, useRef, type MouseEvent, type DragEvent } from 'react'
+import React from 'react'
 import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
 import { useFileDetails } from '../contexts/FileDetailsContext'
@@ -40,10 +41,25 @@ export default function Home() {
   >(null)
   const [draggingPath, setDraggingPath] = useState<string | null>(null)
   const [dragOverPath, setDragOverPath] = useState<string | null>(null)
+  const [dragOverDropZone, setDragOverDropZone] = useState<number | null>(null)
+  const [fileOrder, setFileOrder] = useState<string[]>([]) // Track custom file order
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Initialize file order when files change
+  useEffect(() => {
+    if (files.length > 0) {
+      setFileOrder(prev => {
+        // Keep existing order if files haven't changed much
+        const currentPaths = files.map(f => f.path)
+        const prevPaths = prev.filter(path => currentPaths.includes(path))
+        const newPaths = currentPaths.filter(path => !prev.includes(path))
+        return [...prevPaths, ...newPaths]
+      })
+    }
+  }, [files])
 
   const fileMap = useMemo(() => {
     const map = new Map<string, FileItem>()
@@ -269,7 +285,32 @@ export default function Home() {
     [fileMap, createClipFromPair],
   )
 
-  const handleCardDragStart = useCallback((event: DragEvent<HTMLLIElement>, file: FileItem) => {
+  const handleDropReorder = useCallback(
+    (sourcePath: string, dropIndex: number) => {
+      if (!sourcePath) {
+        return
+      }
+
+      setFileOrder(prev => {
+        const sourceIndex = prev.indexOf(sourcePath)
+        if (sourceIndex === -1) {
+          return prev
+        }
+
+        const newOrder = [...prev]
+        // Remove source file from current position
+        newOrder.splice(sourceIndex, 1)
+        // Insert at new position
+        const insertIndex = dropIndex > sourceIndex ? dropIndex - 1 : dropIndex
+        newOrder.splice(insertIndex, 0, sourcePath)
+        
+        return newOrder
+      })
+    },
+    [],
+  )
+
+  const handleCardDragStart = useCallback((event: DragEvent<HTMLDivElement>, file: FileItem) => {
     if (file.isDirectory) {
       return
     }
@@ -284,10 +325,74 @@ export default function Home() {
   const handleCardDragEnd = useCallback(() => {
     setDraggingPath(null)
     setDragOverPath(null)
+    setDragOverDropZone(null)
   }, [])
 
+  const handleDropZoneDragOver = useCallback(
+    (event: DragEvent<HTMLDivElement>, dropIndex: number) => {
+      if (!draggingPath) {
+        return
+      }
+
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+      if (dragOverDropZone !== dropIndex) {
+        setDragOverDropZone(dropIndex)
+        setDragOverPath(null) // Clear card hover state
+      }
+    },
+    [draggingPath, dragOverDropZone],
+  )
+
+  const handleDropZoneDragEnter = useCallback(
+    (event: DragEvent<HTMLDivElement>, dropIndex: number) => {
+      if (!draggingPath) {
+        return
+      }
+
+      event.preventDefault()
+      if (dragOverDropZone !== dropIndex) {
+        setDragOverDropZone(dropIndex)
+        setDragOverPath(null) // Clear card hover state
+      }
+    },
+    [draggingPath, dragOverDropZone],
+  )
+
+  const handleDropZoneDragLeave = useCallback(
+    (event: DragEvent<HTMLDivElement>, dropIndex: number) => {
+      if (dragOverDropZone !== dropIndex) {
+        return
+      }
+
+      const relatedTarget = event.relatedTarget as Node | null
+      if (relatedTarget && event.currentTarget.contains(relatedTarget)) {
+        return
+      }
+
+      setDragOverDropZone(null)
+    },
+    [dragOverDropZone],
+  )
+
+  const handleDropZoneDrop = useCallback(
+    (event: DragEvent<HTMLDivElement>, dropIndex: number) => {
+      if (!draggingPath) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      setDragOverDropZone(null)
+      setDragOverPath(null)
+      handleDropReorder(draggingPath, dropIndex)
+      setDraggingPath(null)
+    },
+    [draggingPath, handleDropReorder],
+  )
+
   const handleCardDragOver = useCallback(
-    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+    (event: DragEvent<HTMLDivElement>, file: FileItem) => {
       if (!draggingPath || draggingPath === file.path || file.isDirectory) {
         return
       }
@@ -296,13 +401,14 @@ export default function Home() {
       event.dataTransfer.dropEffect = 'copy'
       if (dragOverPath !== file.path) {
         setDragOverPath(file.path)
+        setDragOverDropZone(null) // Clear drop zone hover state
       }
     },
     [draggingPath, dragOverPath],
   )
 
   const handleCardDragEnter = useCallback(
-    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+    (event: DragEvent<HTMLDivElement>, file: FileItem) => {
       if (!draggingPath || draggingPath === file.path || file.isDirectory) {
         return
       }
@@ -310,13 +416,14 @@ export default function Home() {
       event.preventDefault()
       if (dragOverPath !== file.path) {
         setDragOverPath(file.path)
+        setDragOverDropZone(null) // Clear drop zone hover state
       }
     },
     [draggingPath, dragOverPath],
   )
 
   const handleCardDragLeave = useCallback(
-    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+    (event: DragEvent<HTMLDivElement>, file: FileItem) => {
       if (dragOverPath !== file.path) {
         return
       }
@@ -332,7 +439,7 @@ export default function Home() {
   )
 
   const handleCardDrop = useCallback(
-    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+    (event: DragEvent<HTMLDivElement>, file: FileItem) => {
       if (!draggingPath || draggingPath === file.path || file.isDirectory) {
         return
       }
@@ -449,6 +556,30 @@ export default function Home() {
   const filteredCompoundClips = filterCompoundClips(derivedCompoundClips, debouncedSearchQuery)
   const totalClipCount = files.length + derivedCompoundClips.length
   const filteredClipCount = filteredFiles.length + filteredCompoundClips.length
+
+  // Create ordered files list based on fileOrder state
+  const orderedFilteredFiles = useMemo(() => {
+    if (fileOrder.length === 0) {
+      return filteredFiles
+    }
+
+    const orderedFiles: FileItem[] = []
+    const remainingFiles = [...filteredFiles]
+
+    // First, add files in the specified order
+    for (const filePath of fileOrder) {
+      const fileIndex = remainingFiles.findIndex(file => file.path === filePath)
+      if (fileIndex !== -1) {
+        orderedFiles.push(remainingFiles[fileIndex])
+        remainingFiles.splice(fileIndex, 1)
+      }
+    }
+
+    // Then add any remaining files that aren't in the order
+    orderedFiles.push(...remainingFiles)
+
+    return orderedFiles
+  }, [filteredFiles, fileOrder])
 
   const handleGridAreaClick = (event: MouseEvent<HTMLDivElement>) => {
     if (!isOpen) {
@@ -620,68 +751,97 @@ export default function Home() {
 
         {!loading && !error && filteredClipCount > 0 && (
           <div onClick={handleGridAreaClick}>
-            <ul
-              role="list"
-              className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
-            >
-            {[...filteredCompoundClips.map(entry => ({ type: 'compound' as const, entry })), ...filteredFiles.map(file => ({ type: 'file' as const, file }))].map(item => {
-              if (item.type === 'compound') {
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Drop zone before first item */}
+              <div
+                className={`col-span-1 h-4 ${
+                  dragOverDropZone === 0 && draggingPath
+                    ? 'bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg'
+                    : 'border-2 border-transparent'
+                } transition-all duration-200`}
+                onDragOver={(event) => handleDropZoneDragOver(event, 0)}
+                onDragEnter={(event) => handleDropZoneDragEnter(event, 0)}
+                onDragLeave={(event) => handleDropZoneDragLeave(event, 0)}
+                onDrop={(event) => handleDropZoneDrop(event, 0)}
+              />
+
+              {[...filteredCompoundClips.map(entry => ({ type: 'compound' as const, entry })), ...orderedFilteredFiles.map((file, index) => ({ type: 'file' as const, file, originalIndex: index }))].map((item, itemIndex) => {
+                const dropZoneIndex = itemIndex + 1
+                if (item.type === 'compound') {
                 const { clip, files: clipFiles } = item.entry
                 const primaryFile = clipFiles[0]
                 const isSelected = isOpen && selectedFile && clipFiles.some(file => file.path === selectedFile.path)
 
-                return (
-                  <li
-                    key={clip.id}
-                    data-file-card
-                    className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500 dark:hover:from-gray-50 dark:hover:to-gray-400 dark:focus:border-gray-500 dark:focus:from-gray-50 dark:focus:to-gray-400 ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleCompoundClipClick(item.entry)
-                    }}
-                  >
-                    <div className="p-4 md:p-5 pb-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex flex-col">
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-800 leading-tight">
-                            {clip.title}
-                          </h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-600 mt-1">
-                            {clipFiles.length} documents
-                          </p>
-                        </div>
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-300 flex-shrink-0">
-                          <Image
-                            src={getFileTypeIcon(primaryFile?.extension || '', primaryFile?.isDirectory ?? false)}
-                            alt="Clip"
-                            width={20}
-                            height={20}
-                            className={`${getFileTypeIconColor(primaryFile?.extension || '', primaryFile?.isDirectory ?? false)}`}
-                          />
+                // After compound clip, add a drop zone
+                const compoundClipElement = (
+                  <React.Fragment key={`compound-${clip.id}`}>
+                    <div
+                      data-file-card
+                      className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500 dark:hover:from-gray-50 dark:hover:to-gray-400 dark:focus:border-gray-500 dark:focus:from-gray-50 dark:focus:to-gray-400 ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleCompoundClipClick(item.entry)
+                      }}
+                    >
+                      <div className="p-4 md:p-5 pb-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex flex-col">
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-800 leading-tight">
+                              {clip.title}
+                            </h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-600 mt-1">
+                              {clipFiles.length} documents
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-300 flex-shrink-0">
+                            <Image
+                              src={getFileTypeIcon(primaryFile?.extension || '', primaryFile?.isDirectory ?? false)}
+                              alt="Clip"
+                              width={20}
+                              height={20}
+                              className={`${getFileTypeIconColor(primaryFile?.extension || '', primaryFile?.isDirectory ?? false)}`}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="px-4 md:px-5 pb-4">
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                        <div>
-                          <span className="font-semibold text-gray-700 dark:text-gray-700">Documents:</span>
-                          <span className="ml-2 text-gray-600 dark:text-gray-600">
-                            {clipFiles.slice(0, 2).map(file => file.extension?.toUpperCase() || 'File').join(' + ')}
-                          </span>
+                      <div className="px-4 md:px-5 pb-4">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                          <div>
+                            <span className="font-semibold text-gray-700 dark:text-gray-700">Documents:</span>
+                            <span className="ml-2 text-gray-600 dark:text-gray-600">
+                              {clipFiles.slice(0, 2).map(file => file.extension?.toUpperCase() || 'File').join(' + ')}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="font-semibold text-gray-700 dark:text-gray-700">Created:</span>
+                            <span className="ml-2 text-gray-600 dark:text-gray-600">
+                              {new Date(clip.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div className="col-span-2">
+                            <span className="font-semibold text-gray-700 dark:text-gray-700">Included files:</span>
+                            <div className="mt-1 space-y-1">
+                              {clipFiles.slice(0, 2).map(file => (
+                                <div key={file.path} className="text-xs text-gray-600 dark:text-gray-600 truncate">
+                                  {file.name}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <span className="font-semibold text-gray-700 dark:text-gray-700">Created:</span>
-                          <span className="ml-2 text-gray-600 dark:text-gray-600">
-                            {new Date(clip.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="col-span-2">
-                          <span className="font-semibold text-gray-700 dark:text-gray-700">Included files:</span>
-                          <div className="mt-1 space-y-1">
+                      </div>
+
+                      <div className="px-4 md:px-5 pb-4">
+                        <div className="border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg p-4 min-h-[120px] max-h-[310px] group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors relative overflow-hidden bg-gray-100 dark:bg-gray-700">
+                          <div className="flex h-full gap-3">
                             {clipFiles.slice(0, 2).map(file => (
-                              <div key={file.path} className="text-xs text-gray-600 dark:text-gray-600 truncate">
-                                {file.name}
+                              <div key={file.path} className="relative flex-1 overflow-hidden rounded-md bg-white/40 dark:bg-white/30">
+                                <FilePreview
+                                  file={file}
+                                  size="card"
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ))}
                           </div>
@@ -689,23 +849,22 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="px-4 md:px-5 pb-4">
-                      <div className="border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg p-4 min-h-[120px] max-h-[310px] group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors relative overflow-hidden bg-gray-100 dark:bg-gray-700">
-                        <div className="flex h-full gap-3">
-                          {clipFiles.slice(0, 2).map(file => (
-                            <div key={file.path} className="relative flex-1 overflow-hidden rounded-md bg-white/40 dark:bg-white/30">
-                              <FilePreview
-                                file={file}
-                                size="card"
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                    {/* Drop zone after compound clip */}
+                    <div
+                      className={`col-span-1 h-4 ${
+                        dragOverDropZone === dropZoneIndex && draggingPath
+                          ? 'bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg'
+                          : 'border-2 border-transparent'
+                      } transition-all duration-200`}
+                      onDragOver={(event) => handleDropZoneDragOver(event, dropZoneIndex)}
+                      onDragEnter={(event) => handleDropZoneDragEnter(event, dropZoneIndex)}
+                      onDragLeave={(event) => handleDropZoneDragLeave(event, dropZoneIndex)}
+                      onDrop={(event) => handleDropZoneDrop(event, dropZoneIndex)}
+                    />
+                  </React.Fragment>
                 )
+                
+                return compoundClipElement
               }
 
               const file = item.file
@@ -715,38 +874,38 @@ export default function Home() {
               const hasCustomTitle = clipTitle.trim() !== file.name
               const isBuilderSelected = builderSelectionSet.has(file.path)
 
-              return (
-                <li
-                  key={file.path}
-                  data-file-card
-                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300/60 hover:bg-gray-50/40 focus:outline-hidden focus:shadow-md focus:border-gray-300/60 focus:bg-gray-50/40 transition-all duration-200 ease-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500/60 dark:hover:from-gray-50 dark:hover:to-gray-400/40 dark:focus:border-gray-500/60 dark:focus:from-gray-50 dark:focus:to-gray-400/40 ${
-                    isSelected
-                      ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
-                      : ''
-                  } ${
-                    file.isDirectory ? 'cursor-default' : 'cursor-pointer'
-                  } ${
-                    !file.isDirectory ? '*:cursor-pointer' : ''
-                  } ${
-                    dragOverPath === file.path && draggingPath && draggingPath !== file.path
-                      ? 'ring-1 ring-green-400/60 ring-offset-1 ring-offset-white shadow-lg scale-102 bg-green-50/30 dark:bg-green-900/10 dark:ring-green-400/40 dark:ring-offset-gray-900 border-green-300/40 dark:border-green-400/30 z-10 relative transition-all duration-200'
-                      : ''
-                  } ${
-                    draggingPath === file.path ? 'opacity-30 scale-95' : ''
-                  }`}
-                  draggable={!file.isDirectory}
-                  aria-grabbed={!file.isDirectory ? draggingPath === file.path : undefined}
-                  onDragStart={(event) => handleCardDragStart(event, file)}
-                  onDragEnd={handleCardDragEnd}
-                  onDragOver={(event) => handleCardDragOver(event, file)}
-                  onDragEnter={(event) => handleCardDragEnter(event, file)}
-                  onDragLeave={(event) => handleCardDragLeave(event, file)}
-                  onDrop={(event) => handleCardDrop(event, file)}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleFileClick(file)
-                  }}
-                >
+              const fileElement = (
+                <React.Fragment key={`file-${file.path}`}>
+                  <div
+                    data-file-card
+                    className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300/60 hover:bg-gray-50/40 focus:outline-hidden focus:shadow-md focus:border-gray-300/60 focus:bg-gray-50/40 transition-all duration-200 ease-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500/60 dark:hover:from-gray-50 dark:hover:to-gray-400/40 dark:focus:border-gray-500/60 dark:focus:from-gray-50 dark:focus:to-gray-400/40 ${
+                      isSelected
+                        ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
+                        : ''
+                    } ${
+                      file.isDirectory ? 'cursor-default' : 'cursor-pointer'
+                    } ${
+                      !file.isDirectory ? '*:cursor-pointer' : ''
+                    } ${
+                      dragOverPath === file.path && draggingPath && draggingPath !== file.path
+                        ? 'ring-1 ring-green-400/60 ring-offset-1 ring-offset-white shadow-lg scale-102 bg-green-50/30 dark:bg-green-900/10 dark:ring-green-400/40 dark:ring-offset-gray-900 border-green-300/40 dark:border-green-400/30 z-10 relative transition-all duration-200'
+                        : ''
+                    } ${
+                      draggingPath === file.path ? 'opacity-30 scale-95' : ''
+                    }`}
+                    draggable={!file.isDirectory}
+                    aria-grabbed={!file.isDirectory ? draggingPath === file.path : undefined}
+                    onDragStart={(event) => handleCardDragStart(event, file)}
+                    onDragEnd={handleCardDragEnd}
+                    onDragOver={(event) => handleCardDragOver(event, file)}
+                    onDragEnter={(event) => handleCardDragEnter(event, file)}
+                    onDragLeave={(event) => handleCardDragLeave(event, file)}
+                    onDrop={(event) => handleCardDrop(event, file)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleFileClick(file)
+                    }}
+                  >
                   {/* Header amb títol i icona de tipus */}
                   <div className="p-4 md:p-5 pb-3">
                     <div className="flex items-start justify-between gap-3">
@@ -914,10 +1073,26 @@ export default function Home() {
                     )}
                   </div>
                 </div>
-                </li>
-              )
+                </div>
+
+                {/* Drop zone after file */}
+                <div
+                  className={`col-span-1 h-4 ${
+                    dragOverDropZone === dropZoneIndex && draggingPath
+                      ? 'bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg'
+                      : 'border-2 border-transparent'
+                  } transition-all duration-200`}
+                  onDragOver={(event) => handleDropZoneDragOver(event, dropZoneIndex)}
+                  onDragEnter={(event) => handleDropZoneDragEnter(event, dropZoneIndex)}
+                  onDragLeave={(event) => handleDropZoneDragLeave(event, dropZoneIndex)}
+                  onDrop={(event) => handleDropZoneDrop(event, dropZoneIndex)}
+                />
+              </React.Fragment>
+            )
+            
+            return fileElement
             })}
-            </ul>
+            </div>
           </div>
         )}
       </div>
