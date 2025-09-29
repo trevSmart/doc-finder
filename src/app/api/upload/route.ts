@@ -40,6 +40,12 @@ export async function POST(request: NextRequest) {
     const baseName = extMatch ? originalName.slice(0, -ext.length) : originalName
     const sanitizedBase = baseName.replace(/[^a-zA-Z0-9_-]/g, '_')
     const sanitizedExt = ext.replace(/[^.a-zA-Z0-9]/g, '')
+
+    // Whitelist of allowed file extensions (lowercase, with dot)
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.pdf', '.txt', '.doc', '.docx']
+    if (!sanitizedExt || !allowedExtensions.includes(sanitizedExt.toLowerCase())) {
+      return NextResponse.json({ error: 'File type not allowed' }, { status: 400 })
+    }
     const fileName = `${timestamp}_${sanitizedBase}${sanitizedExt}`
 
     // Ensure the sanitized filename does not contain path separators
