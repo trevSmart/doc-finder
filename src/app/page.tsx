@@ -754,16 +754,22 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {/* Drop zone before first item */}
               <div
-                className={`col-span-1 h-4 ${
+                className={`col-span-1 transition-all duration-200 ${
                   dragOverDropZone === 0 && draggingPath
-                    ? 'bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg'
-                    : 'border-2 border-transparent'
-                } transition-all duration-200`}
+                    ? 'h-8 bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center'
+                    : draggingPath
+                      ? 'h-4 border-2 border-dashed border-gray-300 rounded-lg'
+                      : 'h-2 border-2 border-transparent'
+                }`}
                 onDragOver={(event) => handleDropZoneDragOver(event, 0)}
                 onDragEnter={(event) => handleDropZoneDragEnter(event, 0)}
                 onDragLeave={(event) => handleDropZoneDragLeave(event, 0)}
                 onDrop={(event) => handleDropZoneDrop(event, 0)}
-              />
+              >
+                {dragOverDropZone === 0 && draggingPath && (
+                  <span className="text-xs text-blue-600 font-medium">Drop here to reorder</span>
+                )}
+              </div>
 
               {[...filteredCompoundClips.map(entry => ({ type: 'compound' as const, entry })), ...orderedFilteredFiles.map((file, index) => ({ type: 'file' as const, file, originalIndex: index }))].map((item, itemIndex) => {
                 const dropZoneIndex = itemIndex + 1
@@ -851,16 +857,22 @@ export default function Home() {
 
                     {/* Drop zone after compound clip */}
                     <div
-                      className={`col-span-1 h-4 ${
+                      className={`col-span-1 transition-all duration-200 ${
                         dragOverDropZone === dropZoneIndex && draggingPath
-                          ? 'bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg'
-                          : 'border-2 border-transparent'
-                      } transition-all duration-200`}
+                          ? 'h-8 bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center'
+                          : draggingPath
+                            ? 'h-4 border-2 border-dashed border-gray-300 rounded-lg'
+                            : 'h-2 border-2 border-transparent'
+                      }`}
                       onDragOver={(event) => handleDropZoneDragOver(event, dropZoneIndex)}
                       onDragEnter={(event) => handleDropZoneDragEnter(event, dropZoneIndex)}
                       onDragLeave={(event) => handleDropZoneDragLeave(event, dropZoneIndex)}
                       onDrop={(event) => handleDropZoneDrop(event, dropZoneIndex)}
-                    />
+                    >
+                      {dragOverDropZone === dropZoneIndex && draggingPath && (
+                        <span className="text-xs text-blue-600 font-medium">Drop here to reorder</span>
+                      )}
+                    </div>
                   </React.Fragment>
                 )
                 
@@ -1077,16 +1089,22 @@ export default function Home() {
 
                 {/* Drop zone after file */}
                 <div
-                  className={`col-span-1 h-4 ${
+                  className={`col-span-1 transition-all duration-200 ${
                     dragOverDropZone === dropZoneIndex && draggingPath
-                      ? 'bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg'
-                      : 'border-2 border-transparent'
-                  } transition-all duration-200`}
+                      ? 'h-8 bg-blue-200 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center'
+                      : draggingPath
+                        ? 'h-4 border-2 border-dashed border-gray-300 rounded-lg'
+                        : 'h-2 border-2 border-transparent'
+                  }`}
                   onDragOver={(event) => handleDropZoneDragOver(event, dropZoneIndex)}
                   onDragEnter={(event) => handleDropZoneDragEnter(event, dropZoneIndex)}
                   onDragLeave={(event) => handleDropZoneDragLeave(event, dropZoneIndex)}
                   onDrop={(event) => handleDropZoneDrop(event, dropZoneIndex)}
-                />
+                >
+                  {dragOverDropZone === dropZoneIndex && draggingPath && (
+                    <span className="text-xs text-blue-600 font-medium">Drop here to reorder</span>
+                  )}
+                </div>
               </React.Fragment>
             )
             
