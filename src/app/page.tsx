@@ -751,7 +751,7 @@ export default function Home() {
                   <div className="p-4 md:p-5 pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-col">
-                        <h3 className="font-bold text-gray-800 dark:text-gray-800 leading-tight" style={{ fontSize: 'var(--text-base)' }}>
+                        <h3 className="font-bold text-gray-800 dark:text-gray-100 text-base leading-tight">
                           {clipTitle}
                         </h3>
                         {hasCustomTitle && (
