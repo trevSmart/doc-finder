@@ -10,6 +10,7 @@ import { FilePreviewProvider } from "../contexts/FilePreviewContext";
 import { TagProvider } from "../contexts/TagContext";
 import { FileTagsProvider } from "../contexts/FileTagsContext";
 import { ClipProvider } from "../contexts/ClipContext";
+import { UploadProvider } from "../contexts/UploadContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,17 +50,19 @@ export default function RootLayout({
           <TagProvider>
             <FileTagsProvider>
               <ClipProvider>
-                <FileDetailsProvider>
-                  <FileListProvider>
-                    <FilePreviewProvider>
-                      <SearchProvider>
-                        <LayoutWrapper>
-                          {children}
-                        </LayoutWrapper>
-                      </SearchProvider>
-                    </FilePreviewProvider>
-                  </FileListProvider>
-                </FileDetailsProvider>
+                <UploadProvider>
+                  <FileDetailsProvider>
+                    <FileListProvider>
+                      <FilePreviewProvider>
+                        <SearchProvider>
+                          <LayoutWrapper>
+                            {children}
+                          </LayoutWrapper>
+                        </SearchProvider>
+                      </FilePreviewProvider>
+                    </FileListProvider>
+                  </FileDetailsProvider>
+                </UploadProvider>
               </ClipProvider>
             </FileTagsProvider>
           </TagProvider>

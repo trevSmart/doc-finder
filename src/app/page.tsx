@@ -719,18 +719,20 @@ export default function Home() {
                 <li
                   key={file.path}
                   data-file-card
-                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500 dark:hover:from-gray-50 dark:hover:to-gray-400 dark:focus:border-gray-500 dark:focus:from-gray-50 dark:focus:to-gray-400 ${
+                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300/60 hover:bg-gray-50/40 focus:outline-hidden focus:shadow-md focus:border-gray-300/60 focus:bg-gray-50/40 transition-all duration-200 ease-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500/60 dark:hover:from-gray-50 dark:hover:to-gray-400/40 dark:focus:border-gray-500/60 dark:focus:from-gray-50 dark:focus:to-gray-400/40 ${
                     isSelected
                       ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
                       : ''
                   } ${
                     file.isDirectory ? 'cursor-default' : 'cursor-pointer'
                   } ${
+                    !file.isDirectory ? '*:cursor-pointer' : ''
+                  } ${
                     dragOverPath === file.path && draggingPath && draggingPath !== file.path
-                      ? 'ring-2 ring-blue-400 ring-offset-2 ring-offset-white dark:ring-blue-300 dark:ring-offset-gray-900'
+                      ? 'ring-1 ring-green-400/60 ring-offset-1 ring-offset-white shadow-lg scale-102 bg-green-50/30 dark:bg-green-900/10 dark:ring-green-400/40 dark:ring-offset-gray-900 border-green-300/40 dark:border-green-400/30 z-10 relative transition-all duration-200'
                       : ''
                   } ${
-                    draggingPath === file.path ? 'opacity-80' : ''
+                    draggingPath === file.path ? 'opacity-30 scale-95' : ''
                   }`}
                   draggable={!file.isDirectory}
                   aria-grabbed={!file.isDirectory ? draggingPath === file.path : undefined}
@@ -749,7 +751,7 @@ export default function Home() {
                   <div className="p-4 md:p-5 pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-col">
-                        <h3 className="text-lg font-bold text-gray-800 dark:text-gray-800 leading-tight">
+                        <h3 className="font-bold text-gray-800 dark:text-gray-800 leading-tight" style={{ fontSize: 'var(--text-base)' }}>
                           {clipTitle}
                         </h3>
                         {hasCustomTitle && (

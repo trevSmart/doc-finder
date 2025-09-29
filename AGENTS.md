@@ -38,23 +38,25 @@ src/
 │   ├── FilePreview.tsx     # File preview component with multiple formats
 │   └── TagSelector.tsx     # Tag selection component for file tagging
 ├── contexts/
-│   ├── SettingsContext.tsx # React Context for settings management
+│   ├── ClipContext.tsx     # Context for clip management (custom titles and compound clips)
 │   ├── FileDetailsContext.tsx # Context for file details sidebar state
-│   ├── SearchContext.tsx   # Context for search functionality with debouncing
-│   ├── FileTagsContext.tsx # Context for file-specific tag management
-│   ├── TagContext.tsx      # Context for global tag definitions
 │   ├── FileListContext.tsx # Context for file list state management
-│   └── FilePreviewContext.tsx # Context for file preview state
+│   ├── FilePreviewContext.tsx # Context for file preview state
+│   ├── FileTagsContext.tsx # Context for file-specific tag management
+│   ├── SearchContext.tsx   # Context for search functionality with debouncing
+│   ├── SettingsContext.tsx # React Context for settings management
+│   └── TagContext.tsx      # Context for global tag definitions
 ├── hooks/
 │   ├── useFileList.ts      # Custom hook for file listing functionality
 │   ├── useResizableSidebar.ts # Hook for resizable sidebar functionality
 │   └── useResizableRightSidebar.ts # Hook for right sidebar resizing
 ├── types/
+│   ├── clip.ts             # TypeScript interfaces for clip management
 │   ├── file.ts             # TypeScript interfaces for file management
 │   ├── filePreview.ts      # TypeScript interfaces for file preview
 │   ├── tag.ts              # TypeScript interfaces for tag management
 │   └── pptx2json.d.ts      # TypeScript declarations for PPTX parsing
-└── utils/
+├── utils/
     └── fileUtils.ts        # Utility functions for file operations
 ```
 
@@ -82,6 +84,14 @@ src/
 - **Actions**: View and Download buttons for files (folders are view-only)
 - **File Preview**: Supports preview for images, PDFs, Markdown, JSON, and text files
 - **Resizable Sidebar**: Sidebar can be resized with mouse drag, width persisted in localStorage
+
+### Clip Management
+- **Custom Titles**: Override default file names with personalized titles
+- **Compound Clips**: Group multiple files together as units for organization
+- **Clip Persistence**: Store clip metadata in localStorage automatically
+- **Clip Registry**: Track custom titles with timestamps (created/updated)
+- **Compound Clip Management**: Create, update, and delete compound clips
+- **Backwards Compatibility**: Upgrade from initial storage format seamlessly
 
 ### UI Components
 - **FileDetailsSidebar**: Slide-out sidebar for file information with dynamic content
@@ -162,6 +172,9 @@ npm run dev
 - ✅ Tag management system with persistence
 - ✅ File tagging functionality
 - ✅ Search by tags (name and color)
+- ✅ Clip management system with storage persistence
+- ✅ Custom file titles with override functionality
+- ✅ Compound clip creation and management
 
 ### Navigation Routes
 - `/` - Home page
@@ -199,6 +212,10 @@ npm run dev
 - **NEW**: Added tags management page with create, edit, and delete capabilities
 - **NEW**: Enhanced search functionality to include tag name and color search
 - **NEW**: Added tag persistence to localStorage with automatic save/load
+- **NEW**: Implemented ClipContext for custom file title management
+- **NEW**: Added compound clip functionality for grouping multiple files
+- **NEW**: Created clip storage system with backwards compatibility
+- **NEW**: Added ClipProvider integration to layout component hierarchy
 
 ## Development Notes
 
@@ -249,9 +266,11 @@ npm run dev
 - Settings: Use `useSettings` hook from `SettingsContext`
 - Tag management: Use `useTags` hook from `TagContext`
 - File tagging: Use `useFileTags` hook from `FileTagsContext`
+- Clip management: Use `useClips` hook from `ClipContext`
 - Adding new file types: Update `FileItem` interface in `src/types/file.ts`
 - Adding new settings: Update `Settings` interface in `SettingsContext.tsx`
 - Adding new tag properties: Update `Tag` interface in `src/types/tag.ts`
+- Adding new clip properties: Update `ClipMetadata` or `CompoundClip` interfaces in `src/types/clip.ts`
 
 ### File Locations
 - **Main layout**: `src/app/layout.tsx`
@@ -262,9 +281,11 @@ npm run dev
 - **Settings Context**: `src/contexts/SettingsContext.tsx`
 - **Tag Context**: `src/contexts/TagContext.tsx`
 - **File Tags Context**: `src/contexts/FileTagsContext.tsx`
+- **Clip Context**: `src/contexts/ClipContext.tsx`
 - **File List Hook**: `src/hooks/useFileList.ts`
 - **File Types**: `src/types/file.ts`
 - **Tag Types**: `src/types/tag.ts`
+- **Clip Types**: `src/types/clip.ts`
 - **Styles**: `src/app/globals.css`
 
 ## Dependencies
@@ -322,6 +343,15 @@ npm run dev
 - **CSS Transforms**: Uses `translate-x-full` and `translate-x-0` for smooth animations
 - **Non-blocking**: Allows continued work on main content while sidebar is open
 
+### Clip Management
+- **ClipContext**: Provides global clip state management with localStorage persistence
+- **Clip Storage**: `docfinder-clips` key stores clip overrides and compound clips
+- **Custom Titles**: Override file names with user-defined titles for better organization
+- **Compound Clips**: Group multiple files as logical units with custom names
+- **Metadata Tracking**: Timestamps for creation and update events
+- **Backwards Compatibility**: Automatically migrates from initial storage format
+- **Storage Hierarchy**: Organized in ClipProvider hierarchy within layout contexts
+
 ### Component Patterns
 - **Client Components**: Use `'use client'` directive for interactive components
 - **Hydration Safety**: Implement `mounted` state to prevent SSR/client mismatches
@@ -334,22 +364,25 @@ npm run dev
 - **API Integration**: Server-side file system access through Next.js API routes
 
 ### Data Flow
-1. Settings stored in localStorage via SettingsContext
-2. Home page reads local folder path from settings
-3. useFileList hook fetches files via `/api/files` endpoint
-4. File grid displays files with count and previews
-5. Clicking files opens FileDetailsSidebar with details
-6. FilePreview component loads content via `/api/file-preview` endpoint
-7. SearchContext manages search state with debouncing
-8. FileDetailsContext manages sidebar open/close state
-9. useResizableSidebar manages sidebar width with localStorage persistence
-10. FileDetailsSidebar transitions managed with CSS transforms and state management
-11. TagContext manages global tag definitions with localStorage persistence
-12. FileTagsContext manages file-specific tag assignments
-13. Search functionality includes tag name and color filtering
-14. TagSelector component provides UI for assigning tags to files
+1. Contexts provide global state management (Settings, Tags, Clip, FileTags, etc.)
+2. Settings stored in localStorage via SettingsContext
+3. Clip metadata stored via ClipContext with custom titles and compound clips
+4. Home page reads local folder path from settings
+5. useFileList hook fetches files via `/api/files` endpoint
+6. File grid displays files with count and previews, using clip titles when available
+7. Clicking files opens FileDetailsSidebar with details
+8. FilePreview component loads content via `/api/file-preview` endpoint
+9. SearchContext manages search state with debouncing
+10. FileDetailsContext manages sidebar open/close state
+11. useResizableSidebar manages sidebar width with localStorage persistence
+12. FileDetailsSidebar transitions managed with CSS transforms and state management
+13. TagContext manages global tag definitions with localStorage persistence
+14. FileTagsContext manages file-specific tag assignments
+15. Search functionality includes tag name and color filtering
+16. TagSelector component provides UI for assigning tags to files
+17. ClipContext provides custom file titles and compound clip grouping
 
 ---
 
-*Last updated: January 2025*
+*Last updated: January 2025 (latest: clip management functionality)*
 *Project version: 0.1.0*

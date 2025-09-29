@@ -189,7 +189,7 @@ export default function TagsPage() {
                 return (
                   <div
                     key={tag.id}
-                    className="flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="flex items-center justify-between p-6 hover:bg-gray-50/50 dark:hover:bg-gray-700/20 transition-colors duration-150 rounded-lg"
                   >
                     <div className="flex items-center gap-4">
                       {/* Tag Preview */}

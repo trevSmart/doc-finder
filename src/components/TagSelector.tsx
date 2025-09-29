@@ -64,7 +64,7 @@ export default function TagSelector({ selectedTagIds, onTagsChange, disabled = f
                   {!disabled && (
                     <button
                       onClick={() => handleRemoveTag(tag.id)}
-                      className="ml-1 rounded-full p-0.5 hover:bg-black/10 dark:hover:bg-white/10"
+                      className="ml-1 rounded-full p-0.5 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-150"
                       title={`Remove ${tag.text} tag`}
                     >
                       <XMarkIcon className="h-3 w-3" />
@@ -110,7 +110,7 @@ export default function TagSelector({ selectedTagIds, onTagsChange, disabled = f
                           handleTagToggle(tag.id);
                           setIsOpen(false);
                         }}
-                        className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
+                        className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-150"
                       >
                         <div className={`h-4 w-4 rounded-full ${colorInfo.bgClass} border border-gray-300 dark:border-gray-500`} />
                         <span className="text-gray-900 dark:text-white">{tag.text}</span>
