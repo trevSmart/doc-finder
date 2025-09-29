@@ -115,8 +115,8 @@ export default function FileDetailsSidebar({ isOpen, onClose, file, sidebarWidth
       <Image
         src={iconSrc}
         alt={isDirectory ? 'Folder' : `${extension} file`}
-        width={24}
-        height={24}
+        width={48}
+        height={48}
         className={iconColor}
       />
     )

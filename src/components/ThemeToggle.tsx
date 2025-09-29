@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
+import { SunIcon, MoonIcon, ComputerDesktopIcon, SwatchIcon } from '@heroicons/react/24/outline'
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = 'light' | 'dark' | 'system' | 'color'
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>('system')
@@ -13,7 +13,7 @@ export default function ThemeToggle() {
   useEffect(() => {
     // Get saved theme from localStorage
     const savedTheme = localStorage.getItem('theme') as Theme
-    if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
+    if (savedTheme && ['light', 'dark', 'system', 'color'].includes(savedTheme)) {
       setTheme(savedTheme)
     }
 
@@ -28,6 +28,8 @@ export default function ThemeToggle() {
       shouldBeDark = true
     } else if (newTheme === 'light') {
       shouldBeDark = false
+    } else if (newTheme === 'color') {
+      shouldBeDark = false // Color theme uses light mode with custom background
     } else {
       // system
       shouldBeDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -35,10 +37,13 @@ export default function ThemeToggle() {
 
     setIsDark(shouldBeDark)
 
+    // Remove all theme classes first
+    document.documentElement.classList.remove('dark', 'color-theme')
+
     if (shouldBeDark) {
       document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
+    } else if (newTheme === 'color') {
+      document.documentElement.classList.add('color-theme')
     }
   }
 
@@ -51,6 +56,8 @@ export default function ThemeToggle() {
   const getCurrentIcon = () => {
     if (theme === 'system') {
       return <ComputerDesktopIcon className="h-5 w-5" />
+    } else if (theme === 'color') {
+      return <SwatchIcon className="h-5 w-5 text-purple-500" />
     }
     return isDark ? (
       <SunIcon className="h-5 w-5 text-yellow-400" />
@@ -62,6 +69,8 @@ export default function ThemeToggle() {
   const getCurrentLabel = () => {
     if (theme === 'system') {
       return 'System theme'
+    } else if (theme === 'color') {
+      return 'Color theme'
     }
     return isDark ? 'Switch to light mode' : 'Switch to dark mode'
   }
@@ -78,7 +87,7 @@ export default function ThemeToggle() {
 
       <MenuItems
         transition
-        className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg outline-1 outline-black/5 dark:outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+        className="absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg outline-1 outline-black/5 dark:outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
       >
         <MenuItem>
           <button
@@ -104,6 +113,19 @@ export default function ThemeToggle() {
           >
             <MoonIcon className="mr-3 h-4 w-4" />
             Dark
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => handleThemeChange('color')}
+            className={`flex w-full items-center px-4 py-2 text-sm ${
+              theme === 'color'
+                ? 'bg-gray-100 text-gray-900 dark:bg-white/5 dark:text-white'
+                : 'text-gray-700 dark:text-gray-300'
+            }`}
+          >
+            <SwatchIcon className="mr-3 h-4 w-4" />
+            Color
           </button>
         </MenuItem>
         <MenuItem>

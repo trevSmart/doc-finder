@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "../components/LayoutWrapper";
 import { SettingsProvider } from "../contexts/SettingsContext";
@@ -12,9 +12,10 @@ import { FileTagsProvider } from "../contexts/FileTagsContext";
 import { ClipProvider } from "../contexts/ClipContext";
 import { UploadProvider } from "../contexts/UploadContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -28,11 +29,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
-      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.webp', sizes: '32x32', type: 'image/webp' },
+      { url: '/favicon.webp', sizes: '16x16', type: 'image/webp' },
     ],
     shortcut: '/favicon.ico',
-    apple: '/favicon.png',
+    apple: '/favicon.webp',
   },
 };
 
@@ -44,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} ${geistMono.variable} antialiased`}
       >
         <SettingsProvider>
           <TagProvider>

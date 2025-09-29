@@ -172,7 +172,8 @@ export function isMediaFile(filename: string): boolean {
  */
 export function getFileTypeIcon(extension: string, isDirectory: boolean = false): string {
   if (isDirectory) {
-    return '/icons/file-types/folder.svg'
+    // Folder icon is stored in the legacy svg set
+    return '/icons/file-types/old/folder.svg'
   }
 
   const ext = extension.toLowerCase()
@@ -181,62 +182,95 @@ export function getFileTypeIcon(extension: string, isDirectory: boolean = false)
     // Documents
     case 'doc':
     case 'docx':
-      return '/icons/file-types/docx.svg'
+      return '/icons/file-types/doc.webp'
     case 'pdf':
-      return '/icons/file-types/pdf.svg'
+      return '/icons/file-types/pdf.webp'
     case 'md':
     case 'markdown':
-      return '/icons/file-types/markdown.png'
+      return '/icons/file-types/txt.webp'
     case 'txt':
-      return '/icons/file-types/txt.svg'
+      return '/icons/file-types/txt.webp'
     case 'html':
     case 'htm':
-      return '/icons/file-types/html.svg'
+      return '/icons/file-types/html.webp'
 
     // Spreadsheets
     case 'xls':
     case 'xlsx':
-      return '/icons/file-types/xlsx.svg'
+      return '/icons/file-types/xls.webp'
     case 'csv':
-      return '/icons/file-types/csv.svg'
+      return '/icons/file-types/csv.webp'
 
     // Presentations
     case 'ppt':
     case 'pptx':
-      return '/icons/file-types/pptx.svg'
+      return '/icons/file-types/ppt.webp'
 
     // Images
     case 'bmp':
+      return '/icons/file-types/jpg.webp'
     case 'jpg':
     case 'jpeg':
+      return '/icons/file-types/jpg.webp'
     case 'webp':
+      return '/icons/file-types/jpg.webp'
     case 'png':
+      return '/icons/file-types/png.webp'
     case 'gif':
+      return '/icons/file-types/gif.webp'
     case 'svg':
-      return '/icons/file-types/image.svg'
+      return '/icons/file-types/svg.webp'
 
     // Audio
     case 'mp3':
+      return '/icons/file-types/mp3.webp'
     case 'wav':
-      return '/icons/file-types/audio.svg'
+      return '/icons/file-types/wav.webp'
 
     // Video
     case 'mpg':
     case 'mpeg':
     case 'mov':
-    case 'avi':
     case 'mp4':
-      return '/icons/file-types/video.svg'
+      return '/icons/file-types/avi.webp'
+    case 'avi':
+      return '/icons/file-types/avi.webp'
 
     // Data
     case 'json':
-      return '/icons/file-types/json.svg'
+      return '/icons/file-types/txt.webp'
     case 'log':
-      return '/icons/file-types/txt.svg'
+      return '/icons/file-types/txt.webp'
+
+    // Other specific icons available in the set
+    case 'css':
+      return '/icons/file-types/css.webp'
+    case 'dll':
+      return '/icons/file-types/dll.webp'
+    case 'dmg':
+      return '/icons/file-types/dmg.webp'
+    case 'eps':
+      return '/icons/file-types/eps.webp'
+    case 'exe':
+      return '/icons/file-types/exe.webp'
+    case 'flac':
+      return '/icons/file-types/flac.webp'
+    case 'rar':
+      return '/icons/file-types/rar.webp'
+    case 'rtf':
+      return '/icons/file-types/rtf.webp'
+    case 'sql':
+      return '/icons/file-types/sql.webp'
+    case 'url':
+      return '/icons/file-types/url.webp'
+    case 'xml':
+      return '/icons/file-types/xml.webp'
+    case 'zip':
+      return '/icons/file-types/zip.webp'
 
     // Default
     default:
-      return '/icons/file-types/default.svg'
+      return '/icons/file-types/doc.webp'
   }
 }
 

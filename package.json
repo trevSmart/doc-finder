@@ -7,7 +7,9 @@
     "dev:open": "next dev --turbopack & sleep 10 && open -a 'Google Chrome' http://localhost:3000",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "crop:icons": "node scripts/crop-icons.mjs",
+    "icons:bg:transparent": "node scripts/make-icons-transparent.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -30,6 +32,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sharp": "^0.31.1",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
     "eslint": "^9",
@@ -37,6 +40,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.4.0",
+    "sharp": "^0.34.4",
     "tailwindcss": "^4.1.13",
     "typescript": "^5"
   }

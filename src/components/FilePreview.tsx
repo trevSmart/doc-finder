@@ -109,7 +109,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 
   const previewOptions = useMemo(() => ({
     auto: shouldLoadPreview,
-    priority: size === 'sidebar' ? 'high' : 'normal',
+    priority: (size === 'sidebar' ? 'high' : 'normal') as 'high' | 'normal',
   }), [shouldLoadPreview, size]);
   const { entry } = useFilePreview(file, previewOptions)
   const { status, data, error: cachedError } = entry
@@ -485,7 +485,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
         renderSkeleton()
       ) : (
         <div className="flex flex-col items-center justify-center gap-2 text-center" aria-live="polite">
-          <div className="flex items-center justify-center rounded-full p-3 bg-white/60 dark:bg-white/30">
+          <div className="flex items-center justify-center">
             {getFileIcon(file.category, file.isDirectory)}
           </div>
           {status === 'error' && cachedError && size !== 'sm' && size !== 'md' && (

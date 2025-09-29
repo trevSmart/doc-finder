@@ -650,12 +650,12 @@ export default function Home() {
                             {clipFiles.length} documents
                           </p>
                         </div>
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-300 flex-shrink-0">
+                        <div className="flex items-center justify-center flex-shrink-0">
                           <Image
                             src={getFileTypeIcon(primaryFile?.extension || '', primaryFile?.isDirectory ?? false)}
                             alt="Clip"
-                            width={20}
-                            height={20}
+                            width={40}
+                            height={40}
                             className={`${getFileTypeIconColor(primaryFile?.extension || '', primaryFile?.isDirectory ?? false)}`}
                           />
                         </div>
@@ -719,7 +719,7 @@ export default function Home() {
                 <li
                   key={file.path}
                   data-file-card
-                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300/60 hover:bg-gray-50/40 focus:outline-hidden focus:shadow-md focus:border-gray-300/60 focus:bg-gray-50/40 transition-all duration-200 ease-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500/60 dark:hover:from-gray-50 dark:hover:to-gray-400/40 dark:focus:border-gray-500/60 dark:focus:from-gray-50 dark:focus:to-gray-400/40 ${
+                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300/60 hover:bg-gray-50/40 focus:outline-hidden focus:shadow-md focus:border-gray-300/60 focus:bg-gray-50/40 transition-all duration-200 ease-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/20 dark:hover:border-gray-500/60 dark:hover:from-gray-50 dark:hover:to-gray-400/40 dark:focus:border-gray-500/60 dark:focus:from-gray-50 dark:focus:to-gray-400/40 ${
                     isSelected
                       ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
                       : ''
@@ -751,7 +751,7 @@ export default function Home() {
                   <div className="p-4 md:p-5 pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-col">
-                        <h3 className="font-bold text-gray-800 dark:text-gray-100 text-base leading-tight">
+                        <h3 className="font-bold text-gray-800 dark:text-gray-100 leading-tight" style={{ fontSize: 'var(--text-base-plus)' }}>
                           {clipTitle}
                         </h3>
                         {hasCustomTitle && (
@@ -785,12 +785,12 @@ export default function Home() {
                             )}
                           </button>
                         )}
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-300 flex-shrink-0">
+                        <div className="flex items-center justify-center flex-shrink-0">
                           <Image
                             src={getFileTypeIcon(file.extension || '', file.isDirectory)}
                             alt={file.isDirectory ? 'Folder' : `${file.extension} file`}
-                            width={20}
-                            height={20}
+                            width={40}
+                            height={40}
                             className={`${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
                           />
                         </div>
@@ -801,19 +801,6 @@ export default function Home() {
                 {/* Secció de detalls en dues columnes */}
                 <div className="px-4 md:px-5 pb-4">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                    <div>
-                      <span className="font-semibold text-gray-700 dark:text-gray-700">Tipus:</span>
-                      <span className="ml-2 text-gray-600 dark:text-gray-600 inline-flex items-center gap-1">
-                        <Image
-                          src={getFileTypeIcon(file.extension || '', file.isDirectory)}
-                          alt={file.isDirectory ? 'Folder' : `${file.extension} file`}
-                          width={16}
-                          height={16}
-                          className={`${getFileTypeIconColor(file.extension || '', file.isDirectory)}`}
-                        />
-                        {file.isDirectory ? 'Directori' : (file.extension ? file.extension.toUpperCase() : 'Clip')}
-                      </span>
-                    </div>
                     <div>
                       <span className="font-semibold text-gray-700 dark:text-gray-700">Mida:</span>
                       <span className="ml-2 text-gray-600 dark:text-gray-600">
