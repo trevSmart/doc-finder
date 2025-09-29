@@ -33,8 +33,18 @@ export async function POST(request: NextRequest) {
 
     // Create safe filename (sanitize and avoid conflicts)
     const timestamp = new Date().getTime()
-    const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const fileName = `${timestamp}_${sanitizedName}`
+    // Strictly sanitize filename: allow only alphanumeric, hyphens, underscores, and a single dot for extension
+    const originalName = file.name
+    const extMatch = originalName.match(/\.([a-zA-Z0-9]+)$/)
+    const ext = extMatch ? extMatch[0] : ''
+    const baseName = extMatch ? originalName.slice(0, -ext.length) : originalName
+    const sanitizedBase = baseName.replace(/[^a-zA-Z0-9_-]/g, '_')
+    const sanitizedExt = ext.replace(/[^.a-zA-Z0-9]/g, '')
+    const fileName = `${timestamp}_${sanitizedBase}${sanitizedExt}`
+    // Ensure the sanitized filename does not contain path separators
+    if (fileName.includes('/') || fileName.includes('\\')) {
+      return NextResponse.json({ error: 'Invalid file name' }, { status: 400 })
+    }
     const filePath = join(uploadsDir, fileName)
 
     try {
