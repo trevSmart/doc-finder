@@ -1,0 +1,80 @@
+# GitHub Dependabot configuration for DocFinder
+# Automatically keep dependencies up to date
+
+version: 2
+updates:
+  # Enable version updates for npm (JavaScript/TypeScript dependencies)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "javascript"
+    reviewers:
+      - "trevSmart"
+    assignees:
+      - "trevSmart"
+    # Group related updates together
+    groups:
+      next-js:
+        patterns:
+          - "next*"
+          - "@next/*"
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      typescript:
+        patterns:
+          - "typescript*"
+          - "@typescript-eslint/*"
+          - "@types/*"
+      tailwind:
+        patterns:
+          - "tailwindcss*"
+          - "@tailwindcss/*"
+          - "@tailwindplus/*"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+          - "eslint-*"
+      dev-tools:
+        patterns:
+          - "@types/*"
+        dependency-type: "development"
+    # Allow automatic merging for patch and minor updates of dev dependencies
+    allow:
+      - dependency-type: "development"
+        update-type: "version-update:semver-patch"
+      - dependency-type: "development"
+        update-type: "version-update:semver-minor"
+
+  # Enable version updates for GitHub Actions (if any are added in the future)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    reviewers:
+      - "trevSmart"
+    assignees:
+      - "trevSmart"
