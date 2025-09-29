@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback, useRef, type MouseEvent } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef, type MouseEvent, type DragEvent } from 'react'
 import FilePreview from '../components/FilePreview'
 import { useSettings } from '../contexts/SettingsContext'
 import { useFileDetails } from '../contexts/FileDetailsContext'
@@ -38,6 +38,8 @@ export default function Home() {
   const [clipFeedback, setClipFeedback] = useState<
     { type: 'success' | 'info' | 'error'; message: string } | null
   >(null)
+  const [draggingPath, setDraggingPath] = useState<string | null>(null)
+  const [dragOverPath, setDragOverPath] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -176,41 +178,173 @@ export default function Home() {
     [setClipFeedback],
   )
 
+  const createClipFromPair = useCallback(
+    (firstFile: FileItem, secondFile: FileItem, customTitle?: string) => {
+      const clipPaths = [firstFile.path, secondFile.path]
+      const normalizedPaths = [...clipPaths].sort().join('|')
+
+      const existingEntry = derivedCompoundClips.find(entry => {
+        const normalizedExisting = [...entry.clip.filePaths].sort().join('|')
+        return normalizedExisting === normalizedPaths
+      })
+
+      const trimmedTitle = customTitle?.trim()
+      const titleToUse = trimmedTitle || `${firstFile.name} + ${secondFile.name}`
+      const result = createCompoundClip(clipPaths, titleToUse)
+
+      if (!result) {
+        setClipFeedback({ type: 'error', message: 'Could not create the clip. Try again.' })
+        return false
+      }
+
+      if (existingEntry) {
+        const updatedTitle = result.title === existingEntry.clip.title
+        setClipFeedback({
+          type: updatedTitle ? 'info' : 'success',
+          message: updatedTitle ? 'This clip already exists.' : 'Clip title updated.',
+        })
+      } else {
+        setClipFeedback({ type: 'success', message: 'Clip created.' })
+      }
+
+      return true
+    },
+    [createCompoundClip, derivedCompoundClips],
+  )
+
   const handleCreateClip = useCallback(() => {
     if (selectedFiles.length !== 2) {
       setClipFeedback({ type: 'error', message: 'Select two documents to create a clip.' })
       return
     }
 
-    const clipPaths = selectedFiles.map(file => file.path)
-    const normalizedPaths = [...clipPaths].sort().join('|')
-    const existingEntry = derivedCompoundClips.find(entry => {
-      const normalizedExisting = [...entry.clip.filePaths].sort().join('|')
-      return normalizedExisting === normalizedPaths
-    })
-
-    const titleToUse = clipTitleDraft.trim() || `${selectedFiles[0].name} + ${selectedFiles[1].name}`
-    const result = createCompoundClip(clipPaths, titleToUse)
-
-    if (!result) {
-      setClipFeedback({ type: 'error', message: 'Could not create the clip. Try again.' })
+    const success = createClipFromPair(selectedFiles[0], selectedFiles[1], clipTitleDraft)
+    if (!success) {
       return
-    }
-
-    if (existingEntry) {
-      const updatedTitle = result.title === existingEntry.clip.title
-      setClipFeedback({
-        type: updatedTitle ? 'info' : 'success',
-        message: updatedTitle ? 'This clip already exists.' : 'Clip title updated.',
-      })
-    } else {
-      setClipFeedback({ type: 'success', message: 'Clip created.' })
     }
 
     setSelectedPaths([])
     setClipTitleDraft('')
     setClipTitleManuallyEdited(false)
-  }, [selectedFiles, clipTitleDraft, createCompoundClip, derivedCompoundClips])
+  }, [selectedFiles, clipTitleDraft, createClipFromPair])
+
+  const handleDropCreateClip = useCallback(
+    (sourcePath: string, targetPath: string) => {
+      if (!sourcePath || !targetPath || sourcePath === targetPath) {
+        return
+      }
+
+      const sourceFile = fileMap.get(sourcePath)
+      const targetFile = fileMap.get(targetPath)
+      if (!sourceFile || !targetFile) {
+        return
+      }
+
+      if (sourceFile.isDirectory || targetFile.isDirectory) {
+        return
+      }
+
+      const success = createClipFromPair(sourceFile, targetFile)
+      if (!success) {
+        return
+      }
+
+      let clearedSelection = false
+      setSelectedPaths(prev => {
+        if (prev.length === 0) {
+          return prev
+        }
+        const next = prev.filter(path => path !== sourcePath && path !== targetPath)
+        if (next.length === 0 && prev.length > 0) {
+          clearedSelection = true
+        }
+        return next
+      })
+
+      if (clearedSelection) {
+        setClipTitleDraft('')
+        setClipTitleManuallyEdited(false)
+      }
+    },
+    [fileMap, createClipFromPair],
+  )
+
+  const handleCardDragStart = useCallback((event: DragEvent<HTMLLIElement>, file: FileItem) => {
+    if (file.isDirectory) {
+      return
+    }
+
+    event.stopPropagation()
+    setDraggingPath(file.path)
+    setDragOverPath(null)
+    event.dataTransfer.setData('text/plain', file.path)
+    event.dataTransfer.effectAllowed = 'copyMove'
+  }, [])
+
+  const handleCardDragEnd = useCallback(() => {
+    setDraggingPath(null)
+    setDragOverPath(null)
+  }, [])
+
+  const handleCardDragOver = useCallback(
+    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+      if (!draggingPath || draggingPath === file.path || file.isDirectory) {
+        return
+      }
+
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'copy'
+      if (dragOverPath !== file.path) {
+        setDragOverPath(file.path)
+      }
+    },
+    [draggingPath, dragOverPath],
+  )
+
+  const handleCardDragEnter = useCallback(
+    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+      if (!draggingPath || draggingPath === file.path || file.isDirectory) {
+        return
+      }
+
+      event.preventDefault()
+      if (dragOverPath !== file.path) {
+        setDragOverPath(file.path)
+      }
+    },
+    [draggingPath, dragOverPath],
+  )
+
+  const handleCardDragLeave = useCallback(
+    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+      if (dragOverPath !== file.path) {
+        return
+      }
+
+      const relatedTarget = event.relatedTarget as Node | null
+      if (relatedTarget && event.currentTarget.contains(relatedTarget)) {
+        return
+      }
+
+      setDragOverPath(null)
+    },
+    [dragOverPath],
+  )
+
+  const handleCardDrop = useCallback(
+    (event: DragEvent<HTMLLIElement>, file: FileItem) => {
+      if (!draggingPath || draggingPath === file.path || file.isDirectory) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      setDragOverPath(null)
+      handleDropCreateClip(draggingPath, file.path)
+      setDraggingPath(null)
+    },
+    [draggingPath, handleDropCreateClip],
+  )
 
   // Funció per filtrar clips segons la cerca i configuració
   const filterFiles = (files: FileItem[], query: string): FileItem[] => {
@@ -585,13 +719,29 @@ export default function Home() {
                 <li
                   key={file.path}
                   data-file-card
-                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-lg hover:border-gray-300 hover:bg-gray-50 focus:outline-hidden focus:shadow-lg focus:border-gray-300 focus:bg-gray-50 transition-all duration-300 ease-in-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500 dark:hover:from-gray-50 dark:hover:to-gray-400 dark:focus:border-gray-500 dark:focus:from-gray-50 dark:focus:to-gray-400 ${
+                  className={`col-span-1 flex flex-col group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300/60 hover:bg-gray-50/40 focus:outline-hidden focus:shadow-md focus:border-gray-300/60 focus:bg-gray-50/40 transition-all duration-200 ease-out dark:bg-gradient-to-b dark:from-white dark:to-gray-300 dark:border-gray-400 dark:shadow-gray-400/30 dark:hover:border-gray-500/60 dark:hover:from-gray-50 dark:hover:to-gray-400/40 dark:focus:border-gray-500/60 dark:focus:from-gray-50 dark:focus:to-gray-400/40 ${
                     isSelected
                       ? 'ring-2 ring-blue-500 ring-opacity-50 bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-700 dark:ring-blue-400'
                       : ''
                   } ${
                     file.isDirectory ? 'cursor-default' : 'cursor-pointer'
+                  } ${
+                    !file.isDirectory ? '*:cursor-pointer' : ''
+                  } ${
+                    dragOverPath === file.path && draggingPath && draggingPath !== file.path
+                      ? 'ring-1 ring-green-400/60 ring-offset-1 ring-offset-white shadow-lg scale-102 bg-green-50/30 dark:bg-green-900/10 dark:ring-green-400/40 dark:ring-offset-gray-900 border-green-300/40 dark:border-green-400/30 z-10 relative transition-all duration-200'
+                      : ''
+                  } ${
+                    draggingPath === file.path ? 'opacity-30 scale-95' : ''
                   }`}
+                  draggable={!file.isDirectory}
+                  aria-grabbed={!file.isDirectory ? draggingPath === file.path : undefined}
+                  onDragStart={(event) => handleCardDragStart(event, file)}
+                  onDragEnd={handleCardDragEnd}
+                  onDragOver={(event) => handleCardDragOver(event, file)}
+                  onDragEnter={(event) => handleCardDragEnter(event, file)}
+                  onDragLeave={(event) => handleCardDragLeave(event, file)}
+                  onDrop={(event) => handleCardDrop(event, file)}
                   onClick={(e) => {
                     e.stopPropagation()
                     handleFileClick(file)
@@ -601,7 +751,7 @@ export default function Home() {
                   <div className="p-4 md:p-5 pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-col">
-                        <h3 className="text-lg font-bold text-gray-800 dark:text-gray-800 leading-tight">
+                        <h3 className="font-bold text-gray-800 dark:text-gray-100 text-base leading-tight">
                           {clipTitle}
                         </h3>
                         {hasCustomTitle && (

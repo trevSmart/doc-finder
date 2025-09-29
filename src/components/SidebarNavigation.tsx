@@ -176,8 +176,7 @@ export default function SidebarNavigation({ sidebarOpen, setSidebarOpen, sidebar
       >
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 pb-4">
-          <div className="flex h-16 shrink-0 items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">DocFinder</h1>
+          <div className="flex h-16 shrink-0 items-center justify-end">
             {/* Desktop close button */}
             <button
               type="button"

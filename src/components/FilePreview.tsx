@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import { FileItem, FileCategory } from '../types/file'
@@ -13,7 +13,8 @@ import {
   CsvPreview,
   DocxPreview,
   PptxPreview,
-  PptxErrorPreview
+  PptxErrorPreview,
+  PptxSlide,
 } from '../types/filePreview'
 import { isImageFile } from '../utils/fileUtils'
 import {
@@ -28,7 +29,6 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
 import { useFilePreview } from '../contexts/FilePreviewContext'
-import type { PptxSlide } from '../types/filePreview'
 
 interface FilePreviewProps {
   file: FileItem
@@ -61,7 +61,57 @@ const skeletonSizes: Record<NonNullable<FilePreviewProps['size']>, string> = {
 }
 
 export default function FilePreview({ file, className = '', size = 'md' }: FilePreviewProps) {
-  const { entry } = useFilePreview(file)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [hasBeenVisible, setHasBeenVisible] = useState(size === 'sidebar')
+
+  useEffect(() => {
+    if (size === 'sidebar') {
+      setHasBeenVisible(true)
+    }
+  }, [size])
+
+  useEffect(() => {
+    if (hasBeenVisible || size === 'sidebar') {
+      return
+    }
+
+    const node = containerRef.current
+    if (!node) {
+      return
+    }
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setHasBeenVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          setHasBeenVisible(true)
+          observer.disconnect()
+        }
+      },
+      {
+        rootMargin: '120px',
+        threshold: 0.1,
+      }
+    )
+
+    observer.observe(node)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [hasBeenVisible, size])
+
+  const shouldLoadPreview = size === 'sidebar' || hasBeenVisible
+
+  const previewOptions = useMemo(() => ({
+    auto: shouldLoadPreview,
+    priority: size === 'sidebar' ? 'high' : 'normal',
+  }), [shouldLoadPreview, size]);
+  const { entry } = useFilePreview(file, previewOptions)
   const { status, data, error: cachedError } = entry
 
   const imageUrl = useMemo(() => {
@@ -84,7 +134,7 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
   const pptxError = data?.type === 'pptx-error' ? (data as PptxErrorPreview).error : null
 
   const effectiveError = cachedError ?? pptxError
-  const isPending = status === 'idle' || status === 'queued' || status === 'loading'
+  const isPending = shouldLoadPreview && (status === 'idle' || status === 'queued' || status === 'loading')
 
   const hasPreviewContent = Boolean(
     imageUrl ||
@@ -95,13 +145,6 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
       csvContent ||
       docxContent ||
       (Array.isArray(pptxContent) && pptxContent.length > 0)
-  )
-
-  const renderSkeleton = () => (
-    <div
-      className={`${skeletonSizes[size]} rounded-md bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 animate-pulse`}
-      aria-hidden
-    />
   )
 
   const getFileIcon = (category?: FileCategory, isDirectory?: boolean) => {
@@ -167,6 +210,13 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
       return jsonString
     }
   }
+
+  const renderSkeleton = () => (
+    <div
+      className={`${skeletonSizes[size]} rounded-md bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 animate-pulse`}
+      aria-hidden
+    />
+  )
 
   const renderImagePreview = () => {
     if (!imageUrl) {
@@ -372,40 +422,74 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
     )
   }
 
-  const canShowPreview = !file.isDirectory && hasPreviewContent && !effectiveError
+  const renderPreviewContent = () => {
+    if (!shouldLoadPreview || effectiveError || !hasPreviewContent) {
+      return null
+    }
 
-  const containerClassName = `${sizeClasses[size]} ${className} ${
-    canShowPreview ? 'relative overflow-hidden' : 'flex items-center justify-center'
-  }`
+    if (imageUrl) {
+      return renderImagePreview()
+    }
+
+    if (markdownContent) {
+      return renderMarkdownPreview()
+    }
+
+    if (jsonContent) {
+      return renderJsonPreview()
+    }
+
+    if (txtContent) {
+      return renderTxtPreview()
+    }
+
+    if (excelContent && Array.isArray(excelContent) && excelContent.length > 0) {
+      return renderExcelPreview()
+    }
+
+    if (csvContent) {
+      return renderCsvPreview()
+    }
+
+    if (docxContent) {
+      return renderDocxPreview()
+    }
+
+    if (pptxContent && Array.isArray(pptxContent) && pptxContent.length > 0) {
+      return renderPptxPreview()
+    }
+
+    return null
+  }
+
+  const previewNode = renderPreviewContent()
+  const shouldRenderPreviewContent = Boolean(previewNode)
+  const showError = Boolean(effectiveError) && shouldLoadPreview
+  const showSkeleton = isPending && !showError
+
+  const baseLayoutClass = shouldRenderPreviewContent ? 'relative overflow-hidden' : 'flex items-center justify-center'
+  const containerClasses = `${sizeClasses[size]} ${getBackgroundColor(file.category, file.isDirectory)} ${baseLayoutClass} rounded-lg ${className}`.trim()
 
   return (
-    <div className={containerClassName}>
-      {canShowPreview ? (
-        <>
-          {imageUrl && renderImagePreview()}
-          {!imageUrl && markdownContent && renderMarkdownPreview()}
-          {!imageUrl && !markdownContent && jsonContent && renderJsonPreview()}
-          {!imageUrl && !markdownContent && !jsonContent && txtContent && renderTxtPreview()}
-          {!imageUrl && !markdownContent && !jsonContent && !txtContent && excelContent && renderExcelPreview()}
-          {!imageUrl && !markdownContent && !jsonContent && !txtContent && !excelContent && csvContent && renderCsvPreview()}
-          {!imageUrl && !markdownContent && !jsonContent && !txtContent && !excelContent && !csvContent && docxContent && renderDocxPreview()}
-          {!imageUrl && !markdownContent && !jsonContent && !txtContent && !excelContent && !csvContent && !docxContent && pptxContent && renderPptxPreview()}
-        </>
+    <div ref={containerRef} className={containerClasses}>
+      {showError ? (
+        <div className="flex flex-col items-center justify-center gap-2 text-center px-3" aria-live="polite">
+          <ExclamationTriangleIcon className={`${iconSizes[size]} text-amber-500`} />
+          {size !== 'sm' && size !== 'md' && (
+            <p className="text-xs text-amber-600 dark:text-amber-400">{effectiveError}</p>
+          )}
+        </div>
+      ) : shouldRenderPreviewContent ? (
+        previewNode
+      ) : showSkeleton ? (
+        renderSkeleton()
       ) : (
-        <div
-          className={`${sizeClasses[size]} ${getBackgroundColor(file.category, file.isDirectory)} ${size === 'card' ? 'rounded-b-xl' : 'rounded-lg'} flex items-center justify-center`}
-        >
-          {isPending ? (
-            renderSkeleton()
-          ) : effectiveError ? (
-            <div className="flex flex-col items-center text-center space-y-1 px-2">
-              <ExclamationTriangleIcon className={`${iconSizes[size]} text-yellow-500 dark:text-yellow-400`} />
-              {size !== 'sm' && size !== 'md' && (
-                <p className="text-xs text-yellow-600 dark:text-yellow-400">{effectiveError}</p>
-              )}
-            </div>
-          ) : (
-            getFileIcon(file.category, file.isDirectory)
+        <div className="flex flex-col items-center justify-center gap-2 text-center" aria-live="polite">
+          <div className="flex items-center justify-center rounded-full p-3 bg-white/60 dark:bg-white/30">
+            {getFileIcon(file.category, file.isDirectory)}
+          </div>
+          {status === 'error' && cachedError && size !== 'sm' && size !== 'md' && (
+            <p className="px-3 text-xs text-gray-500 dark:text-gray-400">{cachedError}</p>
           )}
         </div>
       )}

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode, useRef, useEffect } from 'react'
 import { FileItem } from '../types/file'
 import { useFileTags } from './FileTagsContext'
 
@@ -14,11 +14,27 @@ interface FileDetailsContextType {
 const FileDetailsContext = createContext<FileDetailsContextType | undefined>(undefined)
 
 export function FileDetailsProvider({ children }: { children: ReactNode }) {
+  const CLOSE_DELAY_MS = 320
   const [isOpen, setIsOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null)
   const { getFileTags } = useFileTags()
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current)
+        closeTimeoutRef.current = null
+      }
+    }
+  }, [])
 
   const openFileDetails = (file: FileItem) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+
     // Add tags to the file object
     const fileWithTags = {
       ...file,
@@ -30,7 +46,13 @@ export function FileDetailsProvider({ children }: { children: ReactNode }) {
 
   const closeFileDetails = () => {
     setIsOpen(false)
-    setSelectedFile(null)
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+    }
+    closeTimeoutRef.current = setTimeout(() => {
+      setSelectedFile(null)
+      closeTimeoutRef.current = null
+    }, CLOSE_DELAY_MS)
   }
 
   return (
