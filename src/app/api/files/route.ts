@@ -29,44 +29,42 @@ export async function GET(request: NextRequest) {
     // Llegir el contingut del directori
     const entries = await fs.readdir(folderPath, { withFileTypes: true })
 
-    const files: FileItem[] = []
+    const files = (
+      await Promise.all(
+        entries
+          .filter(entry => !entry.name.startsWith('.'))
+          .map(async entry => {
+            const fullPath = path.join(folderPath, entry.name)
+            const isDirectory = entry.isDirectory()
 
-    for (const entry of entries) {
-      // Ignorar fitxers ocults (que comencen amb punt)
-      if (entry.name.startsWith('.')) {
-        continue
-      }
+            try {
+              const stats = await fs.stat(fullPath)
 
-      const fullPath = path.join(folderPath, entry.name)
-      const isDirectory = entry.isDirectory()
+              const typeInfo = isDirectory ? null : getFileTypeInfo(entry.name)
+              const isImage = typeInfo?.category === 'image'
 
-      let stats
-      try {
-        stats = await fs.stat(fullPath)
-      } catch {
-        // Si no podem llegir les estadístiques, saltem aquest fitxer
-        continue
-      }
+              const fileItem: FileItem = {
+                name: entry.name,
+                path: fullPath,
+                type: isDirectory ? 'directory' : 'file',
+                size: isDirectory ? undefined : stats.size,
+                extension: typeInfo?.extension,
+                lastModified: stats.mtime,
+                isDirectory,
+                category: typeInfo?.category,
+                mimeType: typeInfo?.mimeType,
+                // Per a imatges, generem una URL de previsualització
+                imageUrl: isImage ? `/api/file-preview?path=${encodeURIComponent(fullPath)}` : undefined,
+              }
 
-      const typeInfo = isDirectory ? null : getFileTypeInfo(entry.name)
-      const isImage = typeInfo?.category === 'image'
-
-      const fileItem: FileItem = {
-        name: entry.name,
-        path: fullPath,
-        type: isDirectory ? 'directory' : 'file',
-        size: isDirectory ? undefined : stats.size,
-        extension: typeInfo?.extension,
-        lastModified: stats.mtime,
-        isDirectory,
-        category: typeInfo?.category,
-        mimeType: typeInfo?.mimeType,
-        // Per a imatges, generem una URL de previsualització
-        imageUrl: isImage ? `/api/file-preview?path=${encodeURIComponent(fullPath)}` : undefined
-      }
-
-      files.push(fileItem)
-    }
+              return fileItem
+            } catch {
+              // Si no podem llegir les estadístiques, saltem aquest fitxer
+              return null
+            }
+          })
+      )
+    ).filter((file): file is FileItem => Boolean(file))
 
     // Ordenar: directoris primer, després fitxers per nom
     files.sort((a, b) => {
