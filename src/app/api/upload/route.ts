@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     const sanitizedBase = baseName.replace(/[^a-zA-Z0-9_-]/g, '_')
     const sanitizedExt = ext.replace(/[^.a-zA-Z0-9]/g, '')
     const fileName = `${timestamp}_${sanitizedBase}${sanitizedExt}`
+
     // Ensure the sanitized filename does not contain path separators
     if (fileName.includes('/') || fileName.includes('\\')) {
       return NextResponse.json({ error: 'Invalid file name' }, { status: 400 })
