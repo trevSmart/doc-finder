@@ -107,10 +107,11 @@ export default function FilePreview({ file, className = '', size = 'md' }: FileP
 
   const shouldLoadPreview = size === 'sidebar' || hasBeenVisible
 
-  const { entry } = useFilePreview(file, {
+  const previewOptions = useMemo(() => ({
     auto: shouldLoadPreview,
     priority: size === 'sidebar' ? 'high' : 'normal',
-  })
+  }), [shouldLoadPreview, size]);
+  const { entry } = useFilePreview(file, previewOptions)
   const { status, data, error: cachedError } = entry
 
   const imageUrl = useMemo(() => {
